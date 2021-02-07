@@ -1,0 +1,204 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2678AE66-BA2D-420F-B1CE-A57243BC710E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AmazonBBS.BLL</RootNamespace>
+    <AssemblyName>AmazonBBS.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBLL.cs" />
+    <Compile Include="ActivityBLL.cs" />
+    <Compile Include="ActivityFeeBLL.cs" />
+    <Compile Include="ActivityJoinBLL.cs" />
+    <Compile Include="ADBLL.cs" />
+    <Compile Include="AliPay\AliPayBLL.cs" />
+    <Compile Include="AliPay\AlipayCore.cs" />
+    <Compile Include="AnswerBLL.cs" />
+    <Compile Include="ArticleBLL.cs" />
+    <Compile Include="Auto\Auto_AboutBLL.cs" />
+    <Compile Include="Auto\Auto_ActivityBLL.cs" />
+    <Compile Include="Auto\Auto_ActivityFeeBLL.cs" />
+    <Compile Include="Auto\Auto_ActivityJoinBLL.cs" />
+    <Compile Include="Auto\Auto_ADBLL.cs" />
+    <Compile Include="Auto\Auto_BBSEnumBLL.cs" />
+    <Compile Include="Auto\Auto_BXTOrderBLL.cs" />
+    <Compile Include="Auto\Auto_ClickMsgBLL.cs" />
+    <Compile Include="Auto\Auto_CommentBLL.cs" />
+    <Compile Include="Auto\Auto_EditLogBLL.cs" />
+    <Compile Include="Auto\Auto_EmailNoticeBLL.cs" />
+    <Compile Include="Auto\Auto_FeeAnswerLogBLL.cs" />
+    <Compile Include="Auto\Auto_FeeHRBLL.cs" />
+    <Compile Include="Auto\Auto_GiftFeeBLL.cs" />
+    <Compile Include="Auto\Auto_InviteInterviewBLL.cs" />
+    <Compile Include="Auto\Auto_JobCommentBLL.cs" />
+    <Compile Include="Auto\Auto_JobTradeBLL.cs" />
+    <Compile Include="Auto\Auto_JoinItemAnswerExtBLL.cs" />
+    <Compile Include="Auto\Auto_JoinItemQuestionExtBLL.cs" />
+    <Compile Include="Auto\Auto_LeaveWordBLL.cs" />
+    <Compile Include="Auto\Auto_MasterBLL.cs" />
+    <Compile Include="Auto\Auto_MenuBelongTagBLL.cs" />
+    <Compile Include="Auto\Auto_NewsBLL.cs" />
+    <Compile Include="Auto\Auto_NoticeBLL.cs" />
+    <Compile Include="Auto\Auto_OAuthBLL.cs" />
+    <Compile Include="Auto\Auto_PayCBLogBLL.cs" />
+    <Compile Include="Auto\Auto_ProductBLL.cs" />
+    <Compile Include="Auto\Auto_ProductBuyBLL.cs" />
+    <Compile Include="Auto\Auto_QiuZhiBLL.cs" />
+    <Compile Include="Auto\Auto_QuestionBLL.cs" />
+    <Compile Include="Auto\Auto_ScoreCoinLogBLL.cs" />
+    <Compile Include="Auto\Auto_SendCVBLL.cs" />
+    <Compile Include="Auto\Auto_ShareLinkBLL.cs" />
+    <Compile Include="Auto\Auto_ShareRegistLogBLL.cs" />
+    <Compile Include="Auto\Auto_SiteHeadBLL.cs" />
+    <Compile Include="Auto\Auto_SlideBLL.cs" />
+    <Compile Include="Auto\Auto_SoftLinkBLL.cs" />
+    <Compile Include="Auto\Auto_SoftLinkTypeBLL.cs" />
+    <Compile Include="Auto\Auto_SuggestSiteBLL.cs" />
+    <Compile Include="Auto\Auto_TagBLL.cs" />
+    <Compile Include="Auto\Auto_UserBaseBLL.cs" />
+    <Compile Include="Auto\Auto_UserScoreBLL.cs" />
+    <Compile Include="Auto\Auto_UserExtBLL.cs" />
+    <Compile Include="Auto\Auto_AnswerBLL.cs" />
+    <Compile Include="Auto\Auto_PriseBLL.cs" />
+    <Compile Include="Auto\Auto_UserLikeBLL.cs" />
+    <Compile Include="Auto\Auto_GiftBLL.cs" />
+    <Compile Include="Auto\Auto_UserGiftBLL.cs" />
+    <Compile Include="Auto\Auto_ArticleBLL.cs" />
+    <Compile Include="Auto\Auto_ChatBLL.cs" />
+    <Compile Include="Auto\Auto_VIPHeadBLL.cs" />
+    <Compile Include="Auto\Auto_ZhaoPinBLL.cs" />
+    <Compile Include="Auto\Auto_JobBLL.cs" />
+    <Compile Include="BXTOrderBLL.cs" />
+    <Compile Include="Cache\CacheBLL.cs" />
+    <Compile Include="ClickMsgBLL.cs" />
+    <Compile Include="CommentBLL.cs" />
+    <Compile Include="EditLogBLL.cs" />
+    <Compile Include="EmailNoticeBLL.cs" />
+    <Compile Include="ErrorBLL.cs" />
+    <Compile Include="FeeHRBLL.cs" />
+    <Compile Include="GiftFeeBLL.cs" />
+    <Compile Include="InviteInterviewBLL.cs" />
+    <Compile Include="JobBLL.cs" />
+    <Compile Include="JobCommentBLL.cs" />
+    <Compile Include="JobTradeBLL.cs" />
+    <Compile Include="JoinItemAnswerExtBLL.cs" />
+    <Compile Include="JoinItemQuestionExtBLL.cs" />
+    <Compile Include="LeaveWordBLL.cs" />
+    <Compile Include="MenuBelongTagBLL.cs" />
+    <Compile Include="NewsBLL.cs" />
+    <Compile Include="NoticeBLL.cs" />
+    <Compile Include="OAuth2\LoginConfig.cs" />
+    <Compile Include="OAuth2\QQApi.cs" />
+    <Compile Include="OAuth2\QQBiz.cs" />
+    <Compile Include="OAuth2\QQOpen.cs" />
+    <Compile Include="OAuth2\WeChatApi.cs" />
+    <Compile Include="OAuth2\WeChatBLL.cs" />
+    <Compile Include="OAuth2\WeChatToken.cs" />
+    <Compile Include="OAuth2\WeChatUser.cs" />
+    <Compile Include="OAuthBLL.cs" />
+    <Compile Include="PayCBLogBLL.cs" />
+    <Compile Include="ProductBLL.cs" />
+    <Compile Include="ProductBuyBLL.cs" />
+    <Compile Include="PVBLL.cs" />
+    <Compile Include="QiuZhiBLL.cs" />
+    <Compile Include="SendCVBLL.cs" />
+    <Compile Include="Service\AutoSendService.cs" />
+    <Compile Include="Service\IService\IAutoSendService.cs" />
+    <Compile Include="Service\IService\INoticeService.cs" />
+    <Compile Include="Service\IService\IOrderService.cs" />
+    <Compile Include="Service\IService\IScoreService.cs" />
+    <Compile Include="Service\IService\IUserService.cs" />
+    <Compile Include="Service\NoticeService.cs" />
+    <Compile Include="Service\OrderService.cs" />
+    <Compile Include="Service\ScoreService.cs" />
+    <Compile Include="Service\UserService.cs" />
+    <Compile Include="ShareLinkBLL.cs" />
+    <Compile Include="ShareRegistLogBLL.cs" />
+    <Compile Include="SiteHeadBLL.cs" />
+    <Compile Include="SlideBLL.cs" />
+    <Compile Include="SoftLinkBLL.cs" />
+    <Compile Include="BBSEnumBLL.cs" />
+    <Compile Include="ChatBLL.cs" />
+    <Compile Include="FeeAnswerLogBLL.cs" />
+    <Compile Include="GiftBLL.cs" />
+    <Compile Include="MasterBLL.cs" />
+    <Compile Include="PriseBLL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionBLL.cs" />
+    <Compile Include="ScoreCoinLogBLL.cs" />
+    <Compile Include="SoftLinkTypeBLL.cs" />
+    <Compile Include="SuggestSiteBLL.cs" />
+    <Compile Include="TagBLL.cs" />
+    <Compile Include="UserBaseBLL.cs" />
+    <Compile Include="UserExtBLL.cs" />
+    <Compile Include="UserGiftBLL.cs" />
+    <Compile Include="UserLikeBLL.cs" />
+    <Compile Include="UserScoreBLL.cs" />
+    <Compile Include="VIPHeadBLL.cs" />
+    <Compile Include="ZhaoPinBLL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AmazonBBS.Common\AmazonBBS.Common.csproj">
+      <Project>{46c5ef58-c92e-4d95-852c-62f0ec8edb58}</Project>
+      <Name>AmazonBBS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.DAL\AmazonBBS.DAL.csproj">
+      <Project>{f606633a-abc5-44d0-9943-59dd44a7ae56}</Project>
+      <Name>AmazonBBS.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.Model\AmazonBBS.Model.csproj">
+      <Project>{bcd6d0e5-27bb-4f7b-a510-32d5a643c287}</Project>
+      <Name>AmazonBBS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

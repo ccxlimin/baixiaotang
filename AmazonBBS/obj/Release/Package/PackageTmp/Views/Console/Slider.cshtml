@@ -1,0 +1,298 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<Slide>
+@{
+    ViewBag.Title = "主页轮播设置";
+    List<Slide> list = Model;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <div>
+                        <div>主页轮播图片切换时间间隔(毫秒：1秒等于1000毫秒)</div>
+                        <input placeholder="@(ViewBag.slideChangeTime)" class="form-control" onEmpty="主页轮播图片切换时间间隔(毫秒)" />
+                        <a onclick="SetConfig('slideChangeTime', this)" class="btn btn-primary">确定设置</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h3>主页轮播设置</h3>
+                    <h6>
+                        请注意：
+                        <br />
+                        <span class="Lcr">左侧为大图：图片宽高最小尺寸请保持在 <span style="color:blue;">530 * 306</span>，比例约 1.732 ,可按比例放大，(每张图片的尺寸要一致)，否则会导致难看！</span>
+                        <br />
+                        <span class="Lcr">右侧为上下两层小图：图片宽高最小尺寸请保持在 <span style="color:blue;">205 * 148</span>，比例约 ‭1.385 ‬,可按比例放大，(每张图片的尺寸要一致)，否则会导致难看！</span>
+                    </h6>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-8 Lmgt5">
+                                <select class="form-control" id="Slide_position">
+                                    <option value="">轮播在首页显示位置(左侧，右上，右下)</option>
+                                    <option value="11">图片在 左侧</option>
+                                    <option value="21">图片在 右上</option>
+                                    <option value="22">图片在 右下</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Slide_Title" placeholder="图片描述" />
+                            </div>
+                            <div class="col-sm-8">
+                                <input type="color" value="#ffffff" class="form-control" id="Slide_color" placeholder="字体颜色" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <input type="text" class="form-control" id="Slide_Url" placeholder="跳转地址" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <input type="text" class="form-control" id="Slide_Img" placeholder="轮播图片" />
+                                <input style="display:none" type="file" id="selectSlide_Img" value="" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <a onclick="addNew()" id="btn_addSlide" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (list != null && list.Count > 0)
+            {
+                <div class="col-md-12">
+                    <table class="table table-bordered table-hover table-console-slider">
+                        <caption>主页轮播管理</caption>
+                        <thead>
+                            <tr>
+                                <th width="20%">图片描述</th>
+                                <th width="20%">跳转地址</th>
+                                <th width="20%">轮播图片</th>
+                                <th width="20%">首页位置</th>
+                                <th width="20%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (Slide item in list)
+                                {
+                                    long sid = item.SlideId;
+                                    string sname = item.Title;
+                                    string saddress = item.Url;
+                                    string img = item.Img;
+                                    <tr>
+                                        <td style="color:@item.FontColor;background-color:#cccccc;">@sname</td>
+                                        <td>@saddress</td>
+                                        <td class="layer-photos-wrap"><img width="50" src="@img" /></td>
+                                        <td><img src="/Content/img/slideposition@(item.SlideType).png" alt="@item.SlideType" /></td>
+                                        <td>
+                                            <a onclick="Edit(this,@sid,@item.SlideType,'@item.FontColor')" class="btn-sm btn-primary">编辑</a>
+                                            @if (item.IsDelete == 1)
+                                            {
+                                                <a onclick="Delete(this,@sid,0)" class="btn-sm btn-success">恢复</a>
+                                            }
+                                            else
+                                            {
+                                                <a onclick="Delete(this,@sid,1)" class="btn-sm btn-danger">删除</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </form>
+</div>
+<div class="EditSlider Ldn" style="background-color:#fff;">
+    <div class="form-group Lmgt10">
+        <div class="col-md-12">
+            <select class="form-control" id="edit_Slide_position">
+                <option value="">轮播在首页显示位置(左侧，右上，右下)</option>
+                <option value="11">图片在 左侧</option>
+                <option value="21">图片在 右上</option>
+                <option value="22">图片在 右下</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_Title" name="edit_Title" placeholder="图片描述" type="text" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" value="#ffffff" id="edit_Color" name="edit_Color" placeholder="字体颜色" type="color" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_Url" name="edit_Url" placeholder="跳转地址" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input type="text" class="form-control" id="edit_Img" name="edit_Img" placeholder="轮播图片" />
+            <input style="display:none" type="file" id="EditSlide_Img" value="" />
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    Leo.tools.PickupInput("#selectSlide_Img", "#Slide_Img");
+    Leo.tools.PickupInput('#EditSlide_Img', '#edit_Img');
+    Leo.ShowMaxImg();
+
+    $("#Slide_position").change(function () {
+        var v = $(this).val()
+        if (v != "") {
+            $("#Slide_Img").val(v == "11" ? "轮播图片 尺寸：530 * 306" : "轮播图片 尺寸：205 * 148")
+        } else {
+            $("#Slide_Img").val("轮播图片")
+        }
+    })
+
+    /**新增 */
+    function addNew() {
+        var Slide_position = $("#Slide_position"),
+            Slide_Title = $("#Slide_Title"),
+            Slide_color = $("#Slide_color"),
+            Slide_Url = $("#Slide_Url"),
+            Slide_Img = $("#Slide_Img");
+        if (CHECKNOTEMPTY(Slide_position, "图片位置")) {
+            if (CHECKNOTEMPTY(Slide_Title, "图片描述")) {
+                if (CHECKNOTEMPTY(Slide_color, "跳转地址")) {
+                    if (CHECKNOTEMPTY(Slide_Img, "轮播图片")) {
+                        var formdata = new FormData();
+                        formdata.append("file", $("#selectSlide_Img")[0].files[0]);
+                        formdata.append("name", Slide_Title.val());
+                        formdata.append("color", Slide_color.val());
+                        formdata.append("address", Slide_Url.val());
+                        formdata.append("slideType", Slide_position.val());
+
+                        Leo.SendFile2("/Console/AddSlide", !1, function (data) {
+                            if (data.Ok) {
+                                MSG("新增成功", function () { location.reload(); });
+                                Slide_Title.val("");
+                                Slide_Url.val("");
+                                Slide_color.val("");
+                                Slide_Img.val("");
+                            } else {
+                                Leo.msgfail(data.Msg || "失败");
+                            }
+                        }, formdata);
+                    }
+                }
+            }
+        }
+    }
+
+    //删除
+    function Delete(target, id, type) {
+        var desc = type == 0 ? "恢复" : "删除";
+        var me = $(target);
+        AlertConfirm("确定要{0}此轮播图片吗？".Format(desc), "确认{0}".Format(desc), '我点错了', function () {
+            $.post("/Console/UpdateSlider/{0}".Format(id), { desc: desc, updateType: type }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("{0}成功".Format(desc));
+                    if (type == 0) {
+                        me.text("删除").removeClass("btn-success").addClass("btn-primary");
+                    } else {
+                        me.text("恢复").removeClass("btn-primary").addClass("btn-success");
+                    }
+                    me.removeAttr("onClick").unbind("click").bind("click", function () {
+                        Delete(me, id, type == 0 ? 1 : 0);
+                    });
+                } else {
+                    Leo.msgfail(data.Msg);
+                }
+            });
+        });
+    }
+
+    $("#EditSlide_Img").change(function () {
+        $("#EditSlide_Img").data("isChange", !0);
+    })
+
+    //编辑
+    function Edit(me, id, slideType, color) {
+        var layerindex;
+        var parent = $(me).parent().parent();
+        var edit_Slide_position = $("#edit_Slide_position"),
+            edit_Title = $("#edit_Title"),
+            edit_Color = $("#edit_Color"),
+            edit_Url = $("#edit_Url"),
+            edit_Img = $("#edit_Img");
+        edit_Slide_position.val(slideType);
+        edit_Title.val(parent.children().eq(0).text());
+        edit_Url.val(parent.children().eq(1).text());
+        edit_Img.val(parent.children().eq(2).children().attr("src"));
+        edit_Color.val(color);
+        function empty() {
+            edit_Slide_position.val("");
+            edit_Title.val("");
+            edit_Url.val("");
+            edit_Color.val("");
+            edit_Img.val("");
+            $("#EditSlide_Img").data("isChange", !1);
+        }
+        layerindex = AlertActionAreaWithConfirmWithSize($(".EditSlider"), '编辑主页轮播', "330px", null, '确定修改', null, function () {
+            if (CHECKNOTEMPTY(edit_Slide_position, "图片位置")) {
+                if (CHECKNOTEMPTY(edit_Title, "图片描述")) {
+                    if (CHECKNOTEMPTY(edit_Color, "字体颜色")) {
+                        var formdata = new FormData();
+                        formdata.append("name", edit_Title.val());
+                        formdata.append("color", edit_Color.val());
+                        formdata.append("address", edit_Url.val());
+                        formdata.append("slideType", edit_Slide_position.val());
+
+                        var isChangeImg = $("#EditSlide_Img").data("isChange");
+                        if (isChangeImg) {
+                            formdata.append("file", $("#EditSlide_Img")[0].files[0]);
+                        }
+                        formdata.append("isChangeIMG", isChangeImg || !1);
+                        Leo.SendFile2("/Console/EditSlider/{0}".Format(id), !1, function (data) {
+                            if (data.Ok) {
+                                layer.close(layerindex);
+                                empty();
+                                MSG("编辑成功", function () {
+                                    location.reload(!0);
+                                });
+                            }
+                        }, formdata);
+                    }
+                }
+            }
+        }, function () {
+            empty();
+        });
+    }
+
+    function SetConfig(key, target) {
+        var input = $(target).parent().find(".form-control");
+        if (input.val() != "") {
+            if (Leo.Regpx.isNumber(input.val())) {
+                $.post("/Console/SetConfig/{0}".Format(key), { value: input.val() }, function (data) {
+                    if (data.Ok) {
+                        layer.msg("设置成功");
+                        input.attr("placeholder", input.val());
+                        input.val("");
+                    }
+                });
+            } else {
+                input.focus();
+                MSG("请输入正整数");
+            }
+        } else {
+            input.focus();
+            MSG(input.attr("onEmpty") || "设置不能为空");
+        }
+    }
+</script>

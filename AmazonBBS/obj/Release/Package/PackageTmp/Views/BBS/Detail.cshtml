@@ -1,0 +1,677 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _QuestionInfo
+@{
+    ViewBag.isAuthor = true;
+
+    string baseurl = ConfigHelper.AppSettings("BaseUrl");
+    long currentUserID = UserBaseBLL.Instance.UserID;
+
+    ViewBag.baseurl = baseurl;
+    ViewBag.currentUid = currentUserID;
+    ViewBag.CommentScore = ConfigHelper.AppSettings("commentQuestion");//评论得分
+
+    string defaultUrl = baseurl + "/Content/img/head_default.gif";
+    ViewBag.Title = Model.Title;
+
+    var comments = Model.Comments.Comments;
+    var commentspage = Model.Comments.CommentPage;
+    bool isLogin = UserBaseBLL.Instance.IsLogin;
+    List<Tag> tags = Model.Tags;
+    bool notAuthor = currentUserID != Model.UserID;
+}
+@Styles.Render("~/Content/css2")
+@Scripts.Render("~/Content/main2")
+<div class="containerwrap Lmgt20">
+    <div id="wp" class="wp">
+        @*<script type="text/javascript">var fid = parseInt('57'), tid = parseInt('8149');</script>*@
+
+        @*<script src="data/cache/forum_viewthread.js?qi7" type="text/javascript"></script>*@
+        @*<script type="text/javascript">zoomstatus = parseInt(1); var imagemaxwidth = '600'; var aimgcount = new Array();</script>*@
+
+        @*<style id="diy_style" type="text/css"></style>
+            <!--[diy=diynavtop]--><div id="diynavtop" class="area"></div><!--[/diy]-->
+            <div id="pt" class="bm cl">
+                <div class="z">
+                    <a href="./" class="nvhm" title="首页">倍速社区</a><em>»</em><a href="http://www.51bestseller.com/forum.php">论坛</a> <em>›</em> <a href="http://www.51bestseller.com/forum.php?gid=1">卖家交流</a> <em>›</em> <a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=38">电商平台</a> <em>›</em> <a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=57">Amazon专区</a> <em>›</em> <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149">分享插件DS Amazon Quick View最新版本</a>
+                </div>
+            </div>
+
+            <style id="diy_style" type="text/css"></style>
+            <div class="wp">
+                <!--[diy=diy1]--><div id="diy1" class="area"></div><!--[/diy]-->
+            </div>*@
+
+        <div id="ct" class="wp cl ">
+            <div class="mn" style="width:100%">
+                @*<div id="pgt" class="pgs mbm cl " style=" display:none;">
+                        <div class="pgt"><div class="pg"><strong>1</strong><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=2">2</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=3">3</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=4">4</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=5">5</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=6">6</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=7">7</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=8">8</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=9">9</a><label><input type="text" name="custompage" class="px" size="2" title="输入页码，按回车快速跳转" value="1" onkeydown="if(event.keyCode==13) {window.location='forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page='+this.value;; doane(event);}"><span title="共 9 页"> / 9 页</span></label><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=2" class="nxt">下一页</a></div></div>
+                        <span class="y pgb" id="visitedforums" onmouseover="$('visitedforums').id = 'visitedforumstmp';this.id = 'visitedforums';showMenu({'ctrlid':this.id,'pos':'34'})"><a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=57">返回列表</a></span>
+                        <a id="newspecial" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&amp;action=newthread&amp;fid=57')" href="javascript:;" title="发新帖"><img src="static/image/common/pn_post.png" alt="发新帖"></a>                                        <a id="post_reply" onclick="showWindow('reply', 'forum.php?mod=post&amp;action=reply&amp;fid=57&amp;tid=8149')" href="javascript:;" title="回复"><img src="static/image/common/pn_reply.png" alt="回复"></a>
+                    </div>*@
+
+                @*<ul class="p_pop" id="newspecial_menu" style="display: none">
+                        <li><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57">发表帖子</a></li>
+                        <li class="poll"><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57&amp;special=1">发起投票</a></li>
+                        <li class="reward"><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57&amp;special=3">发布悬赏</a></li>
+                        <li class="debate"><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57&amp;special=5">发起辩论</a></li>
+                        <li class="activity"><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57&amp;special=4">发起活动</a></li>
+                        <li class="trade"><a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=newthread&amp;fid=57&amp;special=2">出售商品</a></li>
+                    </ul>*@
+
+                <div id="postlist" class="pl bm box1">
+                    <!--抢楼回帖奖励-->
+                    <div class="vwthdtit cl">
+                        <div class="vwthduser cl z"></div>
+                        <h1 class="vwthdts z">
+                            @if (tags.Count > 0)
+                            {
+                                foreach (var tag in tags)
+                                {
+                                    <a class="tagItem label label-warning" href="/tag/a/@tag.TagId" target="_blank">@tag.TagName</a>
+                                }
+                            }
+                            <a href="@baseurl/bbs/detail/@Model.QuestionId" id="thread_subject" title="@Model.Title">@Model.Title</a>
+                        </h1>
+                        @if (Model.CoinType != 0)
+                        {
+                            <span class="vwthdreplies y">
+                                <strong class="Lcri">@Model.Coin</strong><br>悬赏分
+                            </span>
+                            <span class="vwthdviews y">
+                                <strong>@Model.CommentCount</strong><br>回复
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="vwthdreplies y">
+                                <strong>@Model.CommentCount</strong><br>回复
+                            </span>
+                        }
+                        <span class="vwthdviews y">
+                            <strong>@Model.PVCount</strong><br>浏览
+                        </span>
+                        <span class="vwthdviews y">
+                            <strong class="likecount">@Model.LikeCount</strong><br>关注
+                        </span>
+                        @*<div class="y">
+                                <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;action=printable&amp;tid=8149" title="打印" target="_blank"><img src="static/image/common/print.png" alt="打印" class="vm"></a>
+                                <a href="http://www.51bestseller.com/forum.php?mod=redirect&amp;goto=nextoldset&amp;tid=8149" title="上一主题"><img src="static/image/common/thread-prev.png" alt="上一主题" class="vm"></a>
+                                <a href="http://www.51bestseller.com/forum.php?mod=redirect&amp;goto=nextnewset&amp;tid=8149" title="下一主题"><img src="static/image/common/thread-next.png" alt="下一主题" class="vm"></a>
+                            </div>*@
+                        <span class="xg1 copy">
+                            @*&nbsp;<img src="static/image/common/hot_1.gif" alt="" title="热度: 78">*@
+                            @*<a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;fromuid=15504" onclick="return copyThreadUrl(this, '倍速社区')" title="您的朋友访问此链接后，您将获得相应的积分奖励">[复制链接]</a>*@
+                            @*<span class="Ldn" id="pasteInfo">@(Model.Title)&#13;@(baseurl)/bbs/detail/@(Model.QuestionId)&#13;(出处：百晓堂)</span>*@
+                            <a class="btn-paste Lusn" data-clipboard-text="@(Model.Title)&#13;@(baseurl)/bbs/detail/@(Model.QuestionId)&#13;(出处：百晓堂)">&nbsp;[复制链接]</a>
+                        </span>
+                        @*<div class="vwthdewm">
+                                <div class="vwthdewmimg"></div>
+                                <div class="vwthdewmsub">
+                                    <img src="http://qr.liantu.com/api.php?w=100&amp;m=0&amp;el=l&amp;text=http://www.51bestseller.com/forum.php?mod=viewthread%26tid=8149"><p>微信扫一扫  分享朋友圈</p>
+                                </div>
+                            </div>*@
+                    </div>
+                    @*<script type="text/javascript">
+                            jq(".vwthdewm").hover(function () {
+                                jq(this).children(".vwthdewmsub").show();
+                            }, function () {
+                                jq(this).children(".vwthdewmsub").hide();
+                            })
+                        </script>*@
+                    <table cellspacing="0" cellpadding="0" class="ad" style=" display:none;">
+                        <tbody>
+                            <tr>
+                                <td class="pls"></td>
+                                <td class="plc"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @*如果不是第一页，则不加载主题*@
+                    @if (Model.Comments != null && Model.Comments.CommentPage.PageIndex == 1)
+                    {
+                        <div id="post_@(Model.QuestionId)" class="viewbox firstfloor cl" style="margin-top:0;">
+                            <table id="pid@(Model.UserID)" class="plhin boxtable" summary="pid@(Model.UserID)" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="pls" rowspan="2">
+                                            @if (!Model.IsAnonymous || Model.UserID == currentUserID || UserBaseBLL.Instance.IsMaster)
+                                            {
+                                                @Html.Partial("_DiscuzLeftUserInfo", Model.DiscuzLeftUserInfo)
+                                            }
+                                            else
+                                            {
+                                                <div class="pls favatar">
+                                                    <div>
+                                                        <div class="avatar">
+                                                            <a href="javascript:;" class="avtm">
+                                                                <img src="~/Content/img/anonymous.png">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pi">
+                                                        <div class="authi">
+                                                            <a>匿名用户</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="plc" style="width:100%">
+                                            <div class="pi">
+                                                @*<strong>
+                                                        <a href="javascript:;" title="楼主" id="postnum@(Model.UserID)">
+                                                            楼主
+                                                        </a>
+                                                    </strong>*@
+                                                <div class="pti">
+                                                    <div class="pdbt"></div>
+                                                    <div class="authi firstauthi">
+                                                        @*<img class="authicn vm" id="authicon@(Model.UserID)" src="static/image/common/online_member.gif">*@
+                                                        <em>发表于 @Model.CreateTime.Value.ToString(1)</em>
+                                                        @if (Model.ShowCoinTips)
+                                                        {
+                                                            <em class="Lcr">&nbsp;该帖子为您 +@ConfigHelper.AppSettings("addQuestion") 积分</em>
+                                                        }
+                                                        <style>
+                                                            .quick_action a {
+                                                                background: none;
+                                                            }
+                                                        </style>
+                                                        <span data-name="分享组件" class="social-share-cs"></span>
+                                                        <em class="Lfr">
+                                                            <span class="quick_action" data-mid="@Model.QuestionId">
+                                                                @if (notAuthor)
+                                                                {
+                                                                    @*////////////////////////*@
+                                                                    <span class="content-main-button" data-mid="@Model.QuestionId">
+                                                                        <button type="button" class="Button VoteButton VoteButton--up @(Model.IsAgainst?string.Empty:Model.IsPrised?"":isLogin ? "btn_prise" : "btn_login")">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                    <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </span>@(Model.IsAgainst ? string.Empty : Model.IsPrised ? "已点赞" : "点赞") @(Model.PriseCount)
+                                                                        </button>
+                                                                        <button class="@(Model.PriseCount>0?string.Empty:"Ldni") Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-type="1" data-mid="@Model.QuestionId">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                            </span>
+                                                                        </button>
+                                                                        <button type="button" class="Button VoteButton VoteButton--down @(Model.IsPrised?string.Empty:Model.IsAgainst?"":isLogin ? "btn_against" : "btn_login")">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                    <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </span>@(Model.IsPrised ? string.Empty : Model.IsAgainst ? "已反对" : "反对") @(Model.AgainstCount)
+                                                                        </button>
+                                                                        <button class="@(Model.AgainstCount>0?string.Empty:"Ldni") Button VoteButton Lpd0i showAgainstUser" style="margin:0 5px 0 0;" title="查看反对人数" data-type="1" data-mid="@Model.QuestionId">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                            </span>
+                                                                        </button>
+                                                                    </span>
+                                                                    @*////////////////////////////////*@
+                                                                }
+                                                                <a class="fastre btn_comment Lmgl5">评论</a>
+                                                                @if (notAuthor)
+                                                                {
+                                                                    if (Model.IsLiked)
+                                                                    {
+                                                                        <a class="fastre btn_unlike">已关注</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="fastre @(isLogin ? "btn_like" : "btn_login")">关注该贴</a>
+                                                                    }
+                                                                    @*if (Model.IsPrised)
+                                                                        {
+                                                                            <a class="fastre">已点赞</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="fastre @(isLogin ? "btn_prise" : "btn_login")">点赞</a>
+                                                                        }*@
+                                                                }
+                                                            </span>
+                                                            <span class="authorFloorIndex" title="由@(Model.UserName)发表">楼主</span>
+                                                        </em>
+                                                        @*<span class="pipe">|</span>
+                                                            <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;page=1&amp;authorid=8077" rel="nofollow">只看该作者</a>
+                                                            <span class="none"><img src="static/image/common/arw_r.gif" class="vm" alt="回帖奖励"></span>
+                                                            <span class="pipe show">|</span><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;ordertype=1" class="show">倒序浏览</a>
+                                                            <span class="pipe show">|</span><a href="javascript:;" onclick="readmode($('thread_subject').innerHTML, @(Model.UserID));" class="show">阅读模式</a>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*主题 S*@
+                                            <div class="pct">
+                                                <style type="text/css">
+                                                    .pcb {
+                                                        margin-right: 0
+                                                    }
+                                                </style>
+                                                <div class="pcb">
+                                                    <div class="t_fsz">
+                                                        @if (!Model.ContentNeedPay.HasValue || (Model.ContentNeedPay.HasValue && !Model.ContentNeedPay.Value) || currentUserID == Model.UserID || Model.IsBuyContent)
+                                                        {
+                                                            <table cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td class="t_f">
+                                                                        @*@Html.Raw(Model.Body.Replace("&nbsp;", string.Empty))*@
+                                                                        @Html.Raw(Model.Body)
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        }
+                                                        else
+                                                        {
+                                                            @*购买主题 S*@
+                                                            //如果主题需要付费才能看到
+                                                            <div class="locked contentLocked">
+                                                                @if (isLogin)
+                                                                {
+                                                                    <a href="javascript:;" class="y viewpay buycontent" data-mid="@Model.QuestionId" data-feetype="@Model.ContentFeeType" data-fee="@Model.ContentFee" title="购买主题">购买主题</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="javascript:;" class="y viewpay btn_login" title="购买主题">登录后购买</a>
+                                                                }
+                                                                <em class="right">
+                                                                    已有 @(Model.ContentBuyCount) 人购买&nbsp;
+                                                                </em>
+                                                                本主题需向作者支付 <strong>@(Model.ContentFee) @(Model.ContentFeeType == 10 ? "积分" : "VIP分")</strong> 才能浏览
+                                                            </div>
+                                                            @*购买主题 E*@
+                                                        }
+
+                                                        @*如果有附件*@
+                                                        @if (Model.AttachMents.Count > 0)
+                                                        {
+                                                            if (isLogin)
+                                                            {
+                                                                @*下载附件 S*@
+                                                                <div class="pattl">
+                                                                    @foreach (AttachMentWithBuyInfo attach in Model.AttachMents)
+                                                                    {
+                                                                        <ignore_js_op>
+                                                                            <dl class=" tattl">
+                                                                                <dt>
+                                                                                    <img src="@baseurl/content/fileicon/@(attach.FileIcon).png" border="0" class="vm" alt="">
+                                                                                </dt>
+                                                                                <dd>
+                                                                                    <p class="attnm">
+                                                                                        @if (!attach.IsFee || currentUserID == Model.UserID || attach.IsBuy)
+                                                                                        {
+                                                                                            <a href="@(baseurl)/down?mt=1&md=@(Model.QuestionId)&ad=@(attach.AttachMentId)" target="_self" initialized="true">@attach.FileName</a>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <a class="downHref_@(attach.AttachMentId)" href="javascript:;" initialized="true">@attach.FileName</a>
+                                                                                        }
+
+                                                                                    </p>
+                                                                                    <div class="tip tip_4" id="aid6793_menu" style="position: absolute; z-index: 301; left: 593.5px; top: 1357px; display: none;" disautofocus="true" initialized="true">
+                                                                                        <div class="tip_c">
+                                                                                            <p class="y">@(attach.CreateTime.ToString(11)) 上传</p>
+                                                                                            <p>点击文件名下载附件</p>
+                                                                                        </div>
+                                                                                        <div class="tip_horn"></div>
+                                                                                    </div>
+                                                                                    <p></p>
+                                                                                    <p>@(attach.FileSize), 下载次数: @attach.DownCount</p>
+                                                                                    @*附件价格S*@
+                                                                                    @if (attach.IsFee)
+                                                                                    {
+                                                                                        <p class="hasbuyerd_@(attach.AttachMentId)">
+                                                                                            售价: <strong>@(attach.Fee) @(attach.FeeType == 10 ? "积分" : "VIP分")</strong> &nbsp;
+                                                                                            @*[<a href="http://www.51bestseller.com/forum.php?mod=misc&amp;action=viewattachpayments&amp;aid=6525" onclick="showWindow('attachpay', this.href)" target="_blank">记录</a>]*@
+                                                                                            @if (!attach.IsBuy && Model.UserID != currentUserID)
+                                                                                            {
+                                                                                                <span>
+                                                                                                    [<a data-aid="@attach.AttachMentId" data-feetype="@attach.FeeType" data-fee="@attach.Fee" data-filename="@attach.FileName" data-mid="@Model.QuestionId" class="buy-attach-btn">购买</a>]
+                                                                                                </span>
+                                                                                            }
+                                                                                        </p>
+                                                                                    }
+                                                                                    @*附件价格E*@
+                                                                                </dd>
+                                                                            </dl>
+                                                                        </ignore_js_op>
+                                                                    }
+                                                                </div>
+                                                                @*下载附件 E*@
+                                                            }
+                                                            else
+                                                            {
+                                                                //需要登录才能查看附件或其他资源
+                                                                <div class="attach_nopermission attach_tips">
+                                                                    <div>
+                                                                        <h3><strong>本帖子中包含更多资源</strong></h3>
+                                                                        <p>您需要 <a href="@(baseurl)/account/login?returnurl=@Request.Url">登录</a> 才可以下载或查看，没有帐号？<a href="@(baseurl)/account/register?returnurl=@Request.Url" title="注册帐号">立即注册</a> </p>
+                                                                    </div>
+                                                                    <span class="atips_close" onclick="this.parentNode.style.display='none'">x</span>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*主题 E*@
+                                        </td>
+                                    </tr>
+                                    <tr class="Ldn">
+                                        <td class="plc plm">
+                                            <div class="cloudcube_btn cl">
+                                                <a href="http://www.51bestseller.com/home.php?mod=spacecp&amp;ac=favorite&amp;type=thread&amp;id=8149&amp;formhash=27fb4d2e" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' 人收藏'" title="0 人收藏"><i><img src="static/image/common/fav.gif" alt="收藏">收藏<span id="favoritenumber" style="display:none">0</span></i></a>
+                                            </div>
+                                            <div class="vwthdaid cl">
+                                                <div class="vwthdact cl">
+                                                </div>
+                                                <div class="vwthdbdshare y">
+                                                    <div class="bdsharebuttonbox bdshare-button-style1-24" data-bd-bind="1547002544901">
+                                                        <a href="#" class="bds_more" data-cmd="more"></a>
+                                                        <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                                                        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                                                        @*<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>*@
+                                                        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+                                                        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                                                    </div>
+                                                    <script>
+                                                        window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "24" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr id="_postposition@(Model.UserID)"></tr>
+                                    <tr>
+                                        <td class="pls"></td>
+                                        <td class="plc" style="overflow:visible;--> width:100%">
+                                            <div class="po hin">
+                                                <div class="pob cl">
+                                                    <em data-mid="@Model.QuestionId">
+                                                        <a class="fastre btn_comment Lmgl5">评论</a>
+                                                        @if (notAuthor)
+                                                        {
+                                                            if (Model.IsLiked)
+                                                            {
+                                                                <a class="fastre btn_unlike">已关注</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="fastre @(isLogin ? "btn_like" : "btn_login")">关注该贴</a>
+                                                            }
+                                                            @*if (Model.IsPrised)
+                                                                {
+                                                                    <a class="fastre">已点赞</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="fastre @(isLogin ? "btn_prise" : "btn_login")">点赞</a>
+                                                                }*@
+                                                            <button type="button" class="Lmg8 Button VoteButton VoteButton--up @(Model.IsPrised?"":isLogin ? "btn_prise" : "btn_login")">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                        <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                    </svg>
+                                                                </span>@(Model.IsAgainst ? string.Empty : Model.IsPrised ? "已点赞" : "点赞") @(Model.PriseCount)
+                                                            </button>
+                                                            <button class="@(Model.PriseCount>0?"":"Ldni") Lmg8 Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-type="1" data-mid="@Model.QuestionId">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                </span>
+                                                            </button>
+                                                            <button type="button" class="Lmg8 Button VoteButton VoteButton--down @(Model.IsPrised?string.Empty:Model.IsAgainst?"":isLogin ? "btn_against" : "btn_login")">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                        <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                    </svg>
+                                                                </span>@(Model.IsPrised ? string.Empty : Model.IsAgainst ? "已反对" : "反对") @(Model.AgainstCount)
+                                                            </button>
+                                                            <button class="@(Model.AgainstCount>0?"":"Ldni") Button VoteButton Lpd0i showAgainstUser" title="查看反对人数" data-type="1" data-mid="@Model.QuestionId">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                </span>
+                                                            </button>
+                                                        }
+                                                    </em>
+
+                                                    <p>
+                                                        @*<a href="javascript:;" id="mgc_post_@(Model.UserID)" onmouseover="showMenu(this.id)" class="showmenu">使用道具</a>*@
+                                                        <a href="javascript:;" class="report" data-mid="@Model.QuestionId" data-type="1">举报</a>
+                                                    </p>
+
+                                                    @*<ul id="mgc_post_@(Model.UserID)_menu" class="p_pop mgcmn" style="display: none;">
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=bump&amp;idtype=tid&amp;id=8149" id="a_bump" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/bump.small.gif">提升卡</a></li>
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=stick&amp;idtype=tid&amp;id=8149" id="a_stick" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/stick.small.gif">置顶卡</a></li>
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=jack&amp;idtype=tid&amp;id=8149" id="a_jack" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/jack.small.gif">千斤顶</a></li>
+                                                        </ul>
+                                                        <script type="text/javascript" reload="1">checkmgcmn('post_@(Model.UserID)')</script>*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="ad">
+                                        <td class="pls"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    @*回复留言 S*@
+                    @{
+                        ViewBag.UserID = Model.UserID;
+                        ViewBag.MainID = Model.QuestionId;
+                        ViewBag.Best = Model.BestAnswerId;//最佳解答
+                        ViewBag.Nice = Model.NiceAnswerId;//优秀解答
+                        ViewBag.FromBBS = true;
+                        @Html.Partial("_CommentList_New", Model.Comments)
+                    }
+                    @*回复留言 E*@
+                </div>
+                @*<form method="post" autocomplete="off" name="modactions" id="modactions">
+                        <input type="hidden" name="formhash" value="27fb4d2e">
+                        <input type="hidden" name="optgroup">
+                        <input type="hidden" name="operation">
+                        <input type="hidden" name="listextra" value="">
+                        <input type="hidden" name="page" value="1">
+                    </form>
+                    <div class="pgbtn"><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;page=2" hidefocus="true">下一页 »</a></div>
+                    <div class="pgs mtm mbm cl">
+                        <div class="pg"><strong>1</strong><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=2">2</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=3">3</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=4">4</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=5">5</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=6">6</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=7">7</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=8">8</a><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=9">9</a><label><input type="text" name="custompage" class="px" size="2" title="输入页码，按回车快速跳转" value="1" onkeydown="if(event.keyCode==13) {window.location='forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page='+this.value;; doane(event);}"><span title="共 9 页"> / 9 页</span></label><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;page=2" class="nxt">下一页</a></div>        <span class="pgb y" id="visitedforumstmp" onmouseover="$('visitedforums').id = 'visitedforumstmp';this.id = 'visitedforums';showMenu({'ctrlid':this.id,'pos':'21'})"><a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=57">返回列表</a></span>
+                        <a id="newspecialtmp" onmouseover="$('newspecial').id = 'newspecialtmp';this.id = 'newspecial';showMenu({'ctrlid':this.id})" onclick="showWindow('newthread', 'forum.php?mod=post&amp;action=newthread&amp;fid=57')" href="javascript:;" title="发新帖"><img src="static/image/common/pn_post.png" alt="发新帖"></a>
+                        <a id="post_replytmp" onclick="showWindow('reply', 'forum.php?mod=post&amp;action=reply&amp;fid=57&amp;tid=8149')" href="javascript:;" title="回复"><img src="static/image/common/pn_reply.png" alt="回复"></a>
+                    </div>*@
+
+                <!--[diy=diyfastposttop]-->@*<div id="diyfastposttop" class="area"></div>*@<!--[/diy]-->
+                @*<script type="text/javascript">
+                        var postminchars = parseInt('10');
+                        var postmaxchars = parseInt('3000000');
+                        var disablepostctrl = parseInt('0');
+                    </script>*@
+
+                @*<div id="f_pst" class="pl bm bmw">
+                                        <form method="post" autocomplete="off" id="fastpostform" action="forum.php?mod=post&amp;action=reply&amp;fid=57&amp;tid=8149&amp;extra=&amp;replysubmit=yes&amp;infloat=yes&amp;handlekey=fastpost" onsubmit="return fastpostvalidate(this)">
+                                            <table cellspacing="0" cellpadding="0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="pls">
+                                                            <div class="avatar avtm"><img src="http://www.51bestseller.com/uc_server/avatar.php?uid=15504&amp;size=middle"></div>
+                                                        </td>
+                                                        <td class="plc">
+
+                                                            <span id="fastpostreturn"></span>
+
+
+                                                            <div class="cl">
+                                                                <div id="fastsmiliesdiv" class="y"><div id="fastsmiliesdiv_data"><div id="fastsmilies"><table cellspacing="0" cellpadding="0"><tbody><tr></tr><tr><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':)')" id="fastpostsmilie_1_td"><img id="smilie_1" width="20" height="20" src="static/image/smiley/default/smile.gif" alt=":)"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':(')" id="fastpostsmilie_2_td"><img id="smilie_2" width="20" height="20" src="static/image/smiley/default/sad.gif" alt=":("></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':D')" id="fastpostsmilie_3_td"><img id="smilie_3" width="20" height="20" src="static/image/smiley/default/biggrin.gif" alt=":D"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':\'(')" id="fastpostsmilie_4_td"><img id="smilie_4" width="20" height="20" src="static/image/smiley/default/cry.gif" alt=":'("></td></tr><tr><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':@')" id="fastpostsmilie_5_td"><img id="smilie_5" width="20" height="20" src="static/image/smiley/default/huffy.gif" alt=":@"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':o')" id="fastpostsmilie_6_td"><img id="smilie_6" width="20" height="20" src="static/image/smiley/default/shocked.gif" alt=":o"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':P')" id="fastpostsmilie_7_td"><img id="smilie_7" width="20" height="20" src="static/image/smiley/default/tongue.gif" alt=":P"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':$')" id="fastpostsmilie_8_td"><img id="smilie_8" width="20" height="20" src="static/image/smiley/default/shy.gif" alt=":$"></td></tr><tr><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ';P')" id="fastpostsmilie_9_td"><img id="smilie_9" width="20" height="20" src="static/image/smiley/default/titter.gif" alt=";P"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':L')" id="fastpostsmilie_10_td"><img id="smilie_10" width="20" height="20" src="static/image/smiley/default/sweat.gif" alt=":L"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':Q')" id="fastpostsmilie_11_td"><img id="smilie_11" width="20" height="20" src="static/image/smiley/default/mad.gif" alt=":Q"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':lol')" id="fastpostsmilie_12_td"><img id="smilie_12" width="20" height="20" src="static/image/smiley/default/lol.gif" alt=":lol"></td></tr><tr><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':loveliness:')" id="fastpostsmilie_13_td"><img id="smilie_13" width="20" height="20" src="static/image/smiley/default/loveliness.gif" alt=":loveliness:"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':funk:')" id="fastpostsmilie_14_td"><img id="smilie_14" width="20" height="20" src="static/image/smiley/default/funk.gif" alt=":funk:"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':curse:')" id="fastpostsmilie_15_td"><img id="smilie_15" width="20" height="20" src="static/image/smiley/default/curse.gif" alt=":curse:"></td><td onmouseover="smilies_preview('fastpost', 'fastsmiliesdiv', this, 20)" onmouseout="$('smilies_preview').style.display = 'none'" onclick="seditor_insertunit('fastpost', ':dizzy:')" id="fastpostsmilie_16_td"><img id="smilie_16" width="20" height="20" src="static/image/smiley/default/dizzy.gif" alt=":dizzy:"></td></tr></tbody></table></div></div></div><div class="hasfsl" id="fastposteditor">
+                                                                    <div class="tedt mtn">
+                                                                        <div class="bar">
+                                                                            <span class="y">
+                                                                                <a href="http://www.51bestseller.com/forum.php?mod=post&amp;action=reply&amp;fid=57&amp;tid=8149" onclick="return switchAdvanceMode(this.href)">高级模式</a>
+                                                                            </span>
+                                                                            <script src="data/cache/seditor.js?qi7" type="text/javascript"></script>
+                                                                            <div class="fpd">
+                                                                                <a href="javascript:;" title="文字加粗" class="fbld" onclick="seditor_insertunit('fastpost', '[b]', '[/b]');doane(event);">B</a>
+                                                                                <a href="javascript:;" title="设置文字颜色" class="fclr" id="fastpostforecolor" onclick="showColorBox(this.id, 2, 'fastpost');doane(event);">Color</a>
+                                                                                <a id="fastpostimg" href="javascript:;" title="图片" class="fmg" onclick="seditor_menu('fastpost', 'img');doane(event);">Image</a>
+                                                                                <a id="fastposturl" href="javascript:;" title="添加链接" class="flnk" onclick="seditor_menu('fastpost', 'url');doane(event);">Link</a>
+                                                                                <a id="fastpostquote" href="javascript:;" title="引用" class="fqt" onclick="seditor_menu('fastpost', 'quote');doane(event);">Quote</a>
+                                                                                <a id="fastpostcode" href="javascript:;" title="代码" class="fcd" onclick="seditor_menu('fastpost', 'code');doane(event);">Code</a>
+                                                                                <a href="javascript:;" class="fsml" id="fastpostsml" onclick="showMenu({'ctrlid':this.id,'evt':'click','layer':2});return false;">Smilies</a>
+                                                                                <script type="text/javascript" reload="1">smilies_show('fastpostsmiliesdiv', 8, 'fastpost');</script>
+                                                                                <span class="pipe z">|</span><object id="SWFUpload_0" type="application/x-shockwave-flash" data="static/image/common/swfupload.swf?preventswfcaching=1547002544477" width="17" height="25" class="swfupload"><param name="wmode" value="transparent"><param name="movie" value="static/image/common/swfupload.swf?preventswfcaching=1547002544477"><param name="quality" value="high"><param name="allowScriptAccess" value="always"><param name="flashvars" value="movieName=SWFUpload_0&amp;uploadURL=http%3A%2F%2Fwww.51bestseller.com%2Fmisc.php%3Fmod%3Dswfupload%26action%3Dswfupload%26operation%3Dupload%26fid%3D57&amp;useQueryString=false&amp;requeueOnError=false&amp;httpSuccess=&amp;assumeSuccessTimeout=0&amp;params=uid%3D15504%26amp%3Bhash%3Db0dea47b9843a8a9807fda0ca19ddd03&amp;filePostName=Filedata&amp;fileTypes=*.chm%3B*.pdf%3B*.zip%3B*.rar%3B*.tar%3B*.gz%3B*.bzip2%3B*.gif%3B*.jpg%3B*.jpeg%3B*.png&amp;fileTypesDescription=All%20Support%20Formats&amp;fileSizeLimit=5000&amp;fileUploadLimit=0&amp;fileQueueLimit=0&amp;debugEnabled=false&amp;buttonImageURL=%2Fstatic%2Fimage%2Fcommon%2Fuploadbutton_small.png&amp;buttonWidth=17&amp;buttonHeight=25&amp;buttonText=&amp;buttonTextTopPadding=0&amp;buttonTextLeftPadding=0&amp;buttonTextStyle=color%3A%20%23000000%3B%20font-size%3A%2016pt%3B&amp;buttonAction=-110&amp;buttonDisabled=false&amp;buttonCursor=-2"></object>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="area">
+                    <textarea rows="6" cols="80" name="message" id="fastpostmessage" onkeydown="seditor_ctlent(event, 'fastpostvalidate($(\'fastpostform\'))');" tabindex="4" class="pt"></textarea>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="seccheck_fastpost">
+                                                            </div>
+
+                                                            <script type="text/javascript">
+                                                                var editorid = '';
+                                                                var ATTACHNUM = { 'imageused': 0, 'imageunused': 0, 'attachused': 0, 'attachunused': 0 }, ATTACHUNUSEDAID = new Array(), IMGUNUSEDAID = new Array();
+                                                            </script>
+
+                                                            <input type="hidden" name="posttime" id="posttime" value="1547002501">
+                                                            <div class="upfl hasfsl">
+                                                                <table cellpadding="0" cellspacing="0" border="0" id="attach_tblheader" style="display: none;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>点击附件文件名添加到帖子内容中</td>
+                                                                            <td class="atds">描述</td>
+                                                                            <td class="attv">
+                                                                                阅读权限
+                                                                                <img src="static/image/common/faq.gif" alt="Tip" class="vm" onmouseover="showTip(this)" tip="阅读权限按由高到低排列，高于或等于选中组的用户才可以阅读">
+                                                                            </td>
+                                                                            <td class="attpr">金钱</td>
+                                                                            <td class="attc"></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <div class="fieldset flash" id="attachlist"></div>
+                                                                <script src="data/cache/upload.js?qi7" type="text/javascript"></script>
+                                                                <script type="text/javascript">
+                                                                    var upload = new SWFUpload({
+                                                                        upload_url: "http://www.51bestseller.com/misc.php?mod=swfupload&action=swfupload&operation=upload&fid=57",
+                                                                        post_params: { "uid": "15504", "hash": "b0dea47b9843a8a9807fda0ca19ddd03" },
+                                                                        file_size_limit: "5000",
+                                                                        file_types: "*.chm;*.pdf;*.zip;*.rar;*.tar;*.gz;*.bzip2;*.gif;*.jpg;*.jpeg;*.png",
+                                                                        file_types_description: "All Support Formats",
+                                                                        file_upload_limit: 0,
+                                                                        file_queue_limit: 0,
+                                                                        swfupload_preload_handler: preLoad,
+                                                                        swfupload_load_failed_handler: loadFailed,
+                                                                        file_dialog_start_handler: fileDialogStart,
+                                                                        file_queued_handler: fileQueued,
+                                                                        file_queue_error_handler: fileQueueError,
+                                                                        file_dialog_complete_handler: fileDialogComplete,
+                                                                        upload_start_handler: uploadStart,
+                                                                        upload_progress_handler: uploadProgress,
+                                                                        upload_error_handler: uploadError,
+                                                                        upload_success_handler: uploadSuccess,
+                                                                        upload_complete_handler: uploadComplete,
+                                                                        button_image_url: "static/image/common/uploadbutton_small.png",
+                                                                        button_placeholder_id: "spanButtonPlaceholder",
+                                                                        button_width: 17,
+                                                                        button_height: 25,
+                                                                        button_cursor: SWFUpload.CURSOR.HAND,
+                                                                        button_window_mode: "transparent",
+                                                                        custom_settings: {
+                                                                            progressTarget: "attachlist",
+                                                                            uploadSource: 'forum',
+                                                                            uploadType: 'attach',
+                                                                            uploadFrom: 'fastpost'
+                                                                        },
+                                                                        debug: false
+                                                                    });
+                                                                </script>
+                                                            </div>
+
+                                                            <input type="hidden" name="formhash" value="27fb4d2e">
+                                                            <input type="hidden" name="usesig" value="1">
+                                                            <input type="hidden" name="subject" value="  ">
+                                                            <p class="ptm pnpost">
+                                                                <a href="http://www.51bestseller.com/home.php?mod=spacecp&amp;ac=credit&amp;op=rule&amp;fid=57" class="y" target="_blank">本版积分规则</a>
+                                                                <button type="submit" onmouseover="checkpostrule('seccheck_fastpost', 'ac=reply');this.onmouseover=null" name="replysubmit" id="fastpostsubmit" class="pn pnc vm" value="replysubmit" tabindex="5"><strong>发表回复</strong></button>
+                                                                <label for="fastpostrefresh"><input id="fastpostrefresh" type="checkbox" class="pc">回帖后跳转到最后一页</label>
+                                                                <script type="text/javascript">if (getcookie('fastpostrefresh') == 1) { $('fastpostrefresh').checked = true; }</script>
+                                                            </p>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </form>
+                                    </div>*@
+
+
+                @*<div id="visitedforums_menu" class="p_pop blk cl" style="display: none;">
+                        <table cellspacing="0" cellpadding="0">
+                            <tbody>
+                                <tr>
+                                    <td id="v_forums">
+                                        <h3 class="mbn pbn bbda xg1">浏览过的版块</h3>
+                                        <ul class="xl xl1">
+                                            <li><a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=38">电商平台</a></li>
+                                            <li><a href="http://www.51bestseller.com/forum.php?mod=forumdisplay&amp;fid=77">facebook专区</a></li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>*@
+                @*<script type="text/javascript">document.onkeyup = function (e) { keyPageScroll(e, 0, 1, 'forum.php?mod=viewthread&tid=8149', 1); }</script>*@
+            </div>
+        </div>
+
+        @*<div class="wp mtn">*@
+        <!--[diy=diy3]-->@*<div id="diy3" class="area"></div>*@<!--[/diy]-->
+        @*</div>*@
+        @*<script type="text/javascript">
+                function succeedhandle_followmod(url, msg, values) {
+                    var fObj = $('followmod_' + values['fuid']);
+                    if (values['type'] == 'add') {
+                        fObj.innerHTML = '不收听';
+                        fObj.href = 'home.php?mod=spacecp&ac=follow&op=del&fuid=' + values['fuid'];
+                    } else if (values['type'] == 'del') {
+                        fObj.innerHTML = '收听TA';
+                        fObj.href = 'home.php?mod=spacecp&ac=follow&op=add&hash=27fb4d2e&fuid=' + values['fuid'];
+                    }
+                }
+                fixed_avatar([@(Model.UserID), 258687, 258809, 258823, 258881, 258930, 259014, 259067, 262028, 262182], 1);
+            </script>*@
+    </div>
+</div>
+
+@Html.Partial("_DOComment", 1)
+
+@*//////////////////////////////////////////////////*@
+@*评论*@
+@*@{
+        //ViewBag.UserID = Model.UserID;
+        //ViewBag.MainID = Model.QuestionId;
+        //ViewBag.Best = Model.BestAnswerId;//最佳解答
+        //ViewBag.Nice = Model.NiceAnswerId;//优秀解答
+
+        //ViewBag.FromBBS = true;
+
+        @Html.Partial("_CommentList", Model.Comments)
+    }*@
+@*<script src="~/Scripts/ZeroClipboard/ZeroClipboard.min.js"></script>*@
+<script>
+    Leo.init("bbs", "detail", [@Model.QuestionId]).LoadCommentControlForDiscuz(false).LoadPriseControlForDiscuz();
+    //$(".navbar.navbar-inverse.navbar-fixed-top").remove();
+</script>
+@*<div class="share-component"
+    data-disabled="google,twitter,facebook"
+    data-sites="weibo,qzone,qq,wechat"
+    data-wechat-qrcode-title="请打开微信扫一扫"
+    data-mobile-sites="weibo,qq,qzone,tencent"
+    data-description="@ViewBag.Title"
+    data-summary="@ViewBag.Title"
+    data-image="图片全路径"></div>*@

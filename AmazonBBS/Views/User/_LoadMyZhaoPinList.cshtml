@@ -1,0 +1,70 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model BaseListViewModel<ZhaoPin>
+@{
+    List<ZhaoPin> list = Model.DataList;
+    Paging page = Model.Page;
+    int count = list.Count;
+}
+
+@if (count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>招聘岗位</th>
+                <th>招聘人数</th>
+                <th>发布时间</th>
+                <th>有效期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < count; i++)
+            {
+                ZhaoPin item = list[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td><a href="/zhaopin/detail/@item.ZhaoPinID" target="_blank">@item.Gangwei</a></td>
+                    <td>@item.NeedCount</td>
+                    <td>@item.CreateTime.Value.ToString(1)</td>
+                    <td class="validShow">
+                        @{ bool shixiao = item.ValidTime <= DateTime.Now;}
+                        @if (shixiao)
+                        {
+                            <span class="Lcr Lfs12">已失效</span>
+                        }
+                        else
+                        {
+                            <span>@item.ValidTime.Value.ToString(1)</span>
+                        }
+                    </td>
+                    <td>
+                        @if (shixiao)
+                        {
+                            <a data-mid="@item.ZhaoPinID" class="btn-light btn btn-success">擦亮</a>
+                            @*<a class="btn btn-primary">编辑</a>*@
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning disabled">无需擦亮</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="myzhaopinpage">
+        @Html.Partial("_Page", page)
+    </div>
+    <script>
+        Leo.init("user", "myzhaopin")
+    </script>
+}
+else
+{
+    <div class="well">
+        你没有发布过招聘！
+    </div>
+}

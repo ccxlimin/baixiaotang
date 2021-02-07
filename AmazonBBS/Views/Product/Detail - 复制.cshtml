@@ -1,0 +1,108 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model _Product
+@{
+    ViewBag.Title = $"{Model.PTitle}_产品详情";
+    var m = Model;
+    UserExt ext = UserExtBLL.Instance.GetExtInfo(Convert.ToInt64(m.CreateUser));
+    bool isuserv = UserExtBLL.Instance.IsFaRenOauth(ext.UserV);
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+
+    bool canSeeContact = (bool)ViewBag.canSeeContact;
+}
+
+<div class="post">
+    <h1 class="post-head">
+        @m.PTitle
+        @if (islogin)
+        {
+            <span class="Lfr"><button onclick="var me=$(this);me.hide();setTimeout(function(){me.show()},1);print()" class="btn btn-sm btn-primary ">打印</button></span>
+        }
+        else
+        {
+            <span class="Lfr"><button class="btn_login btn btn-sm btn-primary ">打印</button></span>
+        }
+    </h1>
+    <h4 style="color:red;">
+        @(isuserv ? "用户已认证" : "该用户未认证")
+    </h4>
+    <div class="post-content">
+        <h3>
+            公司名称：@m.CompanyName
+        </h3>
+        <h3>
+            产品标题：@m.PTitle
+        </h3>
+        <h3>
+            产品定位：@m.PLocation
+        </h3>
+        <h3>
+            产品介绍：@m.PDesc
+        </h3>
+        <h3>
+            产品功能：@m.PFunction
+        </h3>
+        <h3>
+            产品价格：@m.PPrice
+        </h3>
+        <h3>
+            尺寸重量：@m.PSize
+        </h3>
+        <h3>
+            联系方式：
+            @{
+                if (canSeeContact)
+                {
+                    <span>@m.Contact</span>
+                }
+                else
+                {
+                    <span class="q_contact">********</span>
+                }
+            }
+        </h3>
+        <h3>
+            @if (!canSeeContact)
+            {
+                <a class="btn btn-danger @(islogin?"feeSeeContact":"btn_login")">消费VIP分查看联系方式</a>
+                <script>
+                    $(".feeSeeContact").click(function () {
+                        var me = $(this);
+                        AlertConfirm("确认要付费查看联系方式吗？", "付费查看", "我再想想", function () {
+                            $.post("/ZhaoPin/Fee/{0}".Format(@m.ProductID), { type: 3 }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("付费成功");
+                                    $(".q_contact").text(data.Data);
+                                    me.remove();
+                                } else {
+                                    layer.msg(data.Msg || "付费失败");
+                                    setTimeout(function () {
+                                        if (data.Url) {
+                                            location.href = data.Url;
+                                        }
+                                    });
+                                }
+                            });
+                        });
+                    });
+                </script>
+            }
+        </h3>
+        <h3>
+            产品图片：
+            <span><img src="@m.ProductPic" /></span>
+        </h3>
+    </div>
+    <div style="margin-top:10px;">
+        <button type="button" class="btn_comment btn btn-default" data-mid="@m.ProductID">评论</button>
+    </div>
+    @Html.Partial("_DOComment", 0)
+</div>
+@{
+    ViewBag.UserID = Convert.ToInt64(m.CreateUser);
+    ViewBag.MainID = m.ProductID;
+}
+@Html.Partial("_CommentList", m.Comments)
+<script>
+    Leo.init("product","detail",@Model.ProductID).LoadCommentControl().LoadPriseControl();
+</script>

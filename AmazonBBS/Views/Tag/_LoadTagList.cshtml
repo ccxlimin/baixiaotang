@@ -1,0 +1,28 @@
+﻿@using AmazonBBS.Model
+@model List<HomeTagsViewModel>
+@{
+    /**/
+
+    List<HomeTagsViewModel> tags = Model;
+}
+@if (tags != null && tags.Count > 0)
+{
+    foreach (HomeTagsViewModel tag in tags)
+    {
+        @*if (tag.TagBelongId == 1038)
+            {
+                <a class="btn btn-default Lmgb10" href="/tag/a/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+            }
+            else
+            {
+                <a class="btn btn-default Lmgb10" href="/tag/b/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+            }*@
+        <a class="btn btn-default Lmgb10" href="/tag/category/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+    }
+}
+else
+{
+    <div class="well">
+        暂无数据！
+    </div>
+}

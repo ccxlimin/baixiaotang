@@ -1,0 +1,186 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<JobTrade>
+@{
+    ViewBag.Title = "行业岗位管理";
+    List<Job> jobTypeSelect = ViewBag.JobTypeSelect;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-4">
+                    <h3>行业管理</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="Trade_Name" placeholder="行业名称" />
+                            </div>
+                            <div class="col-sm-12 Lmgt5">
+                                <a onclick="addNewTrade()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>岗位分类管理</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="JobType_Name" placeholder="职位分类名称" />
+                            </div>
+                            <div class="col-sm-12 Lmgt5">
+                                <a onclick="addNewJobType()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>岗位管理</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12">
+                                <select id="select_jobType" class="form-control">
+                                    <option value="">请选择职位分类</option>
+                                    @foreach (Job item in jobTypeSelect)
+                                    {
+                                        <option value="@item.JobId">@item.JobType</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-12 Lmgt5">
+                                <input type="text" class="form-control" id="Job_Name" placeholder="职位名称" />
+                            </div>
+                            <div class="col-sm-12 Lmgt5">
+                                <a onclick="addNewJob()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-10">
+        <ul class="userTabs nav nav-tabs nav-tabs-a-borderColor-top-blue">
+            <li class="active"><a href="#Sort_Trade" data-toggle="tab" data-reactid="Sort_Trade" onclick="loadData(this,'GetTrade')">行业</a></li>
+            <li><a href="#Sort_Job" data-toggle="tab" data-reactid="Sort_Job" onclick="loadData(this,'GetJobs')">职位</a></li>
+        </ul>
+        <div class="List_RenderData">
+            @Html.Partial("_LoadJobTradeData", Model)
+        </div>
+    </div>
+</div>
+<div id="EditTradeWrapper">
+
+</div>
+<script>
+    function addNewTrade() {
+        if (CHECKNOTEMPTY($("#Trade_Name"), "行业名称")) {
+            if (Leo.tools.CheckLength($("#Trade_Name").val(), 1, 20, "行业名称")) {
+                $.post("/Common/AddTrade", { tradeName: $.trim($("#Trade_Name").val()), isfromConsole: !0 }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess(data.Msg || "新增成功", function () { location.reload(!0); });
+                    } else {
+                        Leo.msgfail(data.Msg || "新增失败");
+                    }
+                });
+            }
+        }
+    }
+
+    function addNewJobType() {
+        if (CHECKNOTEMPTY($("#JobType_Name"), "职位分类名称")) {
+            if (Leo.tools.CheckLength($("#JobType_Name").val(), 1, 20, "职位分类名称")) {
+                $.post("/Common/AddJobType", { jobTypeName: $.trim($("#JobType_Name").val()), isfromConsole: !0, isJob: !1 }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess(data.Msg || "新增成功", function () { location.reload(!0); });
+                    } else {
+                        Leo.msgfail(data.Msg || "新增失败");
+                    }
+                });
+            }
+        }
+    }
+
+    function addNewJob() {
+        if (CHECKNOTEMPTY($("#select_jobType"), "职位分类")) {
+            if (CHECKNOTEMPTY($("#Job_Name"), "职位名称")) {
+                if (Leo.tools.CheckLength($("#Job_Name").val(), 1, 20, "职位名称")) {
+                    $.post("/Common/AddJobType", { jobName: $.trim($("#Job_Name").val()), parentId: $("#select_jobType").val(), isfromConsole: !0, isJob: !0 }, function (data) {
+                        if (data.Ok) {
+                            Leo.msgsuccess(data.Msg || "新增成功", function () { location.reload(!0); });
+                        } else {
+                            Leo.msgfail(data.Msg || "新增失败");
+                        }
+                    });
+                }
+            }
+        }
+    }
+    function loadData(target, method) {
+        var index;
+        $(target).parent().hasClass("active") || (
+            index = LOAD("加载数据中..."), Leo.ScrollTop(".userTabs"),
+            setTimeout(function () {
+                $.get("/Console/{0}".Format(method), function (data) {
+                    CLOSE(index);
+                    $(".List_RenderData").empty().append(data);
+                })
+            }, Leo.tools.Random(500, 1000))
+        );
+    }
+    function DeleteTrade(target, id, type) {
+        AlertConfirm("确定要删除吗？", "删除", "取消", function () {
+            $.post("/Console/DeleteTrade/{0}".Format(id), { type: type }, function (d) {
+                if (d.Ok) {
+                    Leo.msg("删除成功");
+                    $(target).parent().parent().remove();
+                } else {
+                    Leo.msgfail("删除失败");
+                }
+            })
+        });
+    }
+
+    function DeleteJob(target, id, type) {
+        AlertConfirm("确定要删除吗？", "删除", "取消", function () {
+            $.post("/Console/DeleteJob/{0}".Format(id), { type: type }, function (d) {
+                if (d.Ok) {
+                    Leo.msg("删除成功");
+                    var deleteElement = $(target).parent().parent(), _class = deleteElement.attr("class");
+                    if (deleteElement.children().eq(1).hasClass("Ldn")) {
+                        var prev = deleteElement.prev();
+                        while (prev.attr("class") == _class && prev.prev().attr("class") == _class) {
+                            prev = prev.prev();
+                        }
+                        var td = prev.children().eq(1);
+                        td.attr("rowspan", parseInt(td.attr("rowspan")) - 1);
+                        while (prev.next().attr("class") == _class) {
+                            prev = prev.next();
+                            var td = prev.children().eq(1);
+                            td.attr("rowspan", parseInt(td.attr("rowspan")) - 1);
+                        }
+                    } else {
+                        var next = deleteElement.next();
+                        if (_class == next.attr("class")) {
+                            var td = next.children().eq(1);
+                            td.attr("rowspan", parseInt(td.attr("rowspan")) - 1).removeClass("Ldn");
+                            while (next.next().attr("class") == _class) {
+                                next = next.next();
+                                var td = next.children().eq(1);
+                                td.attr("rowspan", parseInt(td.attr("rowspan")) - 1);
+                            }
+                        }
+                    }
+                    deleteElement.remove();
+                } else {
+                    Leo.msgfail("删除失败");
+                }
+            })
+        });
+    }
+</script>

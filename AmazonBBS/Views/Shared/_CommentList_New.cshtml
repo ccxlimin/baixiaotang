@@ -1,0 +1,579 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model _Comments
+@{
+    ViewBag.isAuthor = false;//该处是评论展示，并非 作者  用于discuz左侧用户信息展示时的判断
+
+    string baseurl = ViewBag.baseurl;
+    bool fromBBS = ViewBag.FromBBS ?? false;//来自BBS
+
+    int priseType = fromBBS ? 2 : 4;
+    int reportType = fromBBS ? 3 : 4;
+
+    long bestAnswerid = ViewBag.Best ?? 0;//最佳解答
+    long niceAnswerid = ViewBag.Nice ?? 0;//优秀解答
+
+    //string defaultsign = "该用户很懒，懒的什么都没有留下";
+    //string defaultheadurl = "/content/img/head_default.gif";
+    var comments = Model.Comments;
+    var commentspage = Model.CommentPage;
+
+    bool isLogin = UserBaseBLL.Instance.IsLogin;
+    long currentLoginUserID = UserBaseBLL.Instance.UserID;
+    string loginUri = baseurl + "/account/login?returnurl=" + Request.Url;
+
+    //作者ID
+    long AuthorUserID = ViewBag.UserID;
+    //问题或文章 ID
+    long MainID = ViewBag.MainID;
+
+    ///评论的删除和修改目前只有超管可以
+    bool isroot = UserBaseBLL.Instance.IsRoot;
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+
+    //获取积分等级表
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+
+    //评论得分
+    string commentScore = ViewBag.CommentScore;
+
+    if (comments != null)
+    {
+        //foreach (var comment in comments)
+        for (int commentIndex = 0, commentCount = comments.Count; commentIndex < commentCount; commentIndex++)
+        {
+            _Comment comment = comments[commentIndex];
+            //是否匿名或显示状态
+            bool showUserInfo = isMaster || !comment.IsAnonymous || currentLoginUserID == comment.CommentUserID;
+            var commentUserID = showUserInfo ? comment.CommentUserID : -1;
+
+            //当前楼层
+            var currentFloor = (commentIndex + 1) + (commentspage.PageIndex - 1) * commentspage.PageSize;
+            <div id="post_@(commentUserID)" class="viewbox otherfloor cl">
+                <table id="pid@(commentUserID)" class="plhin boxtable" summary="pid@(commentUserID)" cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td class="pls" rowspan="2">
+                                @*如果 该条评论 是 不是匿名 或者 当前用户是管理员 或者当前用户是该评论人，则显示*@
+                                @if (showUserInfo)
+                                {
+                                    @Html.Partial("_DiscuzLeftUserInfo", MapperHelper.MapTo<DiscuzLeftUserInfo>(comment))
+                                }
+                                else
+                                {
+                                    <div class="pls favatar">
+                                        <div>
+                                            <div class="avatar">
+                                                <a href="javascript:;" class="avtm">
+                                                    <img src="~/Content/img/anonymous.png">
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="pi">
+                                            <div class="authi">
+                                                <a>匿名用户</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+                            <td class="plc" style="width:100%">
+                                <div class="pi">
+                                    <div class="pti">
+                                        <div class="pdbt"></div>
+                                        <div class="authi">
+                                            @*<img class="authicn vm" id="authicon@(commentUserID)" src="@comment.HeadUrl">*@
+                                            <em id="authorposton@(commentUserID)">
+                                                @if (!showUserInfo)
+                                                {
+                                                    <span>匿名用户</span>
+                                                }
+                                                else
+                                                {
+                                                    ViewBag.VIP = comment.VIP;
+                                                    ViewBag.Time = comment.VIPExpiryTime;
+                                                    var htm = Html.Partial("_VIP");
+                                                    <span>@comment.UserName</span>
+                                                    <span>@Html.Raw(htm)</span>
+                                                }
+                                                &nbsp;评论于 @comment.CreateTime.Value.ToString(1)
+                                            </em>
+                                            @if (comment.ShowCoinTips)
+                                            {
+                                                <em class="Lcr">&nbsp;(本次评论为您 +@commentScore 积分)</em>
+                                            }
+                                            @*最佳回答*@
+
+                                            @if (commentspage.PageIndex == 1)
+                                            {
+                                                if (currentFloor < 3)
+                                                {
+                                                    <em class="Lmgl5 y" title="由@(comment.UserName)评论">@(currentFloor == 1 ? "沙发" : currentFloor == 2 ? "板凳" : "地板")</em>
+                                                }
+                                                else
+                                                {
+                                                    <em class="Lmgl5 y" title="由@(comment.UserName)评论">@(currentFloor)楼</em>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <em class="Lmgl5 y" title="由@(comment.UserName)评论">@(currentFloor)楼</em>
+                                            }
+
+                                            @if (fromBBS)
+                                            {
+                                                if (comment.CommentId == bestAnswerid)
+                                                {
+                                                    <em class="masked y">最佳解答</em>
+                                                }
+                                                else if (comment.CommentId == niceAnswerid)
+                                                {
+                                                    <em class="masked2 y">优秀解答</em>
+                                                }
+                                            }
+                                            @*<span class="pipe">|</span>
+                                                <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=16483&amp;page=1&amp;authorid=4836" rel="nofollow">只看该作者</a>*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pct">
+                                    <div class="pcb">
+                                        <div class="t_fsz commentContent_@comment.CommentId">
+                                            @{
+                                                //如果当前登录用户 是 作者 或者 是该评论者 或者付费了，则可以看答案和进行操作
+                                                bool canSeeAnswer = currentLoginUserID == AuthorUserID || currentLoginUserID == comment.CommentUserID || comment.IsHideOrFeeToSee != 1 || comment.IsFeeAnswer;
+                                            }
+                                            @if (canSeeAnswer)
+                                            {
+                                                <table cellspacing="0" cellpadding="0">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="t_f commentContent@(comment.CommentId)" id="postmessage_@(commentUserID)">
+                                                                @Html.Raw(comment.CommentContent)
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                string _body = AmazonBBS.Common.HtmlRegexHelper.ToText(comment.CommentContent);
+                                                int length = _body.Length;
+                                                //展示前15%文字
+                                                int end = Convert.ToInt32(Math.Floor(0.15 * length));
+                                                end = end > 20 ? 20 : end > 2 ? end : 0;
+                                                if (end > 0)
+                                                {
+                                                    <div>@_body.Substring(0, Convert.ToInt32(end))...(<span class="Lcr">后续内容需付费</span>)</div>
+                                                }
+                                                @*<div class="Lmgb0 well" style="background-image: url('/Content/img/block_layer_big.jpg');background-size: cover;">
+                                                        <div style="background-color:rgba(56, 180, 71, 0.7);color:#fff;padding:5px 10px;user-select:none;">
+                                                            <div>该用户设置了@(comment.FeeCoinType == 1 ?"积分" :"金钱")查看。</div>
+                                                            <div>
+                                                                你需要
+                                                                @if (isLogin)
+                                                                {
+                                                                    <a class="FeeScoreForAnswer" data-type="@comment.FeeCoinType" data-coin="@comment.NeedCoin" data-id="@comment.CommentId">购买</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="@loginUri">登录</a><span> 后再购买</span>
+                                                                }
+                                                                才可查看回答答案！
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                @*购买主题 S*@
+                                                //如果主题需要付费才能看到
+                                                <div class="locked">
+                                                    @if (isLogin)
+                                                    {
+                                                        <a href="javascript:;" class="y viewpay FeeScoreForAnswer" data-type="@comment.FeeCoinType" data-coin="@comment.NeedCoin" data-id="@comment.CommentId" title="购买回答">购买回答</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="@loginUri" class="y viewpay" title="登录再购买回答">请先登录后支付</a>
+                                                    }
+                                                    @*<em class="right">
+                                                            已有 19 人购买&nbsp;
+                                                        </em>*@
+                                                    本回答需向作者支付 <strong>@(comment.NeedCoin)&nbsp;@(comment.FeeCoinType == 1 ? "积分" : "金钱")</strong> 才能浏览全部内容
+                                                </div>
+                                                @*购买主题 E*@
+                                            }
+                                        </div>
+                                        <div id="comment_@(commentUserID)" class="cm"></div>
+                                        <div id="post_rate_div_@(commentUserID)"></div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="plc plm"></td>
+                        </tr>
+                        <tr id="_postposition@(commentUserID)"></tr>
+                        <tr>
+                            <td class="pls"></td>
+                            <td class="plc" style="overflow:visible;--> width:100%">
+                                <div class="po hin">
+                                    <div class="pob cl">
+                                        <em>
+                                            @if (fromBBS)
+                                            {
+                                                if (bestAnswerid == 0 && currentLoginUserID == AuthorUserID)
+                                                {
+                                                    if (comment.CommentId != niceAnswerid)
+                                                    {
+                                                        //最佳答案采纳
+                                                        <a class="fastre btn_best" data-mid="@MainID" data-comment-id="@comment.CommentId">采纳该答案</a>
+                                                    }
+                                                }
+                                            }
+                                            @if (showUserInfo)
+                                            {
+                                                if (isLogin)
+                                                {
+                                                    <a class="Lmgl5 fastre @(canSeeAnswer ? "aw-add-comment" : string.Empty)" data-mid="@MainID" data-comment-id="@comment.CommentId">回复(@comment.ReplyCount)</a>
+                                                    if (comment.IsPrised)
+                                                    {
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--up">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>已点赞 <span class="count">@comment.PrisedCount</span>
+                                                        </button>
+                                                        <button class="Lmg8 Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-comment-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                        //反对
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--down">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span><span class="count">@comment.AgainstCount</span>
+                                                        </button>
+                                                        <button class="Lmg8 Button VoteButton Lpd0i @(comment.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数" data-answer-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                    }
+                                                    else if (comment.IsAgainst)
+                                                    {
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--up">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span><span class="count">@comment.PrisedCount</span>
+                                                        </button>
+                                                        <button class="Lmg8 Button VoteButton Lpd0i @(comment.PrisedCount > 0 ? string.Empty : "Ldni") showPriseUser" title="查看点赞人数" data-comment-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                        //反对
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--down">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>已反对 <span class="count">@comment.AgainstCount</span>
+                                                        </button>
+                                                        <button class="Lmg8 Button VoteButton Lpd0i @(comment.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数" data-answer-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                    }
+                                                    else
+                                                    {
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--up add_prise" data-answer-id="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>点赞 <span class="count">@comment.PrisedCount</span>
+                                                        </button>
+                                                        <button class="Lmg8 Button VoteButton Lpd0i @(comment.PrisedCount > 0 ? string.Empty : "Ldni") showPriseUser" title="查看点赞人数" data-answer-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                        //反对
+                                                        <button type="button" class="Lmg8 Button VoteButton VoteButton--down add_against" data-answer-id="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                    <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>反对 <span class="count">@comment.AgainstCount</span>
+                                                        </button>
+                                                        <button class="Button VoteButton Lpd0i @(comment.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数" data-answer-id="@comment.CommentId" data-type="@priseType" data-mid="@comment.CommentId">
+                                                            <span style="display: inline-flex; align-items: center;">
+                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                            </span>
+                                                        </button>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <a href="@loginUri" class="fastre Lmgl5">回复(@comment.ReplyCount)</a>
+                                                    <a href="@loginUri" class="fastre">点赞(@comment.PrisedCount)</a>
+                                                }
+                                            }
+                                        </em>
+                                        @if (isroot)
+                                        {
+                                            <p data-comentoperaid="@comment.CommentId">
+                                                <a class="active btn-edit-comment">编辑</a>
+                                                <a class="active btn-delete-comment">删除</a>
+                                            </p>
+                                        }
+                                        else
+                                        {
+                                            <p>
+                                                <a href="javascript:;" class="report" data-mid="@comment.CommentId" data-type="@reportType">举报</a>
+                                            </p>
+                                        }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="ad">
+                            <td class="pls"></td>
+                            <td class="plc"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            //回复
+            if (canSeeAnswer)
+            {
+                if (comment.ReplyList != null && comment.ReplyList.Count > 0)
+                {
+                    //foreach (var reply in comment.ReplyList)
+                    for (int replyIndex = 0, replyCount = comment.ReplyList.Count; replyIndex < replyCount; replyIndex++)
+                    {
+                        _ReplyComment reply = comment.ReplyList[replyIndex];
+                        bool showReplyUserInfo = isMaster || !comment.IsAnonymous || currentLoginUserID == comment.CommentUserID;
+                        var replyUserID = showReplyUserInfo ? reply.CommentUserID : -1;
+
+                        <div id="post_@(reply.CommentId)" name="post_@(reply.CommentId)" class="viewbox otherfloor cl" style="margin-top:0;">
+                            <table id="pid@(replyUserID)" class="plhin boxtable" summary="pid@(replyUserID)" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="pls" rowspan="2">
+                                            @Html.Partial("_DiscuzLeftUserInfo", MapperHelper.MapTo<DiscuzLeftUserInfo>(reply))
+                                        </td>
+                                        <td class="plc" style="width:100%">
+                                            <div class="pi">
+                                                <div class="pti">
+                                                    <div class="pdbt"></div>
+                                                    <div class="authi">
+                                                        @*<img class="authicn vm" id="authicon@(replyUserID)" src="static/image/common/online_member.gif">*@
+                                                        <em id="authorposton@(replyUserID)">
+                                                            @if (!showReplyUserInfo)
+                                                            {
+                                                                <span>匿名用户</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                ViewBag.VIP = reply.VIP;
+                                                                ViewBag.Time = reply.VIPExpiryTime;
+                                                                var htm_reply = Html.Partial("_VIP");
+                                                                <span>@reply.UserName</span>
+                                                                <span>@Html.Raw(htm_reply)</span>
+                                                            }
+                                                            &nbsp;&nbsp;回复于 @reply.CreateTime.Value.ToString(1)
+                                                        </em>
+                                                        <em class="y">@(currentFloor)楼-@(replyIndex + 1)</em>
+                                                        @*<span class="pipe">|</span>
+                                                            <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=16483&amp;page=1&amp;authorid=4836" rel="nofollow">只看该作者</a>*@
+                                                    </div>
+                                                </div>
+                                            </div><div class="pct">
+                                                <style type="text/css">
+                                                    .pcb {
+                                                        margin-right: 0
+                                                    }
+                                                </style>
+                                                <div class="pcb">
+                                                    <div class="t_fsz">
+                                                        <table cellspacing="0" cellpadding="0">
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="t_f" id="postmessage_@(replyUserID)">
+                                                                        @{
+                                                                            if (reply.Reply2UserID > 0 && reply.Reply2UserName.IsNotNullOrEmpty())
+                                                                            {
+                                                                                <a title="回复@(reply.Reply2UserName)" href="#post_@(reply.ReplyToCommentID)">@("@" + reply.Reply2UserName)</a>
+                                                                            }
+                                                                            @Html.Raw(reply.CommentContent)
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    @*<div id="comment_@(replyUserID)" class="cm"></div>*@
+                                                    @*<div id="post_rate_div_@(replyUserID)"></div>*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="plc plm"></td>
+                                    </tr>
+                                    <tr id="_postposition@(replyUserID)"></tr>
+                                    <tr>
+                                        <td class="pls"></td>
+                                        <td class="plc" style="overflow:visible;--> width:100%">
+                                            <div class="po hin">
+                                                <div class="pob cl">
+                                                    <em>
+                                                        @if (showReplyUserInfo)
+                                                        {
+                                                            if (isLogin)
+                                                            {
+                                                                <a class="fastre Lmgl5 aw-add-comment" data-mid="@MainID" data-comment-id="@comment.CommentId" data-replyuid="@reply.CommentUserID" data-replytoanswer="@reply.CommentId">回复(<span class="count">@reply.ReplyCount</span>)</a>
+                                                                if (reply.IsPrised)
+                                                                {
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--up">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span>已点赞 <span class="count">@reply.PrisedCount</span>
+                                                                    </button>
+                                                                    <button class="Lmg8 Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-comment-id="@comment.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                    //反对
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--down">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span><span class="count">@reply.AgainstCount</span>
+                                                                    </button>
+                                                                    <button class="Button VoteButton Lpd0i @(reply.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数123" data-answer-id="@reply.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                }
+                                                                else if (reply.IsAgainst)
+                                                                {
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--up">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span><span class="count">@reply.PrisedCount</span>
+                                                                    </button>
+                                                                    <button class="Lmg8 Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-comment-id="@reply.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                    //反对
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--down">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span>已反对 <span class="count">@reply.AgainstCount</span>
+                                                                    </button>
+                                                                    <button class="Button VoteButton Lpd0i @(reply.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数" data-answer-id="@reply.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--up add_prise" data-answer-id="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span>点赞 <span class="count">@reply.PrisedCount</span>
+                                                                    </button>
+                                                                    <button class="Lmg8 Button VoteButton Lpd0i @(reply.PrisedCount > 0 ? string.Empty : "Ldni") showPriseUser" title="查看点赞人数" data-answer-id="@reply.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                    //反对
+                                                                    <button type="button" class="Lmg8 Button VoteButton VoteButton--down add_against" data-answer-id="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                            </svg>
+                                                                        </span>反对 <span class="count">@reply.AgainstCount</span>
+                                                                    </button>
+                                                                    <button class="Button VoteButton Lpd0i @(reply.AgainstCount > 0 ? string.Empty : "Ldni") showAgainstUser" title="查看反对人数" data-answer-id="@reply.CommentId" data-type="@priseType" data-mid="@reply.CommentId">
+                                                                        <span style="display: inline-flex; align-items: center;">
+                                                                            <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                        </span>
+                                                                    </button>
+                                                                }
+                                                            }
+                                                            else
+                                                            {
+                                                                //未登录
+                                                                <a href="@loginUri" class="fastre Lmgl5">回复(@reply.ReplyCount)</a>
+                                                                <a href="@loginUri" class="fastre">点赞(@reply.PrisedCount)</a>
+                                                            }
+                                                        }
+                                                    </em>
+                                                    @if (isroot)
+                                                    {
+                                                        <p data-comentoperaid="@reply.CommentId">
+                                                            <a class="active btn-edit-comment">编辑</a>
+                                                            <a class="active btn-delete-comment">删除</a>
+                                                        </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>
+                                                            <a href="javascript:;" class="report" data-mid="@reply.CommentId" data-type="@reportType">举报</a>
+                                                        </p>
+                                                    }
+
+                                                    <ul id="mgc_post_@(replyUserID)_menu" class="p_pop mgcmn" style="display: none;"></ul>
+                                                    @*<script type="text/javascript" reload="1">checkmgcmn('post_@(replyUserID)')</script>*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    @*<tr class="ad">
+                                            <td class="pls"></td>
+                                            <td class="plc"></td>
+                                        </tr>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                }
+            }
+        }
+        @Html.Partial("_PageLink", commentspage)
+    }
+    <div id="replyWrap" class="Ldn">
+        <div id="summernote_reply_wrap">
+            <div id="summernote_reply"></div>
+        </div>
+        <div style="text-align:center;">
+            <button type="button" class="btn btn-default" id="btn_subReply">提交回复</button>
+        </div>
+    </div>
+}

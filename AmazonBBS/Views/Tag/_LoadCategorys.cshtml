@@ -1,0 +1,31 @@
+﻿@using AmazonBBS.Model
+@model TagCategoryVM
+@{
+    List<_QuestionInfo> questionInfos = Model.QuestionInfos;
+    List<_Article> articles = Model.Articles;
+    Paging page = Model.Page;
+}
+@if (questionInfos.Count == 0 && articles.Count == 0)
+{
+    <div class="well">
+        该话题下暂时没有内容！<a href="/tag" target="_blank">更多话题</a>
+    </div>
+}
+else
+{
+    if (questionInfos.Count > 0)
+    {
+        <div class="aw-common-list">
+            @Html.Partial("_BBS_Search", questionInfos)
+        </div>
+    }
+    if (articles.Count > 0)
+    {
+        <div class="aw-common-list">
+            @Html.Partial("_Article_Search", articles)
+        </div>
+    }
+    <div class="categoryListPage">
+        @Html.Partial("_Page", page)
+    </div>
+}

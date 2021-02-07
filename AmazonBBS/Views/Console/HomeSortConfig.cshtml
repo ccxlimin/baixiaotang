@@ -1,0 +1,259 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model TagViewModel
+@{
+    ViewBag.Title = "首页排序规则设置";
+    string home_default = ConfigHelper.AppSettings("HomeSortConfig-Sort_Default");
+    string home_hot = ConfigHelper.AppSettings("HomeSortConfig-Sort_Hot");
+    string home_jinghua = ConfigHelper.AppSettings("HomeSortConfig-Sort_JinHua");
+    string home_top = ConfigHelper.AppSettings("HomeSortConfig-Sort_Top");
+}
+<style>
+    body {
+        user-select: none;
+        -moz-user-select: none;
+    }
+</style>
+<div class="row Lmgt20">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div class="well">
+            <h4>首页-综合页签排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_default = new List<string>();
+                    if (home_default.IsNotNullOrEmpty())
+                    {
+                        roles_default = home_default.Split('+').ToList();
+                    }
+                }
+                <a onclick="selectSortType(this)" data-typedesc="default-top" class="btn-sm btn-warning @(roles_default.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+置顶</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-hot" class="btn-sm btn-warning @(roles_default.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+热门</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-jinghua" class="btn-sm btn-warning @(roles_default.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+精华</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-pvcount" class="btn-sm btn-warning @(roles_default.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-createtime" class="btn-sm btn-warning @(roles_default.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-desc" class="btn-sm btn-warning @(roles_default.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="default-asc" class="btn-sm btn-warning @(roles_default.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="default-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (home_default.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_default)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="default-top">-置顶</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="default-hot">-热门</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="default-jinghua">-精华</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="default-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="default-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="default-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="default-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Sort_Default')">提交设置</a>
+            </div>
+        </div>
+        <div class="well">
+            <h4>首页-热门页签排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_hot = new List<string>();
+                    if (home_hot.IsNotNullOrEmpty())
+                    {
+                        roles_hot = home_hot.Split('+').ToList();
+                    }
+                }
+                <a onclick="selectSortType(this)" data-typedesc="hot-top" class="btn-sm btn-warning @(roles_hot.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+置顶</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-hot" class="btn-sm btn-warning @(roles_hot.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+热门</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-jinghua" class="btn-sm btn-warning @(roles_hot.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+精华</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-pvcount" class="btn-sm btn-warning @(roles_hot.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-createtime" class="btn-sm btn-warning @(roles_hot.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-desc" class="btn-sm btn-warning @(roles_hot.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="hot-asc" class="btn-sm btn-warning @(roles_hot.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="hot-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (home_hot.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_hot)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="hot-top">-置顶</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="hot-hot">-热门</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="hot-jinghua">-精华</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="hot-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="hot-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="hot-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="hot-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Sort_Hot')">提交设置</a>
+            </div>
+        </div>
+        <div class="well">
+            <h4>首页-精华页签排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_jinghua = new List<string>();
+                    if (home_jinghua.IsNotNullOrEmpty())
+                    {
+                        roles_jinghua = home_jinghua.Split('+').ToList();
+                    }
+                }
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-top" class="btn-sm btn-warning @(roles_jinghua.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+置顶</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-hot" class="btn-sm btn-warning @(roles_jinghua.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+热门</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-jinghua" class="btn-sm btn-warning @(roles_jinghua.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+精华</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-pvcount" class="btn-sm btn-warning @(roles_jinghua.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-createtime" class="btn-sm btn-warning @(roles_jinghua.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-desc" class="btn-sm btn-warning @(roles_jinghua.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="jinghua-asc" class="btn-sm btn-warning @(roles_jinghua.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="jinghua-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (home_jinghua.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_jinghua)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="jinghua-top">-置顶</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="jinghua-hot">-热门</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="jinghua-jinghua">-精华</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="jinghua-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="jinghua-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="jinghua-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="jinghua-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Sort_JinHua')">提交设置</a>
+            </div>
+        </div>
+        <div class="well">
+            <h4>首页-置顶页签排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_top = new List<string>();
+                    if (home_top.IsNotNullOrEmpty())
+                    {
+                        roles_top = home_top.Split('+').ToList();
+                    }
+                }
+                <a onclick="selectSortType(this)" data-typedesc="top-top" class="btn-sm btn-warning @(roles_top.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+置顶</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-hot" class="btn-sm btn-warning @(roles_top.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+热门</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-jinghua" class="btn-sm btn-warning @(roles_top.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+精华</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-pvcount" class="btn-sm btn-warning @(roles_top.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-createtime" class="btn-sm btn-warning @(roles_top.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-desc" class="btn-sm btn-warning @(roles_top.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="top-asc" class="btn-sm btn-warning @(roles_top.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="top-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (home_top.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_top)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="top-top">-置顶</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="top-hot">-热门</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="top-jinghua">-精华</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="top-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="top-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="top-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="top-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Sort_Top')">提交设置</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function selectSortType(target) {
+        var me = $(target);
+        var typedesc = me.data("typedesc");
+        var renderwrap = me.parent().next();
+        var currentSortIndex = me.data("sortindex");
+        if (renderwrap.find("#{0}".Format(typedesc)).length == 0) {
+            var newElement = $("<a>").text(me.text().replace("+", "-")).data("typeedesc", typedesc).data("sortindex", currentSortIndex).attr("id", typedesc).addClass("btn-sm btn-success Lmgl5").click(function () {
+                removeSortItem(this, me);
+            });
+            if (renderwrap.children().length > 1) {
+                var lastEle = renderwrap.children().eq(-1);
+                var sortindex = lastEle.data("sortindex");
+                if (sortindex == 6 || sortindex == 7) {
+                    if (currentSortIndex != 6 && currentSortIndex != 7) {
+                        me.addClass("Ldn");
+                        lastEle.before(newElement);
+                        renderwrap.next().removeClass("Ldn");
+                    } else {
+                        Leo.msgfail("已经添加了{0}，请先移除{0}再添加新的！".Format(sortindex == 6 ? "降序" : "升序"));
+                    }
+                } else {
+                    me.addClass("Ldn");
+                    lastEle.after(newElement);
+                    renderwrap.next().removeClass("Ldn");
+                }
+            } else {
+                me.addClass("Ldn");
+                renderwrap.append(newElement);
+                renderwrap.next().removeClass("Ldn");
+            }
+        }
+    }
+
+    function submitConfig(target, type) {
+        var me = $(target), selectele = me.parent().prev();
+        if (selectele.children().length == 1) {
+            Leo.msgfail("请选择至少一个排序标签！");
+            selectele.prev().css("border", "1px solid #cecece");
+        } else {
+            var v = [];
+            selectele.children().each(function (i, n) {
+                if (i > 0) {
+                    v.push($(n).data("sortindex"));
+                }
+            });
+            $.post("/Console/SetHomeSortConfit", { sort: "HomeSortConfig-{0}".Format(type), value: v.join("+") }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("设置成功");
+                } else {
+                    Leo.msgfail("设置失败，依旧按默认法排序！");
+                }
+            })
+        }
+    }
+
+    function removeSortItem(target, source) {
+        var me = $(target);
+        if (source) {
+            source.removeClass("Ldn");
+        } else {
+            me.parent().prev().children().eq(parseInt(me.data("sortindex"))).removeClass("Ldn");
+        }
+        me.parent().next().removeClass("Ldn");
+        me.remove();
+    }
+</script>

@@ -1,0 +1,17 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyArticleViewModel
+@{
+    ViewBag.Title = "我发布的文章 - 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @Html.Partial("_LoadMyArticleList", Model)
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "myarticle");
+</script>

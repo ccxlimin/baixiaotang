@@ -1,0 +1,223 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model QiuZhi
+@{
+    ViewBag.Title = "编辑人才求职";
+    List<JobTrade> jobTrades = JobTradeBLL.Instance.SearchAll();
+    JobViewModel jobs = JobBLL.Instance.GetJobs();
+}
+@using (Html.BeginForm("Edit", "QiuZhi", FormMethod.Post, new { @class = "form-horizontal Lmgt20", role = "form", id = "nmform" }))
+{
+    @Html.HiddenFor(m => m.QiuZhiID)
+    //求职意向
+    <div class="form-group">
+        @Html.LabelFor(m => m.IWant, "求职意向", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.IWant, new { @class = "form-control", placeholder = "请输入求职意向" })
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-md-2 control-label">工作性质</label>
+        <div class="col-md-10">
+            <label class="radio-inline">
+                @Html.RadioButtonFor(m => m.WorkType, 1, new { @checked = "checked" })
+                全职
+            </label>
+            <label class="radio-inline">
+                @Html.RadioButtonFor(m => m.WorkType, 2, new { })
+                兼职
+            </label>
+        </div>
+    </div>
+    @Html.Partial("~/Views/ZhaoPin/_LoadJianZhiHtml.cshtml", Model.WorkTime ?? string.Empty)
+    //行业职业
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="BelongJobTrade">行业职业</label>
+        <div class="col-md-10 Lpdl0">
+            @Html.HiddenFor(m => m.BelongJob)
+            <div class="col-md-3">
+                <select id="BelongJobTrade" class="form-control">
+                    @foreach (JobTrade item in jobTrades)
+                    {
+                        <option value="@item.JobTradeId">@item.JobTradeName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="pickupJobType" class="form-control">
+                    @foreach (Job item in jobs.JobTypes)
+                    {
+                        <option value="@item.JobId">@item.JobType</option>
+                    }
+                </select>
+            </div>
+            @{
+                var html = new MvcHtmlString(@JsonHelper.ToJson(jobs.Jobs.Select(a => new { a.JobName, a.JobId, pid = a.ParentJobId })));
+                if (Model.BelongJob == null)
+                {
+                    <div class="col-md-3">
+                        <select id="BelongJob" class="form-control"></select>
+                    </div>
+                }
+                else
+                {
+                    var jobTypeID = jobs.Jobs.FirstOrDefault(b => { return b.JobId == Model.BelongJob; }).ParentJobId;
+                    var _jobs = jobs.Jobs.Where(a => { return a.ParentJobId == jobTypeID; }).ToList();
+                    <div class="col-md-3">
+                        <select id="BelongJob" class="form-control">
+                            @foreach (Job job in _jobs)
+                            {
+                                <option value="@job.JobId">@job.JobName</option>
+                            }
+                        </select>
+                    </div>
+                    <script>
+                        $("#pickupJobType").val('@jobTypeID');
+                        $("#BelongJob").val('@Model.BelongJob');
+                    </script>
+                }
+            }
+            <script>
+                $("#BelongJobTrade").val('@Model.BelongJobTrade');
+                var jobs = @html;
+                $("#pickupJobType").change(function () {
+                    var smallJob = document.getElementById("BelongJob");
+                    var id = $(this).val();
+                    smallJob.options.length = 0;
+                    smallJob.options[smallJob.options.length] = new Option("-请选择岗位小类-", "");
+                    $.each(jobs, function (i, n) {
+                        if (n.pid == id) {
+                            smallJob.options[smallJob.options.length] = new Option(n["JobName"], n["JobId"]);
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+
+    //该求职信息过期时间
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="deadTime">过期时间</label>
+        <div class="col-md-10">
+            <input type="number" id="deadTime" min="15" max="45" class="form-control" placeholder="过期时间(15-45天)" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="Money">求职薪资</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-sm-3">
+                <select id="Money" class="form-control">
+                    @Html.Partial("/Views/ZhaoPin/Option/_Money_QiuZhi.cshtml")
+                </select>
+                <script>
+                    $("#Money").val(@Model.Money);
+                </script>
+            </div>
+        </div>
+    </div>
+    //期望工作地点
+    <div class="form-group">
+        @Html.LabelFor(m => m.IWantPlace, "期望工作地点", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.IWantPlace, new { @class = "form-control", placeholder = "请输入期望工作地点" })
+        </div>
+    </div>
+
+    //目前岗位
+    <div class="form-group">
+        @Html.LabelFor(m => m.NowWork, "目前岗位", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.NowWork, new { @class = "form-control", placeholder = "请输入目前岗位" })
+        </div>
+    </div>
+
+    //离职状态
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="WorkStatus">离职状态</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-sm-3">
+                <select id="WorkStatus" class="form-control">
+                    <option value="1">在职</option>
+                    <option value="2">离职中</option>
+                    <option value="3">已离职</option>
+                </select>
+                <script>
+                    $("#WorkStatus").val(@Model.WorkStatus);
+                </script>
+            </div>
+        </div>
+    </div>
+
+    //学历
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="Study">学历</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-sm-3">
+                <select id="Study" class="form-control">
+                    @Html.Partial("/Views/ZhaoPin/Option/_XueLiOption_QiuZhi.cshtml")
+                </select>
+                <script>
+                    $("#Study").val(@Model.Study)
+                </script>
+            </div>
+        </div>
+    </div>
+
+    //工作年限
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="WorkYear">工作年限</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-sm-3">
+                <select id="WorkYear" class="form-control">
+                    @Html.Partial("/Views/ZhaoPin/Option/_GongZuoJingYan_QiuZhi.cshtml")
+                </select>
+                <script>
+                    $("#WorkYear").val(@Model.WorkYear)
+                </script>
+            </div>
+        </div>
+    </div>
+
+    //联系方式
+    <div class="form-group">
+        @Html.LabelFor(m => m.Contact, "联系方式", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Contact, new { @class = "form-control", placeholder = "请输入电话联系方式和QQ微信联系方式(50字内)" })
+        </div>
+    </div>
+
+    //自我简介
+    <div class="form-group">
+        @Html.LabelFor(m => m.MyDesc, "自我简介", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.MyDesc, new { @class = "form-control", placeholder = "请输入自我简介" })
+        </div>
+    </div>
+
+    //自我评价
+    <div class="form-group">
+        @Html.LabelFor(m => m.SelfAssessment, "自我评价", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextAreaFor(m => m.SelfAssessment, new { @class = "form-control", placeholder = "请输入自我评价" })
+        </div>
+    </div>
+    //简历信息
+    <div class="form-group">
+        @Html.LabelFor(m => m.JianLiPic, "简历信息", new { @class = "col-md-2 control-label" })
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="JianLiPic-input" placeholder="上传简历信息照片" value="@Model.JianLiPic" />
+            @Html.HiddenFor(m => m.JianLiPic, new { @style = "display:none", type = "file" })
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a id="btn_editProductCash" class="btn btn-primary">确认编辑</a>
+        </div>
+    </div>
+}
+
+<script>
+    Leo.init("qiuzhi", "edit");
+</script>

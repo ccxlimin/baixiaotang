@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace AmazonBBS.Model
+{
+	/// <summary>
+    /// $contents$
+    /// </summary>
+    [Serializable]
+    public partial class $tables$
+    {
+	   $fields$
+    }
+}

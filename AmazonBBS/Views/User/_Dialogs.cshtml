@@ -1,0 +1,75 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyMessage
+@{
+    string defaultHeadUrl = "/Content/img/head_default.gif";
+    List<_MsgBox> chats = Model.ChatList;
+    Paging page = Model.ChatPage;
+    long meID = Model.MeID;
+    //和某人的对话记录
+    foreach (_MsgBox item in chats)
+    {
+        <div class="aw-item inbox-style">
+            <div class="mod-head">
+                <a class="aw-user-img aw-border-radius-5" href="/user/detail/@item.FromUserName">
+                    <img src="@(item.HeadUrl ?? defaultHeadUrl)" onerror="this.src='/Content/img/head_default.gif';" />
+                </a>
+                <div class="title">
+                    @{
+                        if (meID == item.FromID)
+                        {
+                            <span>
+                                我发送给
+                                <a href="/user/detail/@item.ToUserName">
+                                    @(item.ToUserName)
+                                </a>
+                                ：@Html.Raw(item.Message)
+                            </span>
+                        }
+                        else
+                        {
+                            <span>
+                                <a href="/user/detail/@item.FromUserName">
+                                    @(item.FromUserName)
+                                </a>
+                                发送给我：@Html.Raw(item.Message)
+                            </span>
+                        }
+                    }
+                </div>
+            </div>
+            @*<div class="mod-body clearfix">
+                    <div class="markitup-box">
+                        @Html.Raw(item.Message)
+                    </div>
+                </div>*@
+            <div class="mod-footer">
+                <div class="meta clearfix">
+                    <span class="text-color-999">
+                        @{
+                            DateTime time = item.SendTime.Value;
+                            if (time.Date == DateTime.Now.Date)
+                            {
+                                <span>今天 @time.ToString("HH:mm")</span>
+                            }
+                            else if (time.Date == DateTime.Now.AddDays(-1).Date)
+                            {
+                                <span>昨天 @time.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>@time.ToString("yyyy-MM-dd HH:mm")</span>
+                            }
+                        }
+                    </span>
+                    <span class="operate">
+                        @*<a class="btn_sendMsg" data-id="@chatId" data-name="@chatUserName">回复</a>
+                            <a>查看对话</a>*@
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    @*<div>加载更多消息</div>*@
+    @Html.Partial("_PageLoadMore", page)
+}

@@ -1,0 +1,13 @@
+﻿@{
+    int vip = ViewBag.VIP;
+    object time = ViewBag.Time;
+}
+@if (vip > 0)
+{
+    if (vip > 0 && Convert.ToDateTime(time) > DateTime.Now)
+    {
+        <span style="color:orange;font-weight:700;margin:0;padding:0;">
+            VIP<span style="font-size:12px;margin:0;padding:0;">&nbsp;@vip</span>
+        </span>
+    }
+}

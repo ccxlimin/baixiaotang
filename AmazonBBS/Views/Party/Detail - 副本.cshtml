@@ -1,0 +1,45 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model _Activity
+@{
+    ViewBag.Title = "活动详情";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+}
+<div class="row">
+    <div class="col-md-5">
+        <div class="thumbnail" style="padding:0;">
+            <img width="100%" src="@(Model.ActivityIMG ?? "/Content/img/party/poster_image_yundong_02.jpg")" />
+        </div>
+    </div>
+    <div class="col-md-7">
+        <h1 style="font-size:22px;color:#000;text-align:left;">@Model.Title</h1>
+        <div style="border-bottom:1px solid #cecece;line-height:40px;">
+            <a href="/User/@(Model.UserID)">@Model.UserName</a>
+            •
+            <span>@Model.ActivityCreateTIme</span>
+            •
+            <span>@((Model.PVCount ?? 0) + 1)</span>
+        </div>
+        <div class="col-md-12">
+            <div class="col-md-12">
+                地址：@Model.Address
+            </div>
+            <div class="col-md-12">
+                时间：@Model.BeginTime ~ @Model.EndTime
+            </div>
+            <div class="col-md-12">
+                地址：@Model.Address
+            </div>
+            <div class="col-md-12">
+                票种：
+                <div data-count="89">
+                    积分付费：10
+                </div>
+            </div>
+        </div>
+        <div>
+            <a class="btn-large btn-primary">我要报名</a>
+        </div>
+    </div>
+</div>

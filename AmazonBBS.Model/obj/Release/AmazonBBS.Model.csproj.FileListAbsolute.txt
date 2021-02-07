@@ -1,0 +1,14 @@
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\AmazonBBS.Model.dll.config
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\AmazonBBS.Model.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\AmazonBBS.Model.pdb
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\EntityFramework.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\EntityFramework.SqlServer.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\EntityFramework.xml
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\EntityFramework.SqlServer.xml
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\zh-Hans\EntityFramework.resources.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\bin\Release\zh-Hans\EntityFramework.SqlServer.resources.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\obj\Release\AmazonBBS.Model.csprojAssemblyReference.cache
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\obj\Release\AmazonBBS.Model.csproj.CoreCompileInputs.cache
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\obj\Release\AmazonBBS.Model.csproj.CopyComplete
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\obj\Release\AmazonBBS.Model.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AmazonBBS.Model\obj\Release\AmazonBBS.Model.pdb

@@ -1,0 +1,135 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model ZhaoPinViewModel
+@{
+    ViewBag.Title = "招聘列表";
+    List<JobTrade> jobTrades = JobTradeBLL.Instance.SearchAll();
+    JobViewModel jobs = JobBLL.Instance.GetJobs();
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+}
+@Html.Partial("_LoadMenuDisplay", 2)
+<div class="clearfix">
+    <h2>
+        招聘列表
+        <a href="/zhaopin/publish" class="@(islogin?string.Empty:"btn_login") btn btn-primary">我要发布招聘</a>
+        <span class="btn-search-leo btn btn-primary Lfr">
+            搜索
+        </span>
+        <span style="display:inline-block;float:right;width:30%">
+            <input class="searchValue form-control" placeholder="搜索你想要的内容(标题/作者/用户)" />
+        </span>
+    </h2>
+</div>
+<div class="job-searchForm">
+    <form class="form-horizontal" id="search-form-zhaopin">
+        <div class="col-md-12 clearfix Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_jobTrade" class="col-md-2 control-label Lpdl0i">行业岗位</label>
+                <div class="col-md-10 Lpdl0i">
+                    <div class="col-md-4 col-xs-12 input-group Lpdl0i Lpdr0i">
+                        <select id="search_jobTrade" name="search_jobTrade" class="form-control">
+                            <option value="">-筛选行业-</option>
+                            @foreach (JobTrade item in jobTrades)
+                            {
+                                <option value="@item.JobTradeId">@item.JobTradeName</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-xs-12 input-group Lpdl0i Lpdr0i">
+                        <select id="search_jobType" class="form-control">
+                            <option value="">-筛选岗位大类-</option>
+                            @foreach (Job item in jobs.JobTypes)
+                            {
+                                <option value="@item.JobId">@item.JobType</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-4 col-xs-12 input-group Lpdl0i Lpdr0i">
+                        <select id="search_job" name="search_job" class="form-control">
+                            <option value="">-筛选岗位小类-</option>
+                        </select>
+                    </div>
+                </div>
+                <script>
+                @{
+                    var html = new MvcHtmlString(@JsonHelper.ToJson(jobs.Jobs.Select(a=> new{ a.JobName,a.JobId,pid=a.ParentJobId})));
+                }
+                    var jobs = @html;
+                    $("#search_jobType").change(function () {
+                        var smallJob = document.getElementById("search_job");
+                        var id = $(this).val();
+                        smallJob.options.length = 0;
+                        smallJob.options[smallJob.options.length] = new Option("-筛选岗位小类-", "");
+                        $.each(jobs, function (i, n) {
+                            if (n.pid == id) {
+                                smallJob.options[smallJob.options.length] = new Option(n["JobName"], n["JobId"]);
+                            }
+                        });
+                    });
+                </script>
+            </div>
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_companyName" class="col-md-2 control-label Lpdl0i">公司名</label>
+                <div class="col-md-10 Lpdl0i">
+                    <input class="form-control" id="search_companyName" name="search_companyName" placeholder="公司关键词" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_workPlace" class="col-md-2 control-label Lpdl0i">工作地点</label>
+                <div class="col-md-10 Lpdl0i">
+                    <input class="form-control" id="search_workPlace" name="search_workPlace" placeholder="城市（如：深圳）" />
+                </div>
+            </div>
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_money" class="col-md-2 control-label Lpdl0i">薪资</label>
+                <div class="col-md-10 Lpdl0i">
+                    <select id="search_money" name="search_money" class="form-control">
+                        <option value="">-筛选薪资-</option>
+                        @Html.Partial("/Views/ZhaoPin/Option/_Money.cshtml")
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_study" class="col-md-2 control-label Lpdl0i">学历要求</label>
+                <div class="col-md-10 Lpdl0i">
+                    <select id="search_study" name="search_study" class="form-control">
+                        <option value="">-筛选学历-</option>
+                        @Html.Partial("/Views/ZhaoPin/Option/_XueLiOption_QiuZhi.cshtml")
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 Lpdl0i">
+                <label class="col-md-2 control-label Lpdl0i">工作性质</label>
+                <div class="col-md-10 Lpdl0i">
+                    <label class="radio-inline">
+                        不限<input type="radio" name="search_worktype" value="" checked />
+                    </label>
+                    <label class="radio-inline">
+                        全职<input type="radio" name="search_worktype" value="1" />
+                    </label>
+                    <label class="radio-inline">
+                        兼职<input type="radio" name="search_worktype" value="2" />
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-offset-6 Lpdl0i">
+                <div class="col-md-12 Ltar">
+                    <a class="btn-search-form btn btn-primary">搜索</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="zhaopin-list-wrap">
+    @Html.Partial("_Search", Model)
+</div>
+<script>
+    Leo.init("zhaopin", "index");
+</script>

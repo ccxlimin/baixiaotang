@@ -1,0 +1,176 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model ArticleViewModel
+@{
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    long userid = UserBaseBLL.Instance.UserID;
+    bool needEditScript = false;
+
+    //获取积分等级表
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+}
+@foreach (_Article article in Model.Articles)
+{
+    bool isshow = !article.IsAnonymous || ismaster || userid == article.UserID;
+    <div class="aw-item">
+        @*<a class="aw-user-name hidden-xs" href="/user/detail/@article.UserName" rel="nofollow">*@
+        @if (isshow)
+        {
+            <a class="aw-user-name" href="/user/detail/@article.UserName" rel="nofollow">
+                <img src="@(article.HeadUrl ?? defaultheadurl)" onerror="this.src='/Content/img/head_default.gif'" alt="@article.UserName">
+            </a>
+        }
+        else
+        {
+            <a class="aw-user-name">
+                <img src="~/Content/img/anonymous.png" alt="匿名用户" />
+            </a>
+        }
+        <div class="aw-article-content">
+            <h4>
+                <a target="_blank" href="/article/detail/@article.ArticleId">
+                    @article.Title
+                </a>
+                @{
+                    @Html.Partial("_UserV", article.UserV)
+                }
+            </h4>
+            @{
+                string body = HtmlRegexHelper.ToText(article.Body);
+                var length = body.Length;
+                if (length > 0)
+                {
+                    if (length > 39)
+                    {
+                        body = body.Substring(0, 39);
+                    }
+                    <div class="Lfs12">@(body)...</div>
+                }
+            }
+            <div class="user-title" oncontextmenu="return !1;">
+                @{
+                    if (isshow)
+                    {
+                        ViewBag.VIP = article.VIP;
+                        ViewBag.Time = article.VIPExpiryTime;
+                        var htm = Html.Partial("_VIP");
+                        //用户名及VIP会员等级
+                        <span style="vertical-align:middle;">
+                            @article.UserName • @Html.Raw(htm)
+                        </span>
+                        //管理员
+                        if (article.IsMaster)
+                        {
+                            <span data-toggle="tooltip" title="管理员">
+                                <img width="20" height="20" src="/Content/U/Site/master.png" />
+                            </span>
+                        }
+                        //积分等级
+                        var item = ScoreLevelList.Where(a => a.SortIndex <= article.TotalScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                        if (item != null)
+                        {
+                            <span data-toggle="tooltip" title="@item.EnumDesc">
+                                <img width="20" height="20" src="/Content/img/LevelLogo/scorelevelname_@(item.EnumDesc).png" />
+                            </span>
+                        }
+                        if (article.HeadNameShowType == 1)
+                        {
+                            if (!string.IsNullOrEmpty(article.LevelName))
+                            {
+                                <span data-toggle="tooltip" title="@article.LevelName">
+                                    <img width="20" height="20" src="/Content/img/LevelLogo/levelname_@(article.LevelName).png" />
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(article.OnlyLevelName))
+                            {
+                                <span data-toggle="tooltip" title="@article.OnlyLevelName">
+                                    <img width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(article.OnlyLevelName).png" />
+                                </span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span style="vertical-align:middle;">匿名用户</span>
+                    }
+                    <span class="itemdata">
+                        @(article.PriseCount)赞 •
+                        @(article.LikeCount)人关注 •
+                        @(article.CommentCount) 条评论 •
+                        <span class="pageviews-pv">@(article.PVCount)次浏览</span> •
+                        <span data-toggle="tooltip" title="发布时间">@Html.Partial("_TimeLine", article.CreateTime)</span>
+                        @if (article.UpdateTime != article.CreateTime)
+                        {
+                            <span data-toggle="tooltip" title="更新时间"> • @Html.Partial("_TimeLine", article.UpdateTime)</span>
+                        }
+                        @if (ismaster)
+                        {
+                            <span class="btnActionsNoPosition Ldn" data-mid="@article.ArticleId">
+                                <button class="editPV btn btn-primary btn-xs">修改浏览量</button>
+                                <button class="btnEdit btn btn-primary btn-xs">编辑</button>
+                                <button class="btnDelete btn btn-danger btn-xs">删除</button>
+                            </span>
+                        }
+                        else if (article.UserID == userid && article.EditCount < 3)
+                        {
+                            needEditScript = true;
+                            <span class="btnActionsNoPosition" data-mid="@article.ArticleId">
+                                <button class="btnEdit btn btn-primary btn-xs">编辑</button>
+                            </span>
+                        }
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+}
+<div id="Article_Page_Wrap">
+    @Html.Partial("_Page", Model.ARticlePage)
+</div>
+<script>
+    Leo.init("article", "index");
+</script>
+@if (ismaster || needEditScript)
+{
+    <script>
+        //编辑
+        $(".btnEdit").click(function () {
+            location.href = "/article/edit/" + $(this).parent().data("mid");
+        });
+    </script>
+}
+@if (ismaster)
+{
+    @Html.Partial("_LoadEditPVScript")
+    <script>
+        $(".aw-item").mouseover(function () {
+            $(this).find(".btnActionsNoPosition").removeClass("Ldn")
+        }).mouseleave(function () {
+            $(this).find(".btnActionsNoPosition").addClass("Ldn")
+        });
+        //删除文章
+        $(".btnDelete").click(function () {
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此文章吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD("删除中");
+                setTimeout(function () {
+                    $.post("/article/deletea/{0}".Format(me.parent().data("mid")), function (data) {
+                        if (data.Ok) {
+                            MSG("删除成功");
+                            me.parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+    </script>
+}

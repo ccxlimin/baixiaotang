@@ -1,0 +1,11 @@
+﻿@using AmazonBBS.Common
+@{
+    string[] qqs = ConfigHelper.AppSettings("KeFu_QQ")?.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+    if (qqs != null)
+    {
+        foreach (string qq in qqs)
+        {
+            <span class="btn btn-default btn-xs btn-qqtalk" ahref="tencent://message/?uin=@qq" title="在线QQ客服">咨询</span>
+        }
+    }
+}

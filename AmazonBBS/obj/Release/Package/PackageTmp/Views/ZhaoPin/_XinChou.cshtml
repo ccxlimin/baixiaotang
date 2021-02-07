@@ -1,0 +1,27 @@
+﻿@{
+    //薪酬
+    int xinchou = Model;
+
+    var msg2 = "面谈";
+    switch (xinchou)
+    {
+        case 1:
+            msg2 = "3000-5000"; break;
+        case 2:
+            msg2 = "5000-6000"; break;
+        case 3:
+            msg2 = "7000-9000"; break;
+        case 4:
+            msg2 = "10000+"; break;
+        case 5:
+            msg2 = "15000+"; break;
+        case 6:
+            msg2 = "20000+"; break;
+        case 7:
+            msg2 = "500"; break;
+        case 8:
+            msg2 = "500-1000"; break;
+
+    }
+    <span>@msg2</span>
+}

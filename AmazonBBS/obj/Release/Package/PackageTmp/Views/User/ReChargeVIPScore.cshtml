@@ -1,0 +1,50 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@{
+    ViewBag.Title = "VIP分充值 - 个人中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    UserBaseBLL bll = UserBaseBLL.Instance;
+    UserExtBLL extbll = UserExtBLL.Instance;
+
+    UserBase user = bll.UserInfo;
+    UserExt userext = extbll.GetExtInfo(user.UserID);
+
+    //积分兑换比例
+    int vipscorepay = Convert.ToInt32(ConfigHelper.AppSettings("vipScorePayByRMB"));
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="col-md-12">
+                <h4>
+                    当前社区设置的充值比例规则为：
+                    1元人民币=@(vipscorepay)VIP分
+                </h4>
+            </div>
+            <div class="well">
+                <div class="col-md-12">
+                    <span>您当前拥有@(userext.TotalScore)个积分，@(userext.TotalCoin)个VIP分</span>
+                </div>
+                <div class="clearfix Lmgt5">
+                    <div class="col-md-6">
+                        <div class="form-group-sm Lmgt5">
+                            <input class="form-control" id="vipscorerecharge" placeholder="请输入充值金额(RMB)" />
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            <span class="Ldn ScorechangeResult">可兑换为<span>0</span>个VIP分</span>
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            <a id="btn_VipScoreReCharge" class="btn btn-primary">确认充值</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "ReCharge",@vipscorepay);
+</script>

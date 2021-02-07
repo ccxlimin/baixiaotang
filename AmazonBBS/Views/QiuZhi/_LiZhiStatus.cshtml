@@ -1,0 +1,15 @@
+﻿
+@{
+    int jingyan = Model;
+    var msg2 = string.Empty;
+    switch (jingyan)
+    {
+        case 1:
+            msg2 = "在职"; break;
+        case 2:
+            msg2 = "离职中"; break;
+        case 3:
+            msg2 = "已离职"; break;
+    }
+    <span>@msg2</span>
+}

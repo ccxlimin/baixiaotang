@@ -1,0 +1,223 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model PartyCreateViewModel
+@{
+    ViewBag.Title = "编辑活动";
+    List<ActivityFee> feelist = Model.PartyFee;
+    List<JoinItemQuestionExt> joinQuestions = Model.JoinItemQues;
+    int joinItemCount = joinQuestions.Count;
+}
+<script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+@using (Html.BeginForm("Edit", "Party", FormMethod.Post, new { @class = "form-horizontal Lmgt20", role = "form", id = "nmform" }))
+{
+    @Html.HiddenFor(m => m.Party.ActivityId)
+    @*活动主题*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.Title, "活动主题", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Party.Title, new { @class = "form-control", placeholder = "请输入活动主题" })
+        </div>
+    </div>
+    @*活动海报*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.ActivityIMG, "活动海报", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 ">
+            @Html.HiddenFor(m => m.Party.ActivityIMG)
+            <img width="210" height="123" src="@Model.Party.ActivityIMG" />
+            <a id="btn_addActiveImg" class="btn btn-primary">更换海报</a>
+        </div>
+    </div>
+    @*活动时间*@
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="SelectBeginTime">活动开始时间</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.Party.BeginTime)
+                @Html.HiddenFor(m => m.Party.EndTime)
+                <input id="SelectBeginTime" class="form-control" placeholder="活动开始时间" readonly="readonly" value="@(Model.Party.BeginTime.Value.ToString(1)) - @(Model.Party.EndTime.Value.ToString(1))" />
+            </div>
+        </div>
+    </div>
+    @*活动报名截止时间*@
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="Party_CanJoinOnBeginCHeck">活动报名时间</label>
+        @{ bool canjoinOnBegin = Model.Party.CanJoinOnBegin == 1;}
+        <div class="col-md-10 Lpdl0">
+            @if (canjoinOnBegin)
+            {
+                <div class="col-md-6 Ldn setJoinTime">
+                    <input id="SelectJoinTime" class="form-control" placeholder="活动报名时间" readonly="readonly" value="" />
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6 setJoinTime">
+                    <input id="SelectJoinTime" class="form-control" placeholder="活动报名时间" readonly="readonly" value="@(Model.Party.JoinBeginTime.Value.ToString(1)) - @(Model.Party.JoinEndTime.Value.ToString(1))" />
+                </div>
+            }
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        @Html.HiddenFor(m => m.Party.CanJoinOnBegin)
+                        @Html.HiddenFor(m => m.Party.JoinBeginTime)
+                        @Html.HiddenFor(m => m.Party.JoinEndTime)
+                        <input id="Party_CanJoinOnBeginCHeck" @(canjoinOnBegin ? "checked='checked'" : string.Empty) type="checkbox">活动开始前均可报名
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*活动报名截止时间*@
+            @*<div class="form-group">
+                    <label class="col-md-2 control-label">报名时间</label>
+                    <div class="col-md-10 Lpdl0">
+                        <div class="col-sm-3 @(canjoinOnBegin?" Ldn":string.Empty) setJoinTime">
+                            <input name="Party.JoinBeginTime" id="Party_JoinBeginTime" class="form-control pickup-time" placeholder="报名开始时间" value="@(Model.Party.JoinBeginTime==null?string.Empty:Convert.ToDateTime(Model.Party.JoinBeginTime).ToString(" yyyy-MM-dd HH:mm:ss"))" />
+                        </div>
+                        <div class="col-sm-3  @(canjoinOnBegin?" Ldn":string.Empty) setJoinTime">
+                            <input name="Party.JoinEndTime" id="Party_JoinEndTime" class="form-control pickup-time" placeholder="报名截止时间" value="@(Model.Party.JoinEndTime==null?string.Empty:Convert.ToDateTime(Model.Party.JoinEndTime).ToString(" yyyy-MM-dd HH:mm:ss"))" />
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="checkbox">
+                                <label>
+                                    @Html.HiddenFor(m => m.Party.CanJoinOnBegin)
+                                    <input id="CanJoinOnBeginCHeck" @(canjoinOnBegin ? "checked='checked'" : string.Empty) type="checkbox">活动开始前均可报名
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+            @*活动地址*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Party.Address, "活动地址", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.TextBoxFor(m => m.Party.Address, new { @class = "form-control", placeholder = "请输入活动地址" })
+                </div>
+            </div>
+            @*活动详情*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Party.Body, "活动详情", new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.HiddenFor(m => m.Party.Body)
+                    <div id="summernote"></div>
+                </div>
+            </div>
+            @*报名费用*@
+            <div class="form-group feetypeList">
+                <label class="col-md-2 control-label">票种类型</label>
+                @for (int i = 0; i < feelist.Count; i++)
+                {
+                    <div class="feeitemwrap feeitemwrap-@(i) @(i>0?" col-md-offset-2 Lmgt5":string.Empty) col-md-10 Lpdl0">
+                        <div class="col-md-9">
+                            <div class="col-md-3 col-sm-3 Lpdl0i">
+                                @Html.HiddenFor(m => m.PartyFee[i].FeeType)
+                                @Html.HiddenFor(m => m.PartyFee[i].ActivityFeeId)
+                                @Html.HiddenFor(m => m.PartyFee[i].ActivityId)
+                                <select id="pickupFee@(i)" class="form-control">
+                                    <option value="0">免费</option>
+                                    <option value="10">积分支付</option>
+                                    <option value="20">VIP分支付</option>
+                                    <option value="30">支付宝支付</option>
+                                </select>
+                                <script>
+                                    $("#pickupFee{0}".Format(@i)).val(@Model.PartyFee[i].FeeType);
+                                </script>
+                            </div>
+                            <div class="col-md-3 col-sm-3 Lpdl0i">
+                                @Html.TextBoxFor(m => m.PartyFee[i].FeeName, new { @class = "form-control", placeholder = "票种名称" })
+                            </div>
+                            <div class="col-md-3 col-sm-3 Lpdl0i">
+                                @Html.TextBoxFor(m => m.PartyFee[i].Fee, new { @class = "form-control", placeholder = "报名费", type = "number", min = 0 })
+                            </div>
+                            <div class="col-md-3 col-sm-3 Lpdl0i">
+                                @Html.TextBoxFor(m => m.PartyFee[i].FeeCount, new { @class = "form-control", placeholder = "活动名额", type = "number", min = 1 })
+                            </div>
+                        </div>
+                        @if (i == feelist.Count - 1 && i < 5)
+                        {
+                            <div class="col-md-3">
+                                <a class="btn btn-success btn-addFeetype" data-i="0">+添加票种</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            //报名需提交资料
+            <div class="form-group joinBaseInfos">
+                <label class="col-md-2 control-label">报名填写项</label>
+                <div class="col-md-10 Lpdl0">
+                    <div class="col-md-3">
+                        <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="姓名" />
+                    </div>
+                </div>
+                <div class="col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+                    <div class="col-md-3">
+                        <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="手机" />
+                    </div>
+                    @if (joinItemCount == 0)
+                    {
+                        <div class="col-md-9">
+                            <a class="btn btn-success btn-addJoinInfo" data-i="0">+添加报名填写项</a>
+                        </div>
+                    }
+                </div>
+                @for (int i = 0; i < joinItemCount; i++)
+                {
+                    <div class="joinItemWrap joinItemWrap-@(i) col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+                        <div class="col-md-3">
+                            @Html.HiddenFor(m => m.JoinItemQues[i].JoinItemQuestionExtId)
+                            @Html.HiddenFor(m => m.JoinItemQues[i].MainID)
+                            @Html.TextBoxFor(m => m.JoinItemQues[i].ItemName, new { @class = "form-control", placeholder = "报名内容项名称" })
+                        </div>
+                        @if (i == joinItemCount - 1)
+                        {
+                            <div class="col-md-9 Lpdl0i">
+                                <a class="btn btn-success btn-addJoinInfo" data-i="0">+添加报名填写项</a>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <a id="btn_EditParty" class="btn btn-primary">确认修改活动</a>
+                </div>
+            </div>
+            }
+<div id="ActivityIMGS" class="Ldn">
+    <style>
+        .leo {
+            float: left;
+            padding: 20px;
+            user-select: none;
+        }
+
+            .leo .leotitle {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .leo .imgwrap {
+                padding: 3px;
+            }
+
+            .leo .thumbnail {
+                padding: 0;
+            }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,.2);
+        }
+    </style>
+    <div class="leo">
+        <div class="leotitle">单击图片直接选择海报</div>
+    </div>
+</div>
+<script>
+    Leo.init("party","edit",@Model.Party.ActivityId);
+</script>

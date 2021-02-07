@@ -1,0 +1,306 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _Activity
+@{
+    ViewBag.Title = Model.Title + "_活动详情";
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isLogin = user != null;
+    List<ActivityFee> feelist = Model.FeeList;
+    List<JoinItemQuestionExt> joinQuestions = Model.JoinQuestions;
+
+    List<UserBuyPartyListInfo> userJoinList = Model.JoinFeeList;
+    string userjoin = JsonHelper.ToJson(userJoinList.Select(a => new { count = a.JoinCount, name = a.FeeName }));
+    //bool isJoined = false;
+    //if (isLogin)
+    //{
+    //    isJoined = ActivityJoinBLL.Instance.IsJoined(user.UserID, Model.ActivityId);
+    //}
+}
+<link href="~/Content/huodong.css?v=20200113" rel="stylesheet" />
+<div class="content-body content_body_2" avalonctrl="party_join_controller">
+    <div class="content-body_head">
+        <!--活动海报-->
+        <div class="content-body_head_wrap">
+            <div class="content-body_head_l">
+                <img src="@Model.ActivityIMG" alt="@Model.Title">
+            </div>
+            <!--活动详情头部右侧详情-->
+            <div class="content-body_head_r">
+                <!--标题-->
+                <div class="detail_title" avalonctrl="detail_info_base_controller">
+                    <h1 id="dt_title" class="detail_title_h1">
+                        @Model.Title
+                    </h1>
+                </div>
+                <div class="detail_user hdMan" avalonctrl="detail_info_base_controller">
+                    <div class="hdman_r">
+                        <div class="yhName">
+                            <a target="_blank" href="/user/detail/@Model.UserName" class="subinfo_name" data-toggle="popover" data-placement="bottom" id="subinfo_name" ontouchstart="">
+                                @Model.UserName
+                            </a>
+                            @*<a class="rz_icon_a">
+                                    <span class="gr"></span>
+                                </a>*@
+                            @*<div class="rz_tc_box" style="left: -17px; display: none;">
+                                <h2>该主办方已通过互动吧个人认证，请放心参与。</h2>
+                                <img src="http://img.sys.hudongba.com/static_v4/images/manage/rz_txt_arrow.png" class="fd_img">
+                                </div>*@
+                            <p class="fbTime"><i></i>@(Model.ActivityCreateTIme.Value.ToString("yyyy年MM月dd日"))</p>
+                        </div>
+                        <div class="dt_review_item_count">
+                            <span id="info_hits"><i></i>@((Model.PVCount ?? 0) + 1)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail_time_attr_join" avalonctrl="detail_info_base_controller">
+                    <div class="detail_time_attr_join_gray">
+                        <div class="detail_Attr">
+                            <div class="title_txt">地点：</div>
+                            <a class="detail_attr_blue" target="_blank" rel="nofollow" href="https://ditu.amap.com/search?query=@(Model.Address)">@Model.Address</a>
+                        </div>
+                        <div class="detail_Time">
+                            <div>
+                                <div class="detail_Time_t">
+                                    <div class="title_txt">时间： </div>
+                                    <p>@(Model.BeginTime.Value.ToString(1)) ~ @(Model.EndTime.Value.ToString(1))</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail_Time">
+                            <div>
+                                <div class="detail_Time_t">
+                                    <div class="title_txt">报名： </div>
+                                    @if (Model.CanJoinOnBegin == 1)
+                                    {
+                                        <p>活动开始前均可报名</p>
+                                    }
+                                    else
+                                    {
+                                        <p>@(Model.JoinBeginTime.Value.ToString(1)) ~ @(Model.JoinEndTime.Value.ToString(1))</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="detail_join_ticket" avalonctrl="detail_coupon_controller">
+                            <div class="detail_join_ticket_con">
+                                <!--收费项-->
+                                <div class="tc_c_feiLi_box">
+                                    <p class="title_txt">票种：</p>
+                                    <ul class="ticket tc_c_feiLi tickets">
+                                        @{
+                                            bool selected = false;
+                                            int selectedCount = 0;
+                                            for (int findex = 0; findex < feelist.Count; findex++)
+                                            {
+                                                ActivityFee feeInfo = feelist[findex];
+                                                string cls = string.Empty;
+                                                if (feeInfo.FeeCount == 0)
+                                                {
+                                                    cls = "gray end";
+                                                }
+                                                else
+                                                {
+                                                    if (!selected)
+                                                    {
+                                                        selectedCount = feeInfo.FeeCount.Value;
+                                                        selected = true;
+                                                        cls = "select";
+                                                    }
+                                                }
+                                                <li class="@cls">
+                                                    <table width="170" border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td align="center" valign="middle">
+                                                                    @if (feeInfo.FeeType == 0)
+                                                                    {
+                                                                        <span class="ticket_money" data-feeidn="@feeInfo.ActivityFeeId" data-feetype="@feeInfo.FeeType" data-fee="@feeInfo.Fee"><span>免费</span></span>
+                                                                        <span class="ticket_des">@(feeInfo.FeeName.IsNullOrEmpty() ? (feeInfo.FeeType == 10 ? "福利票" : "标准票") : feeInfo.FeeName)</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        string paytype = feeInfo.FeeType == 10 ? "积分" : feeInfo.FeeType == 20 ? "VIP分" : "元";
+                                                                        <span class="ticket_des">
+                                                                            @(feeInfo.FeeName.IsNullOrEmpty() ? (feeInfo.FeeType == 10 ? "福利票" : "标准票") : feeInfo.FeeName)
+                                                                        </span>
+                                                                        <span class="ticket_money" data-feeidn="@feeInfo.ActivityFeeId" data-feetype="@feeInfo.FeeType" data-fee="@feeInfo.Fee">@(feeInfo.FeeType == 10 || feeInfo.FeeType == 20 ? Convert.ToInt32(feeInfo.Fee) : feeInfo.Fee)<span class="Lfs12"> @(paytype)</span></span>
+                                                                    }
+                                                                    <p>
+                                                                        <span class="num" data-count="@feeInfo.FeeCount">剩余@(feeInfo.FeeCount)张</span>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                    <p class="title_txt">数量</p>
+                                    <div class="select_num">
+                                        <a class="less"></a>
+                                        <div class="count">
+                                            <input type="text" value="1" />
+                                        </div>
+                                        <a class="add"></a>
+                                        <span class="item_limit_note">剩余@(selectedCount)张</span>
+                                    </div>
+                                    <!--报名按钮-->
+                                    <ul class="join clearfix Lmgt15" avalonctrl="detail_join_party_controller">
+                                        <li class="show" avalonctrl="detail_join_party_list_controller">
+                                            @if (Model.IsDelete == 0)
+                                            {
+                                                if (Model.EndTime <= DateTime.Now)
+                                                {
+                                                    <a class="btn btn-lg btn-warning disabled">活动已结束</a>
+                                                }
+                                                else if (Model.BeginTime < DateTime.Now && Model.EndTime > DateTime.Now)
+                                                {
+                                                    <a class="btn btn-lg btn-primary disabled">活动进行中，不可报名</a>
+                                                }
+                                                else
+                                                {
+                                                    if (Model.CanJoinOnBegin == 2)
+                                                    {
+                                                        if (Model.JoinBeginTime > DateTime.Now)
+                                                        {
+                                                            <a class="btn btn-lg btn-danger disabled">报名时间尚未开始</a>
+                                                        }
+                                                        else if (Model.JoinEndTime < DateTime.Now && DateTime.Now < Model.BeginTime)
+                                                        {
+                                                            <a class="btn btn-lg btn-warning disabled">报名时间已过</a>
+                                                        }
+                                                    }
+                                                    if (Model.CanJoinOnBegin == 1 || (Model.JoinBeginTime < DateTime.Now && Model.JoinEndTime > DateTime.Now))
+                                                    {
+                                                        if (!isLogin)
+                                                        {
+                                                            <a class="btn btn-lg btn-info" href="/account/login?returnurl=@Request.Url" rel="nofollow">报名</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (userJoinList.Count > 0)
+                                                            {
+                                                                <a data-aid="@Model.ActivityId" data-joinitem="@userjoin" class="btn_IJoin hasBuy myApply btn btn-lg btn-success">您已报名，继续报名</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a data-aid="@Model.ActivityId" class="btn_IJoin myApply btn btn-lg btn-info">报名</a>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if (isLogin && Model.JoinCount > 0 && (user.UserID == Model.UserID || UserBaseBLL.Instance.IsRoot))
+                                                {
+                                                    <a class="btn-joinManage btn btn-lg btn-primary" href="/party/joinmanage/@Model.ActivityId" target="_blank">报名人员管理</a>
+                                                }
+                                                <a class="btn_comment myApply btn btn-lg btn-primary" data-mid="@Model.ActivityId">评论</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-lg btn-warning">该活动已失效</a>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_DOComment", 0)
+@*活动详情*@
+<div class="content-body content_body_2">
+    <div class="content-body_head">
+        <h3 style="border-bottom:1px solid #f1f1f1;padding-bottom:30px;text-align:left;">活动详情</h3>
+        <div>
+            @Html.Raw(Model.Body)
+        </div>
+    </div>
+</div>
+@*报名人数*@
+<div class="content-body content_body_2">
+    <style>
+        .leo {
+            float: left;
+            padding: 20px;
+            user-select: none;
+        }
+
+            .leo .thumbnail {
+                padding: 0;
+            }
+    </style>
+    <div class="content-body_head">
+        <h3 style="border-bottom:1px solid #f1f1f1;padding-bottom:30px;text-align:left;">
+            报名人数(<span class="titleBuyCount">0</span>)
+            @*@if (Model.IsDelete == 0)
+                {
+                if (isLogin)
+                {
+                if (!isJoined)
+                {
+                <a data-aid="@Model.ActivityId" class="btn_IJoin btn btn-primary">报名</a>
+                }
+                else
+                {
+                <a class="btn btn-danger" >您已报名</a>
+                }
+                }
+                else
+                {
+                <a class="btn btn-primary" href="/Account/Login?ReturnUrl=@Request.Url" rel="nofollow">报名</a>
+                }
+                }*@
+        </h3>
+        <div class="joinedUserList" style="display:inline-block;">
+            <ul style="display:inline-block;"></ul>
+        </div>
+    </div>
+</div>
+@{
+    ViewBag.UserID = Model.UserID;
+    ViewBag.MainID = Model.ActivityId;
+}
+@Html.Partial("_CommentList", Model.Comments)
+<script>
+    Leo.init("party", "detail",@Model.ActivityId).LoadCommentControl().LoadPriseControl();
+</script>
+<div class="form-horizontal baseInfoToJoin Ldn" style="background-color:#fff;">
+    <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+        <label for="baseinfoName" class="col-md-3 control-label Lpdl0i">姓名</label>
+        <div class="col-md-9 Lpdl0i">
+            <input class="form-control joinInputForm joinInputForm1" placeholder="姓名" />
+        </div>
+    </div>
+    <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+        <label for="baseinfoTel" class="col-md-3 control-label Lpdl0i">手机</label>
+        <div class="col-md-9 Lpdl0i">
+            <input class="form-control joinInputForm joinInputForm2" placeholder="手机" />
+        </div>
+    </div>
+    @{
+        int baseHeight = 185;
+        for (int i = 0; i < joinQuestions.Count; i++)
+        {
+            JoinItemQuestionExt item = joinQuestions[i];
+            if (baseHeight < 200)
+            {
+                baseHeight += 45;
+            }
+            <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+                <label for="baseinfoD1" class="col-md-3 control-label Lpdl0i">@item.ItemName</label>
+                <div class="col-md-9 Lpdl0i">
+                    <input class="form-control joinInputForm joinInputForm@(i+3)" data-id="@item.JoinItemQuestionExtId" placeholder="@item.ItemName" />
+                </div>
+            </div>
+        }
+        <div class="col-md-12 clearfix Lmgt10 Lpdl0i Ltac">
+            <a class="btn btn-primary btn-subInfoAndJoin" data-height="@(baseHeight)px">提交资料并报名</a>
+        </div>
+    }
+</div>

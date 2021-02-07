@@ -1,0 +1,35 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@model ArticleViewModel
+@{
+    ViewBag.Title = "文章列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UserBaseBLL userbll = UserBaseBLL.Instance;
+
+    bool islogin = userbll.IsLogin;
+    bool ismaster = userbll.IsMaster;
+    bool canWrite = userbll.CanPublishArticle();
+}
+<div class="clearfix">
+    <h2>
+        文章列表
+        <a href="/article/publish?from=article" class="@(islogin?string.Empty:"btn_login") btn btn-primary">发表文章</a>
+        <span class="btn-search-leo btn btn-primary Lfr">
+            搜索
+        </span>
+        <span style="display:inline-block;float:right;width:30%">
+            <input class="searchValue form-control" placeholder="搜索你想要的内容(标题/作者/用户)" />
+        </span>
+    </h2>
+</div>
+<div class="col-md-9 aw-mod aw-explore-list">
+    <div class="mod-body">
+        <div class="aw-common-list">
+            @Html.Partial("_Search", Model)
+        </div>
+    </div>
+</div>
+@Html.Partial("/Views/AD/Index.cshtml")
+<script>
+    Leo.init("article", "index");
+</script>

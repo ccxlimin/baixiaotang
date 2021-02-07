@@ -1,0 +1,80 @@
+﻿@using AmazonBBS.Model
+@model UserBase
+@{
+    ViewBag.Title = "登录";
+    string returnurl = ViewBag.returnUrl;
+    returnurl = string.IsNullOrEmpty(returnurl) ? string.Empty : "?returnurl=" + returnurl;
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "nmform" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>
+                    欢迎来到百晓堂. 请登录
+                </h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Account, "用户名", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Account, new { @class = "form-control", placeholder = "请填写正确邮箱" })
+                        @Html.ValidationMessageFor(m => m.Account, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, "密码", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "请输入密码" })
+                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @*<div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <div class="checkbox">
+                                @Html.CheckBoxFor(m => m.RememberMe)
+                                @Html.LabelFor(m => m.RememberMe)
+                            </div>
+                        </div>
+                    </div>*@
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        @*<input type="button" id="btn_logoin" value="登录" class="btn btn-default" />*@
+                        <a id="btn_logoin" class="btn btn-primary">登录</a>
+                    </div>
+                </div>
+                if (ViewBag.OpenOAuth)
+                {
+                    <p>
+                        @*data-redirecturi="http://staton.free.ngrok.cc/Account/Auth2"*@
+                        @*<script type="text/javascript" src="http://connect.qq.com/qc_jssdk.js" data-appid="@(ViewBag.QQOpenID)" data-redirecturi="http://www.baixiaotangtop.com/Account/Auth2" charset="utf-8"></script>*@
+                        <script type="text/javascript" src="https://connect.qq.com/qc_jssdk.js" data-appid="@(ViewBag.QQOpenID)" data-redirecturi="http://www.baixiaotangtop.com/Account/Auth2" charset="utf-8"></script>
+                        @*<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="@(ViewBag.QQOpenID)" data-redirecturi="http://www.baixiaotangtop.com/Account/Auth2" charset="utf-8"></script>*@
+                        @*<script type="text/javascript" src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js" charset="utf-8"></script>*@
+                        <span id="qqLoginBtn"></span>
+                        <span id="wxLoginBtn"><a href="@ViewBag.WeChatURI"><img src="/Content/img/icon24_wx_button.png" /></a></span>
+                        @*<div id="login_container" class="Ldn"></div>*@
+                    </p>
+                }
+                <p>
+                    @Html.ActionLink("忘记密码", "forget", new { })
+                    <span style="padding:0 10px;">|</span>
+                    @Html.ActionLink("修改密码", "exchange")
+                    <span style="padding:0 10px;">|</span>
+                    没有会员？ @(Html.ActionLink("注册", "register"))
+                </p>
+
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    @*Leo.init("account", "login", { wxcallback: '@ViewBag.WXCallback', wxappid: '@ViewBag.WXAppID' });*@
+    Leo.init("account", "login");
+</script>

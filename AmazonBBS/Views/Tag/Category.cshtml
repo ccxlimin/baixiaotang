@@ -1,0 +1,22 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model TagCategoryVM
+@{
+    ViewBag.Title = Model.TagName + " - 话题";
+}
+
+<div class="clearfix">
+    <h2>
+        话题 - @(Model.TagName)(@Model.Page.RecordCount)
+    </h2>
+</div>
+<div class="col-md-9 aw-mod aw-explore-list">
+    <div class="mod-body categoryListWrap">
+        @Html.Partial("_LoadCategorys", Model)
+    </div>
+</div>
+@Html.Partial("/Views/AD/Index.cshtml")
+<script>
+    Leo.ToolTip();
+    Leo.BootStrap_Tab_Change(".categoryListWrap", ".categoryListWrap", ".categoryListPage", "/Tag/LoadTag/@(Model.TagID)");
+</script>

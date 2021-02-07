@@ -1,0 +1,180 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _ZhaoPin
+@{
+    ViewBag.Title = $"{Model.Gangwei}_职位详情";
+    var m = Model;
+    bool canSeeContact = (bool)ViewBag.canSeeContact;
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+    UserExt ext = UserExtBLL.Instance.GetExtInfo(Convert.ToInt64(m.Publisher));
+    int userv = ext.UserV.Value;
+    bool isuserv = UserExtBLL.Instance.IsFaRenOauth(ext.UserV.Value);
+    long currentUid = UserBaseBLL.Instance.UserID;
+
+    //职位是否已过期
+    bool youxiao = DateTime.Now < Model.ValidTime;
+}
+
+<div class="post Lmgt20">
+    <div class="post-head">
+        @if (!youxiao)
+        {
+            <h3 class="Lcr">该招聘信息已下线</h3>
+        }
+        <h3>
+            @m.Gangwei
+        </h3>
+    </div>
+    <div class="post-content clearfix">
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">
+                <span>公司名称：</span>
+                <span>
+                    @m.CName
+                    <span style="color:red;font-size:12px;">
+                        @(isuserv ? "已认证" : "未认证")
+                    </span>
+                </span>
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                公司人数：@Html.Partial("_CompanyPeople", m.CPeople)
+            </div>
+            <div class="col-md-4 Lpdl0i Ldn">
+                <a class="btn btn-default">公司介绍</a>
+            </div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">
+                更新时间：@(m.UpdateTime.HasValue ? m.UpdateTime.Value.ToLongDateString() : m.CreateTime.Value.ToLongDateString())
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                招聘截止日期：@m.ValidTime.Value.ToLongDateString()
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                <div class="col-md-7">
+                    @if (youxiao)
+                    {
+                        if (islogin && currentUid.ToString() != Model.Publisher)
+                        {
+                            if (SendCVBLL.Instance.HasSendCV(Model.ZhaoPinID, currentUid))
+                            {
+                                <a class="btn-sm btn-primary">您已投递简历</a>
+                            }
+                            else
+                            {
+                                <a class="btn-sm btn-primary @(islogin ? "btn-sendcv" : "btn_login")">发送简历</a>
+                            }
+                        }
+                    }
+                </div>
+                <div class="col-md-5">
+                    @if (youxiao)
+                    {
+                        if (islogin)
+                        {
+                            <button onclick="var me=$(this);me.hide();setTimeout(function(){me.show()},1);print()" class="btn btn-xs btn-primary ">打印</button>
+                        }
+                        else
+                        {
+                            <button class="btn_login btn btn-xs btn-primary ">打印</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">
+                薪资待遇：@Html.Partial("_XinChou", m.Money ?? 0)
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                工作性质：@Html.Partial("_WorkType", m.WorkeType)
+                @if (m.WorkeType == 2)
+                {
+                    @Html.Partial("_JianZhiTime", m.WorkTime)
+                }
+            </div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">学历要求：@Html.Partial("_XueLi", m.Study)</div>
+            <div class="col-md-4 Lpdl0i">工作经验：@Html.Partial("_GongZuoJingYan", m.WorkHistory)</div>
+            <div class="col-md-4 Lpdl0i">工作地点：@m.WorkPlace</div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">招聘人数：@(m.NeedCount)人</div>
+            <div class="col-md-4 Lpdl0i">
+                联系方式：
+                @{
+                    if (youxiao)
+                    {
+                        if (canSeeContact)
+                        {
+                            <span>@m.Contact</span>
+                        }
+                        else
+                        {
+                            <span class="z_contact">********</span>
+                        }
+                        if (!canSeeContact)
+                        {
+                            <a class="btn-sm btn-danger @(islogin ? "feeSeeContact" : "btn_login")">消费VIP分查看联系方式</a>
+                            <script>
+                        $(".feeSeeContact").click(function () {
+                            var me = $(this);
+                            AlertConfirm("确认要付费查看联系方式吗？", "付费查看", "我再想想", function () {
+                                $.post("/zhaopin/fee/{0}".Format(@m.ZhaoPinID), { type: 1 }, function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("付费成功");
+                                        $(".z_contact").text(data.Data);
+                                        me.remove();
+                                    } else {
+                                        layer.msg(data.Msg || "付费失败");
+                                        setTimeout(function () {
+                                            if (data.Url) {
+                                                location.href = data.Url;
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                            </script>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">职位福利：@Html.Raw(m.JobFuLi.IsNotNullOrEmpty() ? m.JobFuLi.Replace("\r\n", "<br>") : "未填写")</div>
+        <div class="col-md-12 Lpdl0i clearfix">职位要求：@Html.Raw(m.JobRequire.IsNotNullOrEmpty() ? m.JobRequire.Replace("\r\n", "<br>") : "未填写")</div>
+        @if (Model.JobPic.IsNotNullOrEmpty())
+        {
+            <div class="col-md-12 Lpdl0i clearfix">职位介绍：<span class="layer-photos-wrap"><img style="max-width:418px;" src="@Html.Raw(m.JobPic)" /></span></div>
+        }
+        <div class="col-md-12 Lpdl0i clearfix">
+            公司介绍：@Html.Raw(m.CDesc.Replace("\r\n", "<br>"))
+        </div>
+    </div>
+    <div class="clearfix" data-mid="@Model.ZhaoPinID">
+        <button type="button" class="btn_comment btn btn-default" data-mid="@m.ZhaoPinID">评论</button>
+        @if (currentUid != Model.Publisher.ToInt64())
+        {
+            if (Model.IsLiked)
+            {
+                <button type="button" class="btn btn-default btn_unlike">已关注</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-default @(islogin ? "btn_like" : "btn_login")">关注</button>
+            }
+        }
+    </div>
+    @Html.Partial("_DOComment", 0)
+</div>
+@{
+    ViewBag.UserID = Convert.ToInt64(m.Publisher);
+    ViewBag.MainID = m.ZhaoPinID;
+}
+@Html.Partial("_CommentList", m.Comments)
+<script>
+    Leo.init("zhaopin", "detail",{id:@Model.ZhaoPinID,error:@(youxiao?1:0)}).LoadCommentControl().LoadPriseControl().ShowMaxImg();
+</script>

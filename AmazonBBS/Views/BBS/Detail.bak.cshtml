@@ -1,0 +1,389 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model _QuestionInfo
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var comments = Model.Comments.Comments;
+    var commentspage = Model.Comments.CommentPage;
+    string defaultsign = "该用户很懒，懒的什么都没有留下";
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool isLogin = UserBaseBLL.Instance.IsLogin;
+    long currentUserID = UserBaseBLL.Instance.UserID;
+    string loginUri = "/Account/Login?ReturnUrl=" + Request.Url;
+
+    //获取积分等级表
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+}
+
+<article class="post">
+    <div class="post-head">
+        <h1 class="post-title">
+            <span>
+                @Model.Title
+                @{
+                    ViewBag.VIP = Model.VIP;
+                    ViewBag.Time = Model.VIPExpiryTime;
+                    @Html.Partial("_VIP")
+                }
+            </span>
+        </h1>
+        @*标题*@
+        <div class="post-meta">
+            <span class="author">
+                作者：<a href="/User/Detail/@Model.UserID" target="_blank" data-toggle="popover" data-placement="bottom">@Model.UserName</a>@Html.Partial("_VIP")
+                •
+                @{
+                    string now = Convert.ToDateTime(Model.CreateTime).ToString("yyyy.MM.dd");
+                }
+                <time class="post-date" datetime="@now title=@now">
+                    @now
+                </time>
+                •
+                @(Model.LikeCount)人关注
+                •
+                @(Model.CommentCount)条评论
+                •
+                @(Model.PVCount + 1)次浏览
+            </span>
+        </div>
+        @*主体图片*@
+        <div class="featured-media">
+            <a href="/">
+                @*<img src="" alt="" />*@
+            </a>
+        </div>
+        @*内容展示部分*@
+        <div class="post-content">
+            <p>
+                @Html.Raw(Model.Body)
+            </p>
+        </div>
+        <div class="post-permalink action Ltac" data-mid="@Model.QuestionId">
+            <button type="button" class="btn_comment btn btn-default">评论</button>
+            @if (currentUserID != Model.UserID)
+            {
+                if (Model.IsLiked)
+                {
+                    <button type="button" class="btn btn-default btn_unlike">已关注</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-default @(isLogin ? "btn_like" : "btn_login")">关注</button>
+                }
+                if (Model.IsPrised)
+                {
+                    <button type="button" class="btn btn-default disabled" disabled="disabled">已点赞</button>
+                }
+                else
+                {
+                    <button type="button" class="btn btn-default @(isLogin ? "btn_prise" : "btn_login")">点赞</button>
+                }
+            }
+        </div>
+    </div>
+    @Html.Partial("_DOComment", 1)
+</article>
+@*评论*@
+<div class="post">
+    <h3>@(ViewBag.RecordCount)人参与评论</h3>
+    <div class="mod-body aw-feed-list">
+        @if (comments != null)
+            {
+                foreach (var comment in comments)
+                {
+                    var commentUserID = comment.CommentUserID;
+                <div class="aw-item">
+                    <div class="mod-head">
+                        @*最佳回答*@
+                        @if (comment.CommentId == Model.BestAnswerId)
+                        {
+                            <div class="aw-best-answer">
+                                <div class="masked">最佳解答</div>
+                            </div>
+                        }
+                        else if (comment.CommentId == Model.NiceAnswerId)
+                        {
+                            <div class="aw-nice-answer">
+                                <div class="masked2">优秀解答</div>
+                            </div>
+                        }
+                        @*用户头像*@
+                        <a class="aw-user-img aw-border-radius-5" href="/User/Detail/@commentUserID" data-id="@commentUserID">
+                            <img src="@(comment.HeadUrl ?? defaultheadurl)" alt="@comment.UserName">
+                            <div class="small-user-logo">
+                                @{
+                                    //管理员
+                                    if (comment.IsMaster)
+                                    {
+                                        <span style="color:red;border:1px solid #ffcaca;" title="管理员">
+                                            <img width="18" height="18" src="/Content/U/Site/master.png" />
+                                        </span>
+                                    }
+                                    //积分等级
+                                    var item = ScoreLevelList.Where(a => a.SortIndex <= comment.TotalScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                                    if (item != null)
+                                    {
+                                        <span style="color:red;border:1px solid #ffcaca;" title="积分等级">@item.EnumDesc</span>
+                                    }
+                                    ViewBag.VIP = comment.VIP;
+                                    ViewBag.Time = comment.VIPExpiryTime;
+                                    var htm = Html.Partial("_VIP");
+                                    @Html.Raw(htm)
+                                    if (comment.HeadNameShowType == 1)
+                                    {
+                                        if (!string.IsNullOrEmpty(comment.LevelName))
+                                        {
+                                            <span style="color:red;border:1px solid #ffcaca;" title="@comment.LevelName">
+                                                <img width="18" height="18" src="/Content/U/Site/levelname.png" />
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (!string.IsNullOrEmpty(comment.OnlyLevelName))
+                                        {
+                                            <span style="color:red;border:1px solid #ffcaca;" title="@comment.OnlyLevelName">
+                                                <img width="18" height="18" src="/Content/U/Site/onlylevelname.png" />
+                                            </span>
+                                        }
+                                    }
+                                }
+                            </div>
+                        </a>
+                        @*end 用户头像*@
+                        <div class="title">
+                            <p>
+                                <a class="aw-user-name" href="/User/Detail/@commentUserID" data-toggle="popover" data-placement="bottom" data-id="@commentUserID">@comment.UserName</a>
+                                @*<i class="icon-v" title="个人认证"></i>*@
+                                - <span class="text-color-999">@(comment.Sign ?? defaultsign)</span>
+                            </p>
+                            @*<p class="text-color-999 aw-agree-by">
+                                    赞同来自......
+                                </p>*@
+                        </div>
+                    </div>
+                    <div class="mod-body clearfix">
+                        @if (currentUserID == Model.UserID || currentUserID == comment.CommentUserID || comment.IsHideOrFeeToSee != 1 || comment.IsFeeAnswer)
+                        {
+                            @*评论内容*@
+                            <div class="markitup-box comment-content">
+                                @Html.Raw(comment.CommentContent)
+                            </div>
+                            @*end 评论内容*@
+                        }
+                        else
+                        {
+                            <div class="Lmgb0 well">
+                                <div>该用户设置了@(comment.FeeCoinType == 1 ? "积分" : "金钱")查看。</div>
+                                <div>
+                                    你需要
+                                    @if (isLogin)
+                                    {
+                                        <a class="FeeScoreForAnswer" data-type="@comment.FeeCoinType" data-coin="@comment.NeedCoin" data-id="@comment.CommentId">购买</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@loginUri">登录</a><span> 后再购买</span>
+                                    }
+                                    才可查看回答答案！
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    @*@if (!isLogin || (currentUserID != comment.AnswerUserId))*@
+                    @*@if (!isLogin)
+                        {*@
+                    @*自己可以看到自己的点赞数量，评论数量，但是不可以进行点赞和评论操作*@
+                    <div class="mod-footer">
+                        @*社交操作*@
+                        <div class="meta clearfix">
+                            <span class="text-color-999 pull-right">
+                                @Convert.ToDateTime(comment.CreateTime).ToString("yyyy-MM-dd")
+                            </span>
+                            @*最佳答案 操作*@
+                            @if (currentUserID == Model.UserID && Model.BestAnswerId == 0)
+                            {
+                                //最佳答案采纳
+                                <span class="operate">
+                                    <a class="btn_best btn btn-default" data-mid="@Model.QuestionId" data-comment-id="@comment.CommentId" style="font-size:12px;">
+                                        采纳该答案
+                                    </a>
+                                </span>
+                            }
+                            @*评论 操作*@
+                            <span class="operate">
+                                @if (isLogin)
+                                {
+                                    if (comment.IsPrised)
+                                    {
+                                        <a class="agree disabled">
+                                            <img src="/Content/img/icon/prised.svg" width="14" height="14" style="vertical-align:sub;" />
+                                            <b class="count">@comment.PrisedCount</b>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        //能够查看答案
+                                        if (comment.IsHideOrFeeToSee != 1 || comment.IsFeeAnswer)
+                                        {
+                                            <a class="agree add_prise" data-answer-id="@comment.CommentId">
+                                                <img src="/Content/img/icon/prise.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                <b class="count">@comment.PrisedCount</b>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="agree disabled">
+                                                <img src="/Content/img/icon/prise.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                <b class="count">@comment.PrisedCount</b>
+                                            </a>
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="@loginUri" class="agree" title="登录">
+                                        <img src="/Content/img/icon/prise.svg" width="14" height="14" style="vertical-align:sub;" />
+                                        <b class="count">@comment.PrisedCount</b>
+                                    </a>
+                                }
+                            </span>
+                            <span class="operate">
+                                @if (isLogin)
+                                {
+                                    //如果登录了而且是免费答案，则可以进行操作
+                                    if (comment.IsHideOrFeeToSee != 1 || comment.IsFeeAnswer)
+                                    {
+                                        <a class="aw-add-comment active" data-mid="@Model.QuestionId" data-comment-id="@comment.CommentId">
+                                            <img src="~/Content/img/icon/comment.svg" width="14" height="14" style="vertical-align:sub;" />
+                                            <b>@comment.ReplyCount</b>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="active">
+                                            <img src="~/Content/img/icon/comment.svg" width="14" height="14" style="vertical-align:sub;" />
+                                            <b>@comment.ReplyCount</b>
+                                        </a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a class="active" href="@loginUri" title="登录">
+                                        <img src="~/Content/img/icon/comment.svg" width="14" height="14" style="vertical-align:sub;" />
+                                        <b>@comment.ReplyCount</b>
+                                    </a>
+                                }
+                            </span>
+                            @*end 评论 操作*@
+                        </div>
+                        @*end 社交操作*@
+                    </div>
+                    @*}*@
+                    @if (currentUserID == comment.CommentUserID || comment.IsHideOrFeeToSee != 1 || comment.IsFeeAnswer)
+                    {
+                        if (comment.ReplyList != null && comment.ReplyList.Count > 0)
+                        {
+                            @*各 评论的回复*@
+                            <div class="mod-footer">
+                                <div class="aw-comment-box" data-comment-id="@comment.CommentId">
+                                    <div class="aw-comment-list">
+                                        <ul>
+                                            @foreach (var reply in comment.ReplyList)
+                                            {
+                                                var replyUserID = reply.CommentUserID;
+                                                <li class="aw-comment-box-li" data-reply-id="@reply.CommentId">
+                                                    <a class="aw-user-name" href="/User/Detail/@replyUserID" data-id="@replyUserID">
+                                                        <img src="@(reply.HeadUrl ?? defaultheadurl)" alt="@reply.UserName">
+                                                    </a>
+                                                    <div>
+                                                        <a href="/User/Detail/@replyUserID" class="aw-user-name author" data-toggle="popover" data-placement="bottom" data-id="@replyUserID">@reply.UserName</a>
+                                                        @if (reply.Reply2UserID > 0 && !string.IsNullOrEmpty(reply.Reply2UserName))
+                                                        {
+                                                            <span> 回复 <a href="/User/Detail/@reply.Reply2UserID" data-toggle="popover" data-placement="bottom">@reply.Reply2UserName</a></span>
+                                                        }
+                                                        • <span>@reply.CreateTime</span>
+                                                        <p></p>
+                                                        <p class="clearfix">@Html.Raw(reply.CommentContent)</p>
+                                                    </div>
+                                                    @*@if (!isLogin || (currentUserID != reply.AnswerUserId))
+                                                        {*@
+                                                    <div class="mod-footer" style="padding-left:0 !important;">
+                                                        <div class="meta clearfix">
+                                                            @*回复 操作*@
+                                                            <span class="operate">
+                                                                @if (isLogin)
+                                                                {
+                                                                    if (reply.IsPrised)
+                                                                    {
+                                                                        <a class="agree disabled">
+                                                                            <img src="/Content/img/icon/prised.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                                            <b class="count">@reply.PrisedCount</b>
+                                                                        </a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="agree add_prise" data-answer-id="@reply.CommentId">
+                                                                            <img src="/Content/img/icon/prise.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                                            <b class="count">@reply.PrisedCount</b>
+                                                                        </a>
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="agree" href="@loginUri">
+                                                                        <img src="/Content/img/icon/prise.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                                        <b class="count">@reply.PrisedCount</b>
+                                                                    </a>
+                                                                }
+                                                            </span>
+                                                            @*end 回复 操作*@
+                                                            <span class="operate">
+
+
+                                                                @if (isLogin)
+                                                                {
+                                                                    <a class="aw-add-comment active" data-comment-id="@comment.CommentId" data-replyuid="@reply.CommentUserID" data-replytoanswer="@reply.CommentId">
+                                                                        <img src="~/Content/img/icon/comment.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                                        <b>@reply.ReplyCount</b>
+                                                                    </a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="active" href="@loginUri">
+                                                                        <img src="/Content/img/icon/comment.svg" width="14" height="14" style="vertical-align:sub;" />
+                                                                        <b>@reply.ReplyCount</b>
+                                                                    </a>
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    @*}*@
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            @* End 各 评论的回复 *@
+                        }
+                    }
+                </div>
+                                    }
+                                    @Html.Partial("_PageLink", commentspage)
+                                    }
+    </div>
+    <div id="replyWrap" class="Ldn">
+        <div id="summernote_reply_wrap">
+            <div id="summernote_reply"></div>
+        </div>
+        <div style="text-align:center;">
+            <button type="button" class="btn btn-default" id="btn_subReply">提交回复</button>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("bbs", "detail", [@Model.QuestionId]).LoadCommentControl().LoadPriseControl();
+</script>

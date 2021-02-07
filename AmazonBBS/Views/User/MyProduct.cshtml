@@ -1,0 +1,13 @@
+﻿@using AmazonBBS.Model
+@model BaseListViewModel<Product>
+@{
+    ViewBag.Title = "我发布的产品 - 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @Html.Partial("_LoadMyProductList", Model)
+        </div>
+    </div>
+</div>

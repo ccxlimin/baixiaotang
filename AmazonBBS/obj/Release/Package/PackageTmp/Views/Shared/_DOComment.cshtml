@@ -1,0 +1,44 @@
+﻿@{
+    int pagetype = Model;//0 不需要积分查看 1 需要积分查看评论
+    <div style="margin-top:10px;">
+        <div>
+            <div id="summernote"></div>
+        </div>
+        <div class="commentAreaItems Ldn">
+            @if (pagetype == 1)
+            {
+                <div class="Lmgt10">
+                    <div class="form-group clearfix">
+                        <div class="col-lg-4" style="padding-left:0;">
+                            <div class="checkbox">
+                                <label>
+                                    <input id="needScore" type="checkbox" />需积分查看(用户消费的积分将转到你的账户下)
+                                </label>
+                                <select id="payScore" disabled="disabled">
+                                    <option value="">请选择积分</option>
+                                    <option value="10">10积分</option>
+                                    <option value="20">20积分</option>
+                                    <option value="30">30积分</option>
+                                    <option value="40">40积分</option>
+                                    <option value="50">50积分</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="Lmgt10">
+                <div class="form-group clearfix">
+                    <div class="col-lg-4" style="padding-left:0;">
+                        <div class="checkbox">
+                            <label data-toggle='tooltip' title="选中此项，则管理员之外的用户看不到实际评论人">
+                                <input id="add_anonymous" type="checkbox" />匿名评论
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn_Answer btn btn-default">提交评论</button>
+        </div>
+    </div>
+}

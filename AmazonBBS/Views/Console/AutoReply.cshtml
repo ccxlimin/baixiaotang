@@ -1,0 +1,256 @@
+﻿@{
+    ViewBag.Title = "设置购买自动回复";
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active"><a href="#load-gift" data-toggle="tab" data-index="2">设置礼物</a></li>
+            <li><a href="#load-data" data-toggle="tab" data-index="4">设置数据</a></li>
+            <li><a href="#load-class" data-toggle="tab" data-index="8">设置课程</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="load-gift">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+            <div class="tab-pane fade" id="load-data">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+            <div class="tab-pane fade" id="load-class">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+        </div>
+    </div>
+    <div class="autoreply_wrapper Ldn">
+        <div class="Lcr">
+            提示：关键词部分要替换的，请用以下格式：<span style="color:blue">#你自己命名的替换符(必须英文)#</span><span style="color:green">如：#key#</span>来代替！
+            <br />具体内容eg：恭喜你购买成功，你的卡号为：#key1#，您的密码为：#password#！
+            <br />导入的excel表格里字段列必须包含该两列(key1,pasword)，列名为设置的替换关键字，否则导致导入不成功！
+            <br />如果需要编辑自动回复内容时，关键字不可去除，其余内容可自行编辑！如要更改关键字，请【清空】后再导入新的！谢谢
+        </div>
+        <table class="table table-bordered table-hover Ltac">
+            <tr>
+                <td>
+                    自动回复内容
+                </td>
+                <td>
+                    <textarea id="autocontent" placeholder="此处输入购买成功后，自动回复内容"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    导入数据
+                </td>
+                <td>
+                    <input placeholder="导入数据" type="file" accept="excel" id="pickExcel" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <a class="btn btn-primary btn_set_autoreply">导入数据</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        function LoadWrap(element) {
+            $(element).html('<div class="loadwrap">正在整理数据，请稍等<img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>');
+        }
+
+        function NoHtmlList() {
+            return $('<div style="text-align:center;"><div class="well"><h4>无数据</h4></div></div>');
+        }
+
+        function EachList(data, element, callback) {
+            if (data.Ok) {
+                data = data.Data;
+                var divWrap;
+                if (data.length > 0) {
+                    $(".setBtn").removeClass("Ldn");
+                    divWrap = $("<table>").addClass("batchTags_Wrap table table-bordered table-hover");
+                    divWrap.append($("<tr>").append($("<th>").text("标题"), $("<th>").text("是否已设置"), $("<th>").text("操作")))
+                    
+                    $.each(data, function (i, n) {
+                        callback(n).appendTo(divWrap);
+                    });
+                } else {
+                    divWrap = NoHtmlList();
+                }
+                $(element).html(divWrap);
+            }
+        }
+
+        function LoadGift() {
+            $.get("/Console/LoadGiftForSet", function (data) {
+                EachList(data, "#load-gift", function (n) {
+                    return BuildListHtml(n, 2, Leo.baseUrl + "/gift/detail/{0}");
+                });
+            });
+        }
+
+        function LoadData() {
+            $.get("/Console/LoadDataForSet", function (data) {
+                EachList(data, "#load-data", function (n) {
+                    return BuildListHtml(n, 4, Leo.baseUrl + "/gift/detail/{0}");
+                });
+            });
+        }
+
+        function LoadClass() {
+            $.get("/Console/LoadClassForSet", function (data) {
+                EachList(data, "#load-class", function (n) {
+                    return BuildListHtml(n, 8, Leo.baseUrl + "/gift/detail/{0}");
+                });
+            });
+        }
+
+        $(function () {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var index = $(e.target).data("index");
+                if (index == "2") {
+                    LoadWrap("#load-gift");
+                    LoadGift();
+                } else if (index == "4") {
+                    LoadWrap("#load-data");
+                    LoadData();
+                } else {
+                    LoadWrap("#load-class");
+                    LoadClass();
+                }
+            });
+        });
+
+        var layerIndex;
+        //显示设置界面
+        function showSet(type, id, isappend, content) {
+            layerIndex = AlertDiv_End(".autoreply_wrapper", "40%", "31%", "设置自动回复", null, function () {
+                $("#autocontent").val("");
+                $("#pickExcel").val("");
+                $(".btn_set_autoreply").unbind("click");
+            });
+            $("#autocontent").val(isappend ? content : "").attr("disabled", !!isappend);
+            save(type, id);
+        }
+
+        function BuildListHtml(n, type, url) {
+            var divItem = $("<tr>");
+            var title = $("<td>").append($("<a>").attr({ "href": url.Format(n.id), "target": "_blank" }).text(n.name));
+            divItem.append(title);
+            divItem.append($("<td>").text(n.auto ? "已设置" : "否"))
+            var tagsWrap = $("<td>");
+            if (n.auto) {
+                tagsWrap.append($("<a>").addClass("btn btn-sm btn-primary").text("查看").click(function () {
+                    $.get("/console/getautoreply", { type: type, id: n.id }, function (res) {
+                        if (res.Ok) {
+                            console.log(res.Data[0])
+                            var div = $("<div>").addClass("Ldn");
+                            var table1 = $("<table>").addClass("table table-bordered table-hover Lmgb20-");
+                            if (res.Data[0].auto.length > 0) {
+                                var content = res.Data[0].content;
+                                div.append($("<table>").addClass("table table-bordered table-hover").append($("<tr>").append($("<td>").text("自动回复内容"), $("<td>").text(content))));
+                                var head = $("<tr>");
+                                $.each(res.Data[0].auto[0].item, function () {
+                                    head.append($("<th>").text("关键字[{0}]".Format(this.key)));
+                                });
+                                head.append($("<th>").text("完整内容"));
+                                head.append($("<th>").text("是否已使用"));
+                                head.append($("<th>").text("操作"));
+                                table1.append(head);
+                                $.each(res.Data[0].auto, function () {
+                                    var tr = $("<tr>");
+                                    var me = this.item;
+                                    var _content = content;
+                                    var kids = [];
+                                    $.each(me, function () {
+                                        tr.append($("<td>").text(this.value));
+                                        _content = _content.replace("#" + this.key + "#", this.value);
+                                        kids.push(this.kid);
+                                    })
+                                    tr.append($("<td>").text(_content))
+                                    tr.append($("<td>").text(me[0].used ? "已使用" : "未使用"));
+                                    tr.append($("<td>").append($("<a>").addClass("btn btn-sm btn-danger").text("删除").click(function () {
+                                        var thisBtn = $(this);
+                                        AlertConfirm("确定删除此条自动回复吗？", "确定", "取消", function () {
+                                            $.post("/console/deleteautoreplyitem", { kids: kids }, function (data) {
+                                                if (data.Ok) {
+                                                    Leo.msgsuccess("删除成功");
+                                                    thisBtn.parent().parent().remove();
+                                                }
+                                            })
+                                        })
+                                    })));
+                                    table1.append(tr);
+                                })
+                                $("body").append(div.append(table1));
+                                AlertDivWithOutID_MAX(div, "已设置的自动回复");
+                            }
+                        }
+                        else {
+                            Leo.msgfail(res.Msg || '获取失败，重新再试');
+                        }
+                    })
+                }));
+                tagsWrap.append($("<a>").addClass("btn btn-sm btn-info").text("追加").click(function () {
+                    showSet(type, n.id, !0, n.content);
+                }));
+                tagsWrap.append($("<a>").addClass("btn btn-sm btn-danger").text("清空").click(function () {
+                    AlertConfirm("确定要清空此项的所有自动回复吗？", '清空', '取消', function () {
+                        $.post("/console/deleteAllReply/{0}".Format(n.autoId), function (data) {
+                            if (data.Ok) {
+                                Leo.msgsuccess(data.Msg || "清空成功");
+                                location.reload();
+                            } else {
+                                Leo.msgfail(data.Msg || "清空失败");
+                            }
+                        });
+                    });
+
+                }));
+            } else {
+                tagsWrap.append($("<a>").addClass("btn btn-sm btn-primary").text("添加回复内容").click(function () {
+                    showSet(type, n.id);
+                }));
+            }
+            divItem.append(tagsWrap);
+            return divItem;
+        }
+
+        function save(type, id) {
+            $(".btn_set_autoreply").unbind("click").click(function () {
+                if (type && id) {
+                    var content = $("#autocontent");
+                    if (Leo.tools.CheckFormNotEmpty(content, "自动回复内容")) {
+                        var contentV = content.val();
+                        var can = true;
+                        if (contentV.indexOf("#") > -1) {
+                            if (!$("#pickExcel").val()) {
+                                Leo.msgfail("请上传文件数据");
+                                can = false;
+                            }
+                        }
+                        if (can) {
+                            var formdata = new FormData();
+                            formdata.append("id", id);
+                            formdata.append("type", type);
+                            formdata.append("content", content.val());
+                            Leo.SendFile2("/console/ImportAutoReplyContent", false, function (data) {
+                                if (data.Ok) {
+                                    layer.close(layerIndex);
+                                    location.reload();
+                                } else {
+                                    Leo.msgfail(data.Msg || "设置失败");
+                                }
+                            }, formdata, $("#pickExcel")[0]);
+                        }
+                    }
+                } else {
+                    Leo.msgfail("请正确选择");
+                }
+            });
+        }
+
+        LoadGift();
+    </script>
+</div>

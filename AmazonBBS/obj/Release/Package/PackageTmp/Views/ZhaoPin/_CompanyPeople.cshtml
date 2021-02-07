@@ -1,0 +1,24 @@
+﻿@{
+    //公司人数
+    int people = Model;
+
+    var msg2 = string.Empty;
+    switch (people)
+    {
+        case 1:
+            msg2 = "5人以下"; break;
+        case 2:
+            msg2 = "5-10人"; break;
+        case 3:
+            msg2 = "10-15人"; break;
+        case 4:
+            msg2 = "15-20人"; break;
+        case 5:
+            msg2 = "30-50人"; break;
+        case 6:
+            msg2 = "50-100人"; break;
+        case 7:
+            msg2 = "100人以上"; break;
+    }
+    <span>@msg2</span>
+}

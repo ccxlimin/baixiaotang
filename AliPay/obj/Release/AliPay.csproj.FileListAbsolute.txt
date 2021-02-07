@@ -1,0 +1,6 @@
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\bin\Release\AliPay.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\bin\Release\AliPay.pdb
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Release\AliPay.csproj.CoreCompileInputs.cache
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Release\AliPay.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Release\AliPay.pdb
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Release\AliPay.csprojAssemblyReference.cache

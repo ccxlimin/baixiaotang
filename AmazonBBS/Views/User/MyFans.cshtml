@@ -1,0 +1,36 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model  List<FansViewModel>
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    ViewBag.Title = "我的粉丝 - 个人中心";
+    List<FansViewModel> fans = Model;
+}
+
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @if (fans.Count > 0)
+            {
+                <div>
+                    @foreach (FansViewModel item in fans)
+                    {
+                        <a data-toggle="tooltip" title="点击查看@(item.UserName)的详细信息" href="/user/detail/@item.UserName">
+                            @item.UserName
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="well">
+                    暂时没有粉丝哦！
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user");
+</script>

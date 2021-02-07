@@ -1,0 +1,312 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model List<AD>
+@{
+    ViewBag.Title = "广告设置";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div class="well clearfix">
+            <div class="col-md-4 col-sm-4">
+                <h4>新增广告</h4>
+                <div class="well">
+                    <div class="form-group-sm clearfix">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ADTitle" placeholder="广告标题" />
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ADIMG" placeholder="广告图片" />
+                            <input style="display:none" type="file" id="selectADIMG" value="" />
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ADMSG" placeholder="广告描述" />
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ADContact" placeholder="联系方式" />
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="ADWeChat" placeholder="设置微信号" />
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-12">
+                            <a id="btn_AddADInfo" class="btn btn-primary">新增</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="well clearfix Ldn">
+            <div class="col-md-4 col-sm-4">
+                <h4>广告微信号设置</h4>
+                <div class="well">
+                    <div class="form-group-sm clearfix">
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="searchAD" placeholder="查找广告" />
+                        </div>
+                        <a id="btn_search" class="btn btn-primary">开始查找</a>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="giveWeChat" placeholder="设置微信号" />
+                        </div>
+                        <a id="btn_give" class="btn btn-primary">确认设置</a>
+                    </div>
+                </div>
+                <br />
+            </div>
+        </div>
+        <div class="well clearfix">
+            <table class="manageUserTable table table-bordered table-hover">
+                <caption>广告管理</caption>
+                <thead>
+                    <tr>
+                        <th width="10%">广告标题</th>
+                        <th width="20%">广告图片</th>
+                        <th width="25%">广告描述</th>
+                        <th width="10%">联系方式</th>
+                        <th width="10%">微信号</th>
+                        <th width="10%">更新时间</th>
+                        <th width="15%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (AD ad in Model)
+                    {
+                        <tr>
+                            <td>@ad.ADTitle</td>
+                            <td class="layer-photos-wrap"><img width="40" src="@ad.ADIMG" /></td>
+                            <td>@ad.ADMsg</td>
+                            <td>@ad.ADContact</td>
+                            <td>@ad.ADWeChat</td>
+                            <td>@ad.CreateTime.Value.ToString(1)</td>
+                            <td>
+                                <a onclick="Edit(this,'@ad.ADID','@ad.ADTitle','@ad.ADIMG','@ad.ADMsg','@ad.ADContact','@ad.ADWeChat')" class="btn-sm btn-primary">编辑</a>
+                                <a onclick="Delete(this,'@ad.ADID')" class="btn-sm btn-danger">删除</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 col-sm-12 Ldn" id="editAdWrapper">
+    <div class="form-group-sm clearfix Lmgt10">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="edit_ADTitle" placeholder="广告标题" />
+        </div>
+    </div>
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="edit_ADIMG" placeholder="广告图片" />
+            <input style="display:none" type="file" id="edit_selectADIMG" value="" />
+        </div>
+    </div>
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="edit_ADMSG" placeholder="广告描述" />
+        </div>
+    </div>
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="edit_ADContact" placeholder="联系方式" />
+        </div>
+    </div>
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <input type="text" class="form-control" id="edit_ADWeChat" placeholder="设置微信号" />
+        </div>
+    </div>
+    @*<div class="form-group-sm clearfix Lmgt5">
+            <div class="col-sm-12">
+                <a id="btn_Edit_ADInfo" class="btn btn-primary">保存</a>
+            </div>
+        </div>*@
+</div>
+<script>
+    $("#btn_AddADInfo").click(function () {
+        var ADTitle = $("#ADTitle"), ADIMG = $("#ADIMG"), ADMSG = $("#ADMSG"), ADContact = $("#ADContact"), ADWeChat = $("#ADWeChat");
+        if (CHECKNOTEMPTY(ADTitle, "广告标题")) {
+            if (CHECKNOTEMPTY(ADMSG, "广告描述")) {
+                if (CHECKNOTEMPTY(ADContact, "联系方式")) {
+                    if (CHECKNOTEMPTY(ADWeChat, "设置微信号")) {
+                        if (ADIMG.val() == "") {
+                            layer.msg("请选择广告图片");
+                            $("#selectADIMG").click();
+                        } else {
+                            var formdata = new FormData();
+                            formdata.append("ADIMG", $("#selectADIMG")[0].files[0]);
+                            formdata.append("ADTitle", ADTitle.val());
+                            formdata.append("ADMSG", ADMSG.val());
+                            formdata.append("ADContact", ADContact.val());
+                            formdata.append("ADWeChat", ADWeChat.val());
+                            $.ajax({
+                                url: "/Console/ADDAD",
+                                type: "post",
+                                dataType: "json",
+                                contentType: false,
+                                processData: false,
+                                data: formdata,
+                                success: function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("新增广告成功");
+                                        setTimeout(function () { location.reload() }, 1000)
+                                    } else {
+                                        layer.msg(data.Msg || "新增失败");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    });
+    $("#ADIMG").on("click", (function () {
+        $("#selectADIMG").click();
+    }));
+    $("#selectADIMG").change(function (data) {
+        $("#ADIMG").val($("#selectADIMG").val());
+    });
+
+    $("#btn_search").unbind("click").click(function () {
+        if ($("#searchAD").val() == "") {
+            $("#searchAD").focus();
+            layer.msg("请输入广告标题进行查找", function () { $('.errorMsg1').addClass("Ldn") });
+            return !1;
+        } else {
+            $.post("/Console/CheckAD/{1}?t={0}".Format(Leo.getPK(), $.trim($("#searchAD").val()))
+                , function (data) {
+                    if (data.Ok) {
+                        $("#searchAD").attr("disabled", !0);
+                        layer.msg("匹配成功!可以进行微信号设置!");
+                        $("#btn_search").addClass("disabled").unbind("click");
+                        $("#btn_give").unbind("click").click(function () {
+                            if (CHECKNOTEMPTY($("#giveWeChat"), "微信号")) {
+                                $.post("/Console/SetWeChat?t={0}".Format(Leo.getPK()),
+                                    { wechat: $("#giveWeChat").val(), title: $("#searchAD").val() },
+                                    function (data) {
+                                        if (data.Ok) {
+                                            layer.msg(data.Msg);
+                                            setTimeout(function () {
+                                                location.reload(!0);
+                                            }, 500)
+                                        } else {
+                                            layer.msg(data.Msg);
+                                        }
+                                    })
+                            }
+                        });
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+    });
+    function initImg() {
+        Leo.ShowMaxImg();
+    }
+    function Delete(target, id) {
+        AlertConfirm("确定要删除吗？", "删除", "暂不", function () {
+            var loadIndex = LOAD("删除中")
+            $.post("/console/addelete/" + id, function (res) {
+                if (res.Ok) {
+                    CLOSE(loadIndex);
+                    layer.msg("删除成功");
+                    $(target).parent().parent().remove();
+                }
+            })
+        })
+    }
+
+    var edit_change_img = false;
+    function Edit(target, id, title, imgSrc, desc, contact, wechat) {
+        edit_change_img = false;
+        $("#edit_ADTitle").val(title);
+        $("#edit_ADIMG").val(imgSrc);
+        $("#edit_ADMSG").val(desc);
+        $("#edit_ADContact").val(contact);
+        $("#edit_ADWeChat").val(wechat);
+        function empty() {
+            $("#edit_ADTitle").val("");
+            $("#edit_ADIMG").val("");
+            $("#edit_ADMSG").val("");
+            $("#edit_ADContact").val("");
+            $("#edit_ADWeChat").val("");
+            edit_change_img = false;
+        }
+        var alertIndex = AlertActionAreaWithConfirmWithSize($("#editAdWrapper"), "编辑广告", "330PX", null, '确认编辑', null, function () {
+            var ADTitle = $("#edit_ADTitle"), ADIMG = $("#edit_ADIMG"), ADMSG = $("#edit_ADMSG"), ADContact = $("#edit_ADContact"), ADWeChat = $("#edit_ADWeChat");
+            if (CHECKNOTEMPTY(ADTitle, "广告标题")) {
+                if (CHECKNOTEMPTY(ADMSG, "广告描述")) {
+                    if (CHECKNOTEMPTY(ADContact, "联系方式")) {
+                        if (CHECKNOTEMPTY(ADWeChat, "设置微信号")) {
+                            if (ADIMG.val() == "") {
+                                layer.msg("请选择广告图片");
+                                $("#edit_selectADIMG").click();
+                            } else {
+                                var formdata = new FormData();
+                                formdata.append("ADIMG", $("#edit_selectADIMG")[0].files[0]);
+                                formdata.append("ADTitle", ADTitle.val());
+                                formdata.append("ADMSG", ADMSG.val());
+                                formdata.append("ADContact", ADContact.val());
+                                formdata.append("ADWeChat", ADWeChat.val());
+                                formdata.append("ischanged", edit_change_img)
+                                formdata.append("id", id)
+                                var lindex = LOAD("提交中")
+                                $.ajax({
+                                    url: "/Console/ADEdit",
+                                    type: "post",
+                                    dataType: "json",
+                                    contentType: false,
+                                    processData: false,
+                                    data: formdata,
+                                    success: function (data) {
+                                        layer.close(lindex)
+                                        layer.close(alertIndex)
+                                        if (data.Ok) {
+                                            layer.msg("编辑广告成功");
+                                            var parent = $(target).parent().parent().children("td");
+                                            parent.eq(0).text(ADTitle.val());
+                                            parent.eq(1).find("img").attr("src", data.Url);
+                                            parent.eq(2).text(ADMSG.val());
+                                            parent.eq(3).text(ADContact.val());
+                                            parent.eq(4).text(ADWeChat.val());
+                                            if (edit_change_img) {
+                                                Leo.ShowMaxImg()
+                                            }
+                                        } else {
+                                            layer.msg(data.Msg || "编辑失败");
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }, function () { empty() });
+    }
+    $("#edit_ADIMG").on("click", (function () {
+        $("#edit_selectADIMG").click();
+    }));
+    $("#edit_selectADIMG").change(function (data) {
+        $("#edit_ADIMG").val($("#edit_selectADIMG").val());
+        edit_change_img = true;
+    });
+
+    Leo.ShowMaxImg();
+</script>

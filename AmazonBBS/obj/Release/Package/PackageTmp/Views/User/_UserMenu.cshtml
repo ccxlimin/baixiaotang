@@ -1,0 +1,306 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    string headurl = user?.HeadUrl ?? "/Content/img/head_default.gif";
+    //是否管理员
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+
+    List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+    UserExt userExt = UserExtBLL.Instance.GetExtInfo(user.UserID);
+    string[] levels = UserExtBLL.Instance.GetLevelNameForUser(user.UserID);
+    int needSignCount = Convert.ToInt32(levels[0]);
+    string levelName = levels[1];
+    string onlyLevelName = levels[2];
+    string levelNameUrls = levels[4];
+
+    bool isFaRenAuth = false, isdaniuauth = false, ishongrenauth = false;
+    switch (userExt.UserV)
+    {
+        case 1: ishongrenauth = true; break;        //红人
+        case 2: isdaniuauth = true; break;          //大牛
+        case 4: isFaRenAuth = true; break;          //法人
+        case 3: ishongrenauth = isdaniuauth = true; break;//红人 大牛
+        case 6: isdaniuauth = isFaRenAuth = true; break;    //大牛 法人
+        case 5: ishongrenauth = isFaRenAuth = true; break;//红人 法人
+        case 7: ishongrenauth = isdaniuauth = isFaRenAuth = true; break;//红人 大牛 法人
+    }
+    string descUrl = ConfigHelper.AppSettings("scoreName_levelName_desc_url");
+}
+<div class="col-md-3 userCenterAreaLeft">
+    <div class="side-nav">
+        <div class="panel-group" id="accordion">
+            <div class="thumbnail user-headinfo">
+                <div style="text-align:center;">
+                    <div style="display:inline-block;position:relative;">
+                        <img class="myhead" src="@headurl" onerror="this.src='/Content/img/head_default.gif'" width="120" height="120" style="border-radius:100% 100%" />
+                        @{
+                            ViewBag.VIP = userExt.VIP;
+                            ViewBag.Time = userExt.VIPExpiryTime;
+                            <span style="position:absolute;left:0;bottom:0;">
+                                @Html.Partial("_VIP")
+                            </span>
+                        }
+                    </div>
+                </div>
+                <div class="caption" style="text-align:center">
+                    <h5 style="font-weight:bold;font-size:20px;">
+                        @user.UserName
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="签到、提问、点赞和回答问题可以获取积分，详情可双击查看" ondblclick="window.open('@descUrl')" class="Lvam Lusn">等级：</span>
+                        @{
+                            int userScore = userExt.TotalScore.Value;
+                            var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                            if (item != null)
+                            {
+                                var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                                string title = nextItem == null ? "，全站最高等级啦！恭喜！" : "，下一级还需" + (nextItem.SortIndex - userScore) + "积分升级到:" + nextItem.EnumDesc;
+                                //循环计算等级称号
+                                int loopCount = scoreLevelList.Count;
+                                for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                                {
+                                    var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                    if (findItem != null)
+                                    {
+                                        <span>
+                                            <img width="22" height="22" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" alt="@item.EnumDesc" data-toggle="tooltip" title="当前等级:@item.EnumDesc@title" />
+                                        </span>
+                                        if (userScore > 0 && findItem.SortIndex > 0)
+                                        {
+                                            userScore -= findItem.SortIndex.Value;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                <span class="Lvam">暂未达到最低等级</span>
+                            }
+                        }
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="签到次数越多则头衔越高，详情可双击查看" ondblclick="window.open('@descUrl')" class="Lvam Lusn">头衔：</span>
+                        @{
+                            if (string.IsNullOrEmpty(levelName))
+                            {
+                                <span class="Lvam">暂未获得</span>
+                            }
+                            else
+                            {
+                                string titleTip = needSignCount == 0 ? "，已达到头衔最高等级啦！恭喜！" : "还需签到" + needSignCount + "次升到下一级！";
+                                string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                                if (imgs != null)
+                                {
+                                    foreach (string imgSrc in imgs)
+                                    {
+                                        <img width="22" height="22" src="@imgSrc" alt="@levelName" data-toggle="tooltip" title="当前头衔:@levelName @titleTip" />
+                                    }
+                                }
+                            }
+                        }
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="网站管理员赠送" class="Lvam Lusn">专属头衔：</span>
+                        @{
+                            if (string.IsNullOrEmpty(onlyLevelName))
+                            {
+                                <span class="Lvam">暂未获得</span>
+                            }
+                            else
+                            {
+                                <img width="22" height="22" src="/Content/img/LevelLogo/onlylevelname_@(onlyLevelName).png" alt="@onlyLevelName" data-toggle="tooltip" title="@onlyLevelName" />
+                            }
+                        }
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="提交认证获得" class="Lvam Lusn">法人：</span>
+                        @{
+                            if (isFaRenAuth)
+                            {
+                                <img width="22" height="22" src="~/Content/U/UserV/4.png" data-toggle="tooltip" title="法人认证" />
+                            }
+                            else
+                            {
+                                <span class="Lvam">暂未获得</span>
+                            }
+                        }
+
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="网站管理员赠送" class="Lvam Lusn">大牛：</span>
+                        @{
+                            if (!isdaniuauth)
+                            {
+                                <span class="Lvam">暂未获得</span>
+                            }
+                            else
+                            {
+                                if (isdaniuauth)
+                                {
+                                    <img width="22" height="22" src="~/Content/U/UserV/2.png" data-toggle="tooltip" title="牛人认证" />
+                                }
+                            }
+                        }
+                    </h5>
+                    <h5>
+                        <span data-toggle="tooltip" title="网站管理员赠送" class="Lvam Lusn">红人：</span>
+                        @{
+                            if (!ishongrenauth)
+                            {
+                                <span class="Lvam">暂未获得</span>
+                            }
+                            else
+                            {
+                                if (ishongrenauth)
+                                {
+                                    <img width="22" height="22" src="~/Content/U/UserV/1.png" data-toggle="tooltip" title="红人认证" />
+                                }
+                            }
+                        }
+                    </h5>
+                </div>
+            </div>
+            <div class="panel-usermenu">
+                <div class="panel-heading panel">
+                    <a href="/user" class="side-nav-item item-title">
+                        我的首页
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/user/edit" class="side-nav-item item-title">
+                        个性化设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-myquestion" id="" class="side-nav-item item-title">
+                        我的记录
+                        <b class="caret"></b>
+                    </a>
+                    <div id="item-myquestion" class="panel-collapse collapse">
+                        <div class="item-body"><a href="/user/myquestions">我的提问</a></div>
+                        <div class="item-body"><a href="/user/myanswers">我的回答</a></div>
+                        <div class="item-body"><a href="/user/myarticle">我的文章</a></div>
+                        <div class="item-body"><a href="/user/myzhaopin">我的招聘</a></div>
+                        <div class="item-body"><a href="/user/myqiuzhi">我的求职</a></div>
+                        <div class="item-body"><a href="/user/myproduct">我的产品</a></div>
+                        <div class="item-body"><a href="/user/myfans">我的粉丝</a></div>
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-caiwu" id="headcaiwu" class="side-nav-item item-title collapsed">
+                        我的关注
+                        <b class="caret"></b>
+                    </a>
+                    <div id="item-caiwu" class="panel-collapse collapse">
+                        <div class="item-body">
+                            <a href="/user/mylike/user">
+                                我关注的用户
+                            </a>
+                        </div>
+                        <div class="item-body">
+                            <a href="/user/mylike/question">
+                                我关注的问题
+                            </a>
+                        </div>
+                        <div class="item-body">
+                            <a href="/user/mylike/article">
+                                我关注的文章
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#item-jifen" id="headjifen" class="side-nav-item item-title collapsed">
+                        积分操作
+                        <b class="caret"></b>
+                    </a>
+                    <div id="item-jifen" class="panel-collapse collapse">
+                        <div class="item-body">
+                            <a href="/user/scoreexchange">
+                                积分兑换
+                            </a>
+                        </div>
+                        <div class="item-body">
+                            <a href="/user/rechargevipscore">
+                                VIP分充值
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                @if (!isFaRenAuth)
+                {
+                    <div class="panel-heading panel">
+                        <a href="/user/userauth" class="side-nav-item item-title">
+                            用户认证
+                        </a>
+                        <div class="item-body collapse">
+                        </div>
+                    </div>
+                }
+                <div class="panel-heading panel">
+                    <a href="/user/order" class="side-nav-item item-title">
+                        我的订单
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/user/notice" class="side-nav-item item-title">
+                        系统通知
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/user/nnbox" class="side-nav-item item-title">
+                        我的消息
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                @if (user.Source != 4)
+                {
+                    <div class="panel-heading panel">
+                        <a href="/user/bindoauth" class="side-nav-item item-title">
+                            第三方绑定
+                        </a>
+                        <div class="item-body collapse">
+                        </div>
+                    </div>
+                }
+                <div class="panel-heading panel">
+                    <a href="/user/myshare" class="side-nav-item item-title">
+                        我的分享
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                @if (isMaster)
+                {
+                    <div class="panel-heading panel">
+                        <a href="/console/index" class="side-nav-item item-title">
+                            网站后台管理
+                        </a>
+                        <div class="item-body collapse"></div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.ToolTip();
+    Leo.UCenterSkin();
+</script>

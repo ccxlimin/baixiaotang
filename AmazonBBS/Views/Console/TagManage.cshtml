@@ -1,0 +1,178 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model TagViewModel
+@{
+    ViewBag.Title = "标签管理";
+    //List<BBSEnum> enumList = ViewBag.MenuType;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <h3>标签设置</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="Tag_Name" placeholder="标签名" />
+                            </div>
+                            @*<div class="col-md-8 col-sm-8 Lmgt5">
+                                    <select id="Tag_pageModel" name="Tag_pageModel" class="form-control">
+                                        <option value="">请选择标签所属页面</option>
+                                        @foreach (BBSEnum item in enumList)
+                                        {
+                                            <option value="@item.BBSEnumId">@item.EnumDesc</option>
+                                        }
+                                    </select>
+                                </div>*@
+                            <div class="col-sm-8 Lmgt5">
+                                <a onclick="addNew()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @*<div class="col-md-10">
+            <div class="well">
+                <ul class="userTabs nav nav-tabs nav-tabs-a-borderColor-top-blue">
+                    @{
+                        for (int i = 0; i < enumList.Count; i++)
+                        {
+                            BBSEnum item = enumList[i];
+                            if (i == 0)
+                            {
+                                <li class="active"><a href="#@item.EnumCode" data-toggle="tab" data-reactid="@item.BBSEnumId">@item.EnumDesc</a></li>
+                            }
+                            else
+                            {
+                                <li><a href="#@item.EnumCode" data-toggle="tab" data-reactid="@item.BBSEnumId">@item.EnumDesc</a></li>
+                            }
+                        }
+                    }
+                </ul>
+                <div class="userTabContent tab-content" oncontextmenu="return !1;" onselect="return !1;">
+                    @foreach (BBSEnum item in enumList)
+                    {
+                        <div class="tab-pane fade" id="@item.EnumCode"></div>
+                    }
+                </div>
+                <div class="taglistWrap">
+                    @Html.Partial("/Views/Console/_LoadTagsList.cshtml", Model)
+                </div>
+            </div>
+        </div>*@
+    <div class="col-md-10">
+        <div class="taglistWrap">
+            @Html.Partial("/Views/Console/_LoadTagsList.cshtml", Model)
+        </div>
+    </div>
+</div>
+@*<div class="EditTag Ldn">
+    <div class="form-group Lmgt10">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_Tag_Name" name="edit_Tag_Name" placeholder="标签名" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12 Ltac">
+            <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+        </div>
+    </div>
+</div>*@
+<script>
+    function addNew() {
+        var Tag_Name = $("#Tag_Name"),
+            Tag_pageModel = $("#Tag_pageModel");
+        if (CHECKNOTEMPTY(Tag_Name, "标签名")) {
+            if (Leo.tools.CheckLength(Tag_Name.val(), 1, 10, "标签名")) {
+                //if (CHECKNOTEMPTY(Tag_pageModel, "标签所属页面")) {
+                $.post("/Common/AddTag", { name: Tag_Name.val(), /*pageModel: Tag_pageModel.val(),*/ fromConsole: !0 }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess(data.Msg || "新增标签成功", function () { location.reload(!0); });
+                    } else {
+                        Leo.msgfail(data.Msg || "添加失败");
+                    }
+                });
+                //}
+            }
+        }
+    }
+
+    //删除
+    function Delete(target, id, type) {
+        var desc = type == 0 ? "恢复" : "删除";
+        var me = $(target);
+        AlertConfirm("确定要{0}此标签吗？".Format(desc), "确认{0}".Format(desc), '我点错了', function () {
+            $.post("/Console/UpdateTag/{0}".Format(id), { flag: type }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("{0}成功".Format(desc));
+                    var trEle = me.parent().parent(), tbodyEle = trEle.parent();
+                    trEle.remove();
+                    var sorttype = $('.userTabs li.active').children().data("reactid") || 0;
+                    $.get("/Console/GetTags?type={0}".Format(sorttype), function (data) {
+                        $(".taglistWrap").empty().append(data);
+                        Leo.BootStrap_Tab_Change(".userTabs", ".taglistWrap", ".tag_Page", "/Console/GetTags?type={0}", sorttype, "-16px 0", "15px");
+                    });
+                    //tbodyEle.children().length == 0 && (
+                    //    tbodyEle.parent().parent().after($("<div>").addClass("post").text("暂无标签")).remove());
+                } else {
+                    Leo.msgfail(data.Msg);
+                }
+            });
+        });
+    }
+
+    //编辑
+    function Edit(target, id, name) {
+        AlertPromptText("编辑标签", name, '修改', null, function (value, index, ele) {
+            if (CHECKNOTEMPTY(value, "标签名")) {
+                if (Leo.tools.CheckLength(value, 1, 10, "标签名")) {
+                    var layerindex = LOAD("编辑中")
+                    return $.post("/Common/EditTag/{0}".Format(id), { name: value }, function (data) {
+                        if (data.Ok) {
+                            layer.close(layerindex);
+                            layer.close(index);
+                            Leo.msgsuccess("编辑成功");
+                            $(target).parent().parent().children().eq(1).text(value);
+                        } else {
+                            Leo.msgfail(data.Msg || "编辑失败");
+                        }
+                    });
+                }
+            }
+        }, 10);
+    }
+    //Leo.tools.PageRowNumber(".tag_Page", ".taglistWrap","/Console/GetTags",)
+    Leo.BootStrap_Tab_Change(".taglistWrap", ".taglistWrap", ".tag_Page", "/Console/GetTags?type={0}", 1034, "-16px 0", "15px");
+    //$('a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+    //    var layerIndex = Mask();;
+    //    var activeTab = $(e.target).data("reactid");
+    //    $.get("/Console/GetTags?t={0}&type={1}".Format(Leo.getPK(), activeTab), function (data) {
+    //        $(".taglistWrap").empty().append(data);
+    //        InitPageAction(activeTab);
+    //        Leo.LoadMask.Remove(layerIndex);
+    //        ScrollTop();
+    //    }).error(function () { Leo.LoadMask.Remove(layerIndex); });
+    //});
+
+    //function Mask() {
+    //    return Leo.LoadMask(".taglistWrap", "-16px 0", "15px");
+    //}
+
+    //function ScrollTop() {
+    //    $("body,html").animate({ scrollTop: $('.userTabs').offset().top - 51 });
+    //}
+
+    //function InitPageAction(sort) {
+    //    Leo.Page.PageRowNumber(".tag_Page", ".taglistWrap", "/Console/GetTags?t={0}&type={1}".Format(Leo.getPK(), sort || 0), function () {
+    //        ScrollTop();
+    //        return Mask();
+    //    });
+    //}
+</script>

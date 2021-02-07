@@ -1,0 +1,17 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyCommentsViewModel
+@{
+    ViewBag.Title = "我的回答 - 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @Html.Partial("_LoadMyAnswerList", Model)
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "myanswer");
+</script>

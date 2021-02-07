@@ -1,0 +1,167 @@
+﻿@using AmazonBBS.Model
+@model List<BBSEnum>
+@{
+    ViewBag.Title = "菜单名维护";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        @if (Model != null && Model.Count > 0)
+        {
+            <table class="table table-bordered  table-hover">
+                <caption>网站菜单列表</caption>
+                <thead>
+                    <tr>
+                        <th width="25%">显示次序(不能相同)</th>
+                        <th width="25%">菜单中文</th>
+                        <th width="25%">菜单英文</th>
+                        <th width="25%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (BBSEnum item in Model)
+                    {
+                        <tr>
+                            <td>@item.SortIndex</td>
+                            <td style="color:@item.FontColor;" onmouseover="this.style.backgroundColor='@item.FontBGColor'" onmouseout="this.style.backgroundColor='#ebebeb'">@item.EnumDesc</td>
+                            <td>@item.EnumCode</td>
+                            <td>
+                                <a class="btn-sm btn-info" onclick="MENUEDIT(this,@item.BBSEnumId)">编辑</a>
+                                <a class="btnSubmit btn-sm btn-warning Ldn">提交</a>
+                                <a class="btn-sm btn-success" onclick="Color(this,@item.BBSEnumId,['@item.FontColor','@item.FontBGColor','@item.PageBGColor'])">颜色</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<div id="MenuColorWrap" class="Lmg20 Ldn">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fontcolor">字体前景颜色</label>
+            <div class="col-md-8">
+                <input id="fontcolor" class="form-control" type="color" placeholder="设置字体前景颜色" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="fontBGColor">字体背景颜色</label>
+            <div class="col-md-8">
+                <input id="fontBGColor" class="form-control" type="color" placeholder="设置字体背景颜色" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-4 control-label" for="pageBGColor">页面背景颜色</label>
+            <div class="col-md-8">
+                <input id="pageBGColor" class="form-control" type="color" placeholder="设置页面背景颜色" />
+            </div>
+        </div>
+        @*<div class="form-group Ltac">
+                <a class="btn-subColor btn btn-primary">确定</a>
+            </div>*@
+    </div>
+</div>
+<script>
+    function MENUEDIT(target, _id) {
+        var $t = $(target),
+            $si = $t.parent().parent().children().eq(0),
+            $ed = $t.parent().parent().children().eq(1),
+            $ec = $t.parent().parent().children().eq(2);
+        var oldval = [$si.text(), $ed.text(), $ec.text()];
+        $si.html($("<input>").css({ "border": 0, "outline": 0, "width": "100%", "height": "100%" }).val(oldval[0]));
+        $ed.html($("<input>").css({ "border": 0, "outline": 0, "width": "100%", "height": "100%" }).val(oldval[1]));
+        $ec.html($("<input>").css({ "border": 0, "outline": 0, "width": "100%", "height": "100%" }).val(oldval[2]).attr("disabled", !0));
+
+        target.onclick = null;
+        $t.next(".btnSubmit").removeClass("Ldn").click(function () {
+            EDITSUBMIT(target, _id, oldval);
+        });
+        $t.text("取消编辑").unbind("click").click(function () {
+            CANCLEEDIT(target, _id, oldval);
+        });
+    }
+    function CANCLEEDIT(target, _id, oldval) {
+        var $t = $(target);
+        $si = $t.parent().parent().children().eq(0),
+            $ed = $t.parent().parent().children().eq(1),
+            $ec = $t.parent().parent().children().eq(2);
+        $si.html(oldval[0]);
+        $ed.html(oldval[1]);
+        $ec.html(oldval[2]);
+        target.onclick = null;
+        $t.next(".btnSubmit").addClass("Ldn").unbind("click");
+        $t.text("编辑").unbind("click").click(function () {
+            MENUEDIT(target, _id);
+        });
+    }
+    function EDITSUBMIT(target, _id, oldval) {
+        var t = $(target).parent().parent().children(), a, b, c;
+        if ((a = $.trim(t.eq(0).children().val())) == "") {
+            layer.msg("显示次序不能为空");
+            return !1;
+        }
+        else if ((b = $.trim(t.eq(1).children().val())) == "") {
+            layer.msg("菜单中文不能为空");
+            return !1;
+            //} else if ((c = $.trim(t.eq(2).children().val())) == "") {
+            //    layer.msg("菜单英文不能为空");
+            //    return !1;
+        }
+        else if (a == oldval[0] && b == oldval[1] && c == oldval[2]) {
+            layer.msg("值未做修改，无需提交保存");
+            CANCLEEDIT(target, _id, oldval);
+            return !1;
+        }
+        else {
+            c = $.trim(t.eq(2).children().val());
+            $.post("/CONSOLE/EditMenu?t={0}".Format(Leo.getPK()),
+                { code: c, sort: a, cn: b, id: _id, type: 0 }, function (data) {
+                    if (data.Ok) {
+                        CANCLEEDIT(target, _id, [a, b, c]);
+                        layer.msg("更新成功", function () { location.reload(); });
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+    }
+
+    //设置字体前景，背景颜色，及菜单页面背景颜色
+    function Color(target, id, colors) {
+        var fontcolor = $("#fontcolor"),
+            fontBGColor = $("#fontBGColor"),
+            pageBGColor = $("#pageBGColor");
+        fontcolor.val(colors[0]);
+        fontBGColor.val(colors[1]);
+        pageBGColor.val(colors[2]);
+        var layerindex = AlertActionAreaWithConfirmWithSize($("#MenuColorWrap"), "颜色设置", "370px", null, "确认设置", null, function () {
+            var lindex = LOAD("设置中")
+            $.post("/Console/SetMenuColor/{0}".Format(id), { fontcolor: fontcolor.val(), fontbgcolor: fontBGColor.val(), pagebgcolor: pageBGColor.val() }, function (data) {
+                layer.close(layerindex);
+                layer.close(lindex);
+                if (data.Ok) {
+                    layer.msg("颜色设置成功");
+                    fontcolor.val("");
+                    fontBGColor.val("");
+                    pageBGColor.val("");
+                    layer.msg("编辑成功", {
+                        time: 300, end: function () {
+                            location.reload(!0);
+                        }
+                    });
+                } else {
+                    layer.msg(data.Msg || "失败");
+                }
+            });
+        }, function () {
+            fontcolor.val("");
+            fontBGColor.val("");
+            pageBGColor.val("");
+        });
+    }
+</script>

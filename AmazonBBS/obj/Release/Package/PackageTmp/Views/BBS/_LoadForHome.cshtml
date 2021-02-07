@@ -1,0 +1,168 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model BBSListViewModel
+@{
+    string defaultheadurl = "/Content/img/head_default.gif";
+    //int higescore = Convert.ToInt32(ConfigHelper.AppSettings("HigeScoreFlag"));
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    long currentUid = UserBaseBLL.Instance.UserID;
+    int normalUserSee_Score = ConfigHelper.AppSettings("normalUserSee_Score").ToInt32();//普通用户查看 other 版块 所需积分
+}
+<style>
+</style>
+@if (Model.QuestionList.Count > 0)
+{
+    foreach (_QuestionInfo question in Model.QuestionList)
+    {
+        var isshow = !question.IsAnonymous || ismaster || currentUid == question.UserID;
+        <div class="aw-item">
+            @if (isshow)
+            {
+                <a class="aw-user-name" href="/user/detail/@question.UserName" rel="nofollow">
+                    <img src="@(question.HeadUrl ?? defaultheadurl)" onerror="javascript:this.src='/Content/img/head_default.gif'" alt="@question.UserName">
+                </a>
+            }
+            else
+            {
+                <a class="aw-user-name">
+                    <img src="~/Content/img/anonymous.png">
+                </a>
+            }
+            <div class="aw-question-content">
+                <h4>
+                    <a target="_blank" href="/bbs/detail/@question.QuestionId">
+                        @question.Title
+                    </a>
+                </h4>
+                @if (!question.HideForNoVipUserOrNotBuy)
+                {
+                    string body = HtmlRegexHelper.ToText(question.Body);
+                    var length = body.Length;
+                    if (length > 0)
+                    {
+                        if (length > 39)
+                        {
+                            body = body.Substring(0, 39);
+                        }
+                        <div class="Lfs12">@(body)...</div>
+                    }
+                }
+                else
+                {
+                    <div class="Lfs12 Lcr">本条<a class="btn-buyOtherItem" data-id="@question.QuestionId" data-c="@normalUserSee_Score">查看</a>需要 @(normalUserSee_Score) 积分，<a href="/user/scoreexchange#scoreexchange" target="_self">会员</a>可享受免费查看</div>
+                }
+                <div class="user-title" oncontextmenu="return !1;">
+                    @{
+                        if (isshow)
+                        {
+                            ViewBag.VIP = question.VIP;
+                            ViewBag.Time = question.VIPExpiryTime;
+                            var htm = Html.Partial("_VIP");
+                            <span style="vertical-align:middle;">
+                                @question.UserName • @Html.Raw(htm)
+                            </span>
+                            //管理员
+                            if (question.IsMaster)
+                            {
+                                <img width="20" height="20" src="/Content/U/Site/master.png" data-toggle="tooltip" title="管理员" />
+                            }
+                            //积分等级
+                            //获取积分等级表
+                            List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+                            int userScore = question.TotalScore;
+                            var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                            if (item != null)
+                            {
+                                <span>
+                                    •
+                                    @{
+                                        //int offsetLeft = 0;//左偏移量
+                                        var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                                        //循环计算等级称号
+                                        int loopCount = scoreLevelList.Count;
+                                        for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                                        {
+                                            var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                            if (findItem != null)
+                                            {
+                                                <img width="20" height="20" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" data-toggle="tooltip" title="等级：@item.EnumDesc" />
+                                                if (userScore > 0 && findItem.SortIndex > 0)
+                                                {
+                                                    userScore -= findItem.SortIndex.Value;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                                //offsetLeft += 5;
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                </span>
+                            }
+                            //头衔或专属头衔
+                            if (question.HeadNameShowType == 1)
+                            {
+                                if (!string.IsNullOrEmpty(question.LevelName))
+                                {
+                                    //int offsetLeft = 0;//左偏移量
+                                    string levelNameUrls = question.LevelNameUrls;
+                                    string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                                    if (imgs != null)
+                                    {
+                                        <span>
+                                            •
+                                            @foreach (string imgSrc in imgs)
+                                            {
+                                                <img width="20" height="20" src="@imgSrc" data-toggle="tooltip" title="头衔：@question.LevelName" />
+                                                //offsetLeft += 5;
+                                            }
+                                        </span>
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(question.OnlyLevelName))
+                                {
+                                    <img width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(question.OnlyLevelName).png" data-toggle="tooltip" title="专属头衔：@question.OnlyLevelName" />
+                                }
+                            }
+                        }
+                        <span class="itemdata">
+                            • @(question.PriseCount)赞 •
+                            @(question.LikeCount)关注 •
+                            @(question.CommentCount)评论 •
+                            <span class="pageviews-pv">@(question.PVCount)浏览</span> •
+                            <span data-toggle="tooltip" title="发布时间">@Html.Partial("_TimeLine", question.CreateTime)</span>
+                            @if (question.UpdateTime != question.CreateTime)
+                            {
+                                <span data-toggle="tooltip" title="更新时间"> • @Html.Partial("_TimeLine", question.UpdateTime)</span>
+                            }
+                            @if (question.LastCommentTime.HasValue)
+                            {
+                                <span data-toggle="tooltip" title="最后回复时间">
+                                    • @Html.Partial("_TimeLine", question.LastCommentTime)
+                                </span>
+                            }
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="Llh50 Ltac">
+        暂无该类型的帖子！
+    </div>
+}
+<div id="homecommentpage">
+    @Html.Partial("_Page", Model.QuestionPage)
+</div>

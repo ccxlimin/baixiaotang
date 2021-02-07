@@ -1,0 +1,130 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<StudyInfoVM>
+@if (Model.Count > 0)
+{
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover table-console-studyclassdata">
+            <caption>课时管理</caption>
+            <thead>
+                <tr>
+                    <th width="20%">单元序号</th>
+                    <th width="20%">单元名称</th>
+                    <th width="20%">课时序号</th>
+                    <th width="20%">课时名称</th>
+                    <th width="20%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    int change = 0;
+                    foreach (StudyInfoVM studyInfo in Model)
+                    {
+                        int count = studyInfo.ClassInfoVMs.Count;
+                        if (count > 0)
+                        {
+                            for (int j = 0; j < count; j++)
+                            {
+                                <tr class="@(change % 2 == 0 ? "active" : "success")">
+                                    @if (j == 0)
+                                    {
+                                        <td rowspan="@count">第@(++index)章</td>
+                                        <td rowspan="@count">@studyInfo.UnitName</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="Ldn" rowspan="@count"></td>
+                                        <td class="Ldn" rowspan="@count"></td>
+                                    }
+                                    <td>第@(j + 1)节</td>
+                                    <td>@(studyInfo.ClassInfoVMs[j].ClassName)</td>
+                                    <td>
+                                        @{var classId = studyInfo.ClassInfoVMs[j].ClassId;}
+                                        <a onclick="EditClass(this,'@classId','@studyInfo.UnitId')" class="btn-sm btn-success">编辑</a>
+                                        <a onclick="DeleteClass(this,'@classId',1)" class="btn-sm btn-danger">删除</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="@(change%2==0?"active":"success")">
+                                <td>第@(++index)章</td>
+                                <td>@studyInfo.UnitName</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                        }
+                        change++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function DeleteClass(target, id) {
+            AlertConfirm("确定要删除吗？删除该课程后，将清空学员的该学习课程！", "删除", "取消", function () {
+                $.post("/console/deleteclass/{0}".Format(id), function (d) {
+                    if (d.Ok) {
+                        Leo.msg("删除成功");
+                        $(target).parent().parent().remove();
+                    } else {
+                        Leo.msgfail("删除失败");
+                    }
+                })
+            });
+        }
+
+        function EditClass(target, id) {
+            var element = $(target).parent().parent().children().eq(2);
+            var oldValue = $.trim(element.html());
+            layer.prompt({
+                title: '请修改并确认',
+                value: oldValue,
+                formType: 3,
+                maxlength: 20
+            },
+                function (text, index) {
+                    text = $.trim(text);
+                    if (text != oldValue) {
+                        CLOSE(index);
+                        var layerindex = LOAD();
+                        $.post("/console/editstudyclass/{0}".Format(id), {
+                            className: text,
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("修改成功");
+                                element.html(text);
+                            } else {
+                                MSG(data.Msg || "修改失败");
+                            }
+                            CLOSE(layerindex);
+                        });
+                    } else {
+                        Leo.msgfail("值未改变！");
+                    }
+                });
+        }
+
+        function EditClass(target, id, unitid) {
+            AlertDivNoTitle(".addclassWrapper", "272px", "147px", null, function () {
+                $("#select_unit").val("");
+                $("#className").val("");
+                $("#addclassWrapper a").text("点击新增章节内容");
+            });
+            $("#select_unit").val(unitid);
+            $("#className").val($(target).parent().prev().text());
+            $("#addclassWrapper a").text("编辑章节内容");
+            window.edit = true;
+            window.classid = id;
+        }
+    </script>
+}
+else
+{
+    <div class="post">
+        暂无课时！
+    </div>
+}

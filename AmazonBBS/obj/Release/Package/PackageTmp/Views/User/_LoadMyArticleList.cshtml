@@ -1,0 +1,44 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model MyArticleViewModel
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    string headurl = user.HeadUrl ?? "/Content/img/head_default.gif";
+}
+@if (Model.Articles != null && Model.Articles.Count > 0)
+{
+    <div class="aw-common-list">
+        @foreach (_Article article in Model.Articles)
+        {
+            <div class="aw-item ">
+                <a class="aw-user-name hidden-xs" data-toggle="popover" data-placement="bottom">
+                    <img src="@(headurl)" alt="">
+                </a>
+                <div class="aw-question-content">
+                    <h4>
+                        <a target="_blank" href="/article/detail/@article.ArticleId">
+                            @article.Title
+                        </a>
+                    </h4>
+                    <p>
+                        <span class="text-color-999">
+                            @article.LikeCount 人关注 •
+                            @article.PVCount 次浏览 •
+                            @Html.Partial("_TimeLine", article.CreateTime)
+                        </span>
+                    </p>
+                </div>
+            </div>
+        }
+        <div class="myarticle_page_wrap">
+            @Html.Partial("_Page", Model.ArticlePage)
+        </div>
+    </div>
+}
+else
+{
+    <div class="well">
+        你还没有发表过文章！
+    </div>
+}

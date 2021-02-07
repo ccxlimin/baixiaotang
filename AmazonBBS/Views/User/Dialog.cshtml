@@ -1,0 +1,47 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyMessage
+@{
+    string toUserName = Model.ToUserName;
+    long toID = Model.ToID;
+    ViewBag.Title = "我和" + toUserName + "的对话记录";
+    long meID = Model.MeID;
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                @if (meID != toID)
+                {
+                    if (Model.ChatList.Count > 0)
+                    {
+                        <div class="mod-body aw-feed-list aw-feed-list-big dialogList">
+                            <div>
+                                <a class="btn_sendMsg" data-id="@toID" data-name="@toUserName">发送消息给@(toUserName)</a>
+                                <a href="javascript:history.go(-1);" class="pull-right">返回消息盒</a>
+                            </div>
+                            @Html.Partial("_Dialogs", Model)
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="well">
+                            你和@(toUserName)暂时没有对话记录哦。赶快<a class="btn_sendMsg" data-name="@toUserName" data-id="@toID">撩TA</a>吧！
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="well">
+                        自己和自己怎么聊天？
+                        <a href="/user/inbox">返回消息盒</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "dialog",@toID);
+</script>

@@ -1,0 +1,205 @@
+﻿@using AmazonBBS.Common
+@{
+    ViewBag.Title = "签到随机设置";
+    string signconfig = ConfigHelper.AppSettings("signconfig");
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <h3>新增签到赠送积分</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-8">
+                                <input type="number" min="1" class="form-control" id="signScore" placeholder="签到积分" />
+                            </div>
+                            <div class="col-md-8 col-sm-8 Lmgt5">
+                                <textarea placeholder="签到问候语，可以含超链接" class="form-control" id="signTip"></textarea>
+                                <div class="Ldn hrefarea">
+                                    <input type="text" class="hrefName form-control" placeholder="超链接显示名称" />
+                                    <input type="text" class="hrefAddress form-control" placeholder="超链接网址" />
+                                    <a class="btn-addhref-sure btn-sm btn-primary">确定添加超链接</a>
+                                </div>
+                                <a class="btn-addhref btn-sm btn-primary">添加超链接</a>
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <a onclick="addNew()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (signconfig.IsNotNullOrEmpty())
+    {
+        string[] signs = signconfig.Split(new[] { "|sign|" }, StringSplitOptions.RemoveEmptyEntries);
+        <div class="col-md-10">
+            <div class="well">
+                <table class="table table-striped table-console-signrandom">
+                    <thead>
+                        <tr>
+                            <th>签到赠送积分</th>
+                            <th>签到问候语</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (string item in signs)
+                        {
+                            if (item.IsNotNullOrEmpty())
+                            {
+                                string[] signInfo = item.Split(new[] { "$sign$" }, StringSplitOptions.RemoveEmptyEntries);
+                                <tr>
+                                    <td>@signInfo[1]</td>
+                                    <td>@Html.Raw(signInfo[2])</td>
+                                    <td>
+                                        <a onclick="edit(this,@signInfo[0])" class="btn-sm btn-primary">编辑</a>
+                                        <a onclick="Delete(this,@signInfo[0])" class="btn-sm btn-danger">删除</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<div class="EditSign Ldn">
+    <div class="form-group Lmgt10">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_Tag_Name" name="edit_Tag_Name" type="number" min="1" placeholder="签到积分" />
+        </div>
+        <div class="col-md-12">
+            <textarea placeholder="签到问候语，可以含超链接" class="form-control" id="edit_signTip" style="height:150px;resize:none;"></textarea>
+            <div class="Ldn edit_hrefarea">
+                <input type="text" class="edit_hrefName form-control" placeholder="超链接显示名称" />
+                <input type="text" class="edit_hrefAddress form-control" placeholder="超链接网址" />
+                <a class="edit_btn-addhref-sure btn-sm btn-primary">确定添加超链接</a>
+            </div>
+            <a class="edit_btn-addhref btn-sm btn-primary">添加超链接</a>
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    function edit(target, id) {
+        var me = $(target);
+        var edit_Tag_Name = $("#edit_Tag_Name"), edit_signTip = $("#edit_signTip");
+        edit_Tag_Name.val(me.parent().parent().children().eq(0).html());
+        edit_signTip.val(me.parent().parent().children().eq(1).html());
+        //AlertDiv_End(".EditSign", "300px", "280px", "编辑", null, function () {
+        //    edit_Tag_Name.val(""); edit_signTip.val("");
+        //});
+        //$(".btn-subEdit").unbind("click").bind("click", function () {
+
+        //});
+        var layerIndex = AlertActionAreaWithConfirmWithSize($(".EditSign"), '确定编辑', "330px", null, "确认修改", null, function () {
+            if (Leo.tools.CheckFormNotEmpty(edit_Tag_Name, "签到积分")) {
+                if (Leo.tools.CheckFormNotEmpty(edit_signTip, "签到问候语")) {
+                    var lindex = LOAD("正在修改...");
+                    $.post("/Console/EditSignRandom/{0}".Format(id), { signScore: edit_Tag_Name.val(), signTip: encodeURI(edit_signTip.val()) }, function (data) {
+                        layer.close(lindex);
+                        layer.close(layerIndex);
+                        if (data.Ok) {
+                            Leo.msgsuccess("编辑成功", function () {
+                                location.reload(!0);
+                            }, 500)
+                        } else {
+                            Leo.msgfail("编辑失败");
+                        }
+                    });
+                }
+            }
+        })
+    }
+
+    function Delete(target, id) {
+        AlertConfirm("确定要删除该配置吗？", "删除", "取消", function () {
+            var lindex = LOAD("正在删除中...");
+            $.post("/Console/DeleteSignRandom/{0}".Format(id), function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("删除成功");
+                    $(target).parent().parent().remove();
+                }
+                else {
+                    Leo.msgfail("删除失败");
+                }
+                CLOSE(lindex);
+            });
+        });
+    }
+
+    function addNew() {
+        var signScore = $("#signScore"), signTip = $("#signTip");
+        if (Leo.tools.CheckFormNotEmpty(signScore, "签到积分")) {
+            if (Leo.tools.CheckFormNotEmpty(signTip, "签到问候语")) {
+                var lindex = LOAD("正在添加...");
+                $.post("/Console/AddSignRandom", { signScore: signScore.val(), signTip: encodeURI(signTip.val()) }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess("设置成功", function () { location.reload(!0); })
+                    } else {
+                        Leo.msgfail("设置失败");
+                    }
+                    CLOSE(lindex);
+                });
+            }
+        }
+    }
+
+    $(".btn-addhref").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".hrefarea").removeClass("Ldn");
+        $(".btn-addhref-sure").unbind("click").bind("click", function () {
+            var hname = $(".hrefName"), haddress = $('.hrefAddress');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#signTip").val($("#signTip").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".hrefarea").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+    });
+
+    $(".edit_btn-addhref").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".edit_hrefarea").removeClass("Ldn");
+        $(".edit_btn-addhref-sure").unbind("click").bind("click", function () {
+            var hname = $(".edit_hrefName"), haddress = $('.edit_hrefAddress');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#edit_signTip").val($("#edit_signTip").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".edit_hrefarea").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+    });
+</script>

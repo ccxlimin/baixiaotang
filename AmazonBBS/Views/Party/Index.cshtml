@@ -1,0 +1,31 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ActiveListViewModel
+@{
+    ViewBag.Title = "活动列表";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<_Activity> list = Model.Activis;
+
+    UserBaseBLL userbll = UserBaseBLL.Instance;
+    bool ismaster = userbll.IsMaster;
+}
+@Html.Partial("_LoadMenuDisplay", 1)
+<div class="clearfix">
+    <h2>
+        活动列表
+        <a href="/party/create?from=party" class="btn btn-primary">创建活动</a>
+        <span class="btn-search-leo btn btn-primary Lfr">
+            搜索
+        </span>
+        <span style="display:inline-block;float:right;width:30%">
+            <input class="searchValue form-control" placeholder="搜索你想要的内容(标题/作者/用户)" />
+        </span>
+    </h2>
+</div>
+<div class="col-md-9 row party_List">
+    @Html.Partial("_Search", Model)
+</div>
+@Html.Partial("/Views/AD/Index.cshtml")
+<script>
+    Leo.init("party", "index").screenInit();
+</script>

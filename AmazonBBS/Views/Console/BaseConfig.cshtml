@@ -1,0 +1,893 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@using AmazonBBS.Model
+@{
+    ViewBag.Title = "百晓堂基本设置";
+    UserBaseBLL bll = UserBaseBLL.Instance;
+    bool ismaster = bll.IsMaster;
+    bool isroot = bll.IsRoot;
+}
+@*<link rel="stylesheet" type="text/css" href="~/Scripts/bootstrap-switch.min.css">
+    <script type="text/javascript" src="~/Scripts/bootstrap-switch.min.js"></script>*@
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        @*<div class="col-md-12 col-sm-12">
+                <h4>问卷调查设置是否开启(1开0不开)</h4>
+                <div class="well">
+                    <div class="form-group-sm clearfix">
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" onEmpty="问卷调查设置是否开启" placeholder="@ViewBag.MustWriteLog" />
+                        </div>
+                        <a onclick="SetConfig('MustWriteLog', this)" class="btn-sm btn-primary">确认设置</a>
+                    </div>
+                </div>
+            </div>*@
+        @*<table class="table table-hover table-bordered">
+                <tr>
+                    <td>
+                        <div class="switch" data-animated="false">
+                            <input id="switch-lbale" type="checkbox" checked />
+                        </div>
+                    </td>
+                    <td>问卷调查设置是否开启</td>
+                </tr>
+            </table>*@
+        @*<script>
+                $("#switch-lbale").bootstrapSwitch({
+                    onText: "开启",
+                    offText: "关闭",
+                    onColor: "success",
+                    offColor: "info",
+                    size: "Large",
+                    onSwitchChange: function (event, state) {
+                        if (state == true) {
+                            $(this).val("1");
+
+                        } else {
+                            $(this).val("2");
+
+                        }
+                    },
+                    state: true
+                });
+            </script>*@
+        <style>
+            table tr td:first-child {
+                text-align: center;
+            }
+
+            .qqbtn_delete {
+                background-color: #24b654;
+                padding: 2px 5px;
+                border-radius: 3px;
+                color: #fff;
+            }
+        </style>
+        <table class="table table-bordered table-hover">
+            @if (isroot)
+            {
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('MustWriteLog', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="问卷调查设置是否开启" placeholder="@ViewBag.MustWriteLog" />
+                    </td>
+                    <td>问卷调查设置是否开启(1开0不开)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('TagFixedNumber', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="首页标签固定个数" placeholder="@ViewBag.TagFixedNumber" />
+                    </td>
+                    <td>首页标签固定个数</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('TagRandomNumber', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="首页标签随机展示个数" placeholder="@ViewBag.TagRandomNumber" />
+                    </td>
+                    <td>首页标签随机展示个数</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('NewShowCount', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="首页右侧公告显示条数" placeholder="@ViewBag.NewShowCount" />
+                    </td>
+                    <td>首页右侧公告显示条数</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('AutoCheck_NeedScore', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="自动审核所需最小积分" placeholder="@ViewBag.AutoCheck" />
+                    </td>
+                    <td>帖子、文章 自动审核所需最小积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('MustCheckByScore', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="触发审核所需最小积分" placeholder="@ViewBag.MustCheckByScore" />
+
+                    </td>
+                    <td>触发审核所需最小积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('PUBLISH_ZHAOPIN', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="发布招聘VIP分设置" placeholder="@ViewBag.PUBLISH_ZHAOPIN" />
+                    </td>
+                    <td>发布招聘VIP分设置(<span style="font-size:12px;color:red;">1元现金=@(ViewBag.vipScorePayvalue)VIP分，请注意设置后的值不能为小数</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('PUBLISH_QIUZHI', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="发布求职VIP分设置" placeholder="@ViewBag.PUBLISH_QIUZHI" />
+
+                    </td>
+                    <td>发布求职VIP分设置(<span style="font-size:12px;color:red;">1元现金=@(ViewBag.vipScorePayvalue)VIP分，请注意设置后的值不能为小数</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('PUBLISH_PRODUCT', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="发布产品服务VIP分设置" placeholder="@ViewBag.PUBLISH_PRODUCT" />
+
+                    </td>
+                    <td>发布产品服务VIP分设置(<span style="font-size:12px;color:red;">1元现金=@(ViewBag.vipScorePayvalue)VIP分，请注意设置后的值不能为小数</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('FeeHRZhaoPinValue', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control inputvalue" onEmpty="VIP分查看招聘联系方式" placeholder="@ViewBag.ZhaoPinCONTACT" />
+
+                    </td>
+                    <td>VIP分查看招聘联系方式</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('FeeHRQiuZhiValue', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="VIP分查看求职联系方式" placeholder="@ViewBag.QiuZhiCONTACT" />
+
+                    </td>
+                    <td>VIP分查看求职联系方式</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('FeeHRProductValue', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" id="productContactvalue" onEmpty="VIP分查看产品联系方式" placeholder="@ViewBag.ProductCONTACT" />
+
+                    </td>
+                    <td>VIP分查看产品联系方式</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('vipScorePayByRMB', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="充值VIP分比例设置" placeholder="@ViewBag.vipScorePayvalue" />
+
+                    </td>
+                    <td>充值VIP分比例设置(<span style="font-size:12px;color:red;">1元现金=多少VIP分</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('scoreChangeToVipScore', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="VIP分兑换积分比例设置" placeholder="@ViewBag.score2VipScorevalue" />
+
+                    </td>
+                    <td>VIP分兑换积分比例设置(<span style="font-size:12px;color:red;">1VIP分=多少积分</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('ADCount', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="广告展示数量设置" placeholder="@ViewBag.ADCount" />
+
+                    </td>
+                    <td>广告展示数量设置</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('BuyVIPFeeCount', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="购买会员专属所需VIP分设置" placeholder="@ViewBag.BuyVIPFeeCount" />
+                    </td>
+                    <td>购买会员专属所需VIP分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('normalUserSee_Score', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="普通用户查看[数据分析协会]帖子所需积分" placeholder="@ViewBag.normalUserSee_Score" />
+                    </td>
+                    <td>普通用户查看[数据分析协会]帖子所需积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('DIY1', this,true)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="自定义问题一" placeholder="@ViewBag.DIY1" />
+
+                    </td>
+                    <td rowspan="3">问卷调查自定义三大问题</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('DIY2', this, true)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="自定义问题二" placeholder="@ViewBag.DIY2" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('DIY3', this, true)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="自定义问题三" placeholder="@ViewBag.DIY3" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('UserAddTagCount', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="用户每个自然月创建标签数" placeholder="@ViewBag.UserAddTagCount" />
+                    </td>
+                    <td>用户每个自然月创建标签数</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('UserEditCount', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="用户自由编辑帖子次数" placeholder="@ViewBag.UserEditCount" />
+
+                    </td>
+                    <td>用户自由编辑帖子次数</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('HotUsersCount', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="红人榜人数设置" placeholder="@ViewBag.HotUsersCount" />
+                    </td>
+                    <td>红人榜人数设置(<span class="Lfs12 Lcr">积分等级排名前多少名为红人</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('NewUsersDays', this)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="新人榜设定(天)" placeholder="@ViewBag.NewUsersDays" />
+
+                    </td>
+                    <td>新人榜设置(<span class="Lfs12 Lcr">N天内注册的用户为新人</span>)</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('UserAuth1', this, true)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="认证名称设置" placeholder="@ViewBag.UserAuth1" />
+                    </td>
+                    <td rowspan="3">认证名称设置</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('UserAuth2', this, true)" class="btn-sm btn-primary">确认设置</a>
+
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="认证名称设置" placeholder="@ViewBag.UserAuth2" />
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('UserAuth3', this,true)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="认证名称设置" placeholder="@ViewBag.UserAuth3" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('Prise', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" id="dianzanvalue" onEmpty="点赞赠送积分设置" placeholder="@ViewBag.Prise" />
+                    </td>
+                    <td>用户每次回贴增加积分值</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('PriseFor', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" onEmpty="被点赞赠送积分设置" placeholder="@ViewBag.PriseFor" />
+                    </td>
+                    <td>被点赞赠送积分设置</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a id="btn-addWeChat-QRCode-gzh" class="btn-sm btn-primary">确认添加</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" id="wecharKefu-QRCode-gzh" placeholder="添加微信公众号二维码图片" />
+                        <input style="display:none" type="file" id="selectwecharKefu-QRCode-gzh" value="" />
+                        <input placeholder="请输入客服名称" class="form-control gzhkefuname" />
+                    </td>
+                    <td>
+                        @{
+                            var gzhs = ViewBag.wechat_gzh;
+                            foreach (Customer customer in gzhs)
+                            {
+                                <img title="点击删除" data-id="@customer.Id" data-toggle="tooltip" class="customerdelete" src="@customer.Img" width="40" height="40" />
+                            }
+                        }
+                        <span>微信公众号二维码设置</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a id="btn-addWeChat-QRCode" class="btn-sm btn-primary">确认添加</a>
+                    </td>
+                    <td width="120px">
+                        <input type="text" class="form-control" id="wecharKefu-QRCode" placeholder="添加微信客服二维码图片" />
+                        <input style="display:none" type="file" id="selectwecharKefu-QRCode" value="" />
+                        <input placeholder="请输入客服名称" class="form-control wxkefuname" />
+                    </td>
+                    <td>
+                        @{
+                            var wechats = ViewBag.wechat;
+                            foreach (Customer customer in wechats)
+                            {
+                                <img title="点击删除" data-id="@customer.Id" data-toggle="tooltip" class="customerdelete" src="@customer.Img" width="40" height="40" />
+                            }
+                        }
+                        <span>微信客服设置</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a class="btn-setQQKefu btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input placeholder="请输入QQ客服" class="form-control qqkefuValue" /><br />
+                        <input placeholder="请输入客服名称" class="form-control qqkefuname" />
+                    </td>
+                    <td>
+                        @{
+                            var qqs = ViewBag.kefuqq;
+                            foreach (Customer customer in qqs)
+                            {
+                                <span data-id="@customer.Id" class="qqbtn_delete customerdelete" title="点击删除" data-toggle="tooltip">@customer.QQ</span>
+                            }
+                        }
+                        <span>QQ客服设置</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('normalMasterGiveUserMAXScore', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="普通管理员每个月最多给用户赠送多少积分" placeholder="@ViewBag.normalMasterGiveUserMAXScore" />
+                    </td>
+                    <td>普通管理员每个月最多给用户赠送多少积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('normalMasterGiveUserMAXVIPScore', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="普通管理员每个月最多给用户赠送多少VIP积分" placeholder="@ViewBag.normalMasterGiveUserMAXVIPScore" />
+                    </td>
+                    <td>普通管理员每个月最多给用户赠送多少VIP积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('scoreName_levelName_desc_url', this,true)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="积分等级/头衔等级说明链接" placeholder="@ViewBag.scoreName_levelName_desc_url" />
+                    </td>
+                    <td>积分等级/头衔等级说明链接 <a href="@ViewBag.scoreName_levelName_desc_url" target="_blank">点击查看</a></td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('new_user_continu_SignCount3', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="新用户-连续签到满3次赠送积分" placeholder="@ViewBag.new_user_continu_SignCount3" />
+                    </td>
+                    <td><span class="Lcr">新用户</span>-连续签到<span class="Lcr">满3次</span>赠送积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('new_user_continu_SignCount10', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="新用户-连续签到满10次赠送积分" placeholder="@ViewBag.new_user_continu_SignCount10" />
+                    </td>
+                    <td><span class="Lcr">新用户</span>-连续签到<span class="Lcr">满10次</span>赠送积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('old_user_total_SignCount3', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="老用户-累计签到满3次赠送积分" placeholder="@ViewBag.old_user_total_SignCount3" />
+                    </td>
+                    <td><span class="Lcr">老用户</span>-累计签到<span class="Lcr">满3次</span>赠送积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('old_user_total_SignCount10', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="老用户-累计签到满10次赠送积分" placeholder="@ViewBag.old_user_total_SignCount10" />
+                    </td>
+                    <td><span class="Lcr">老用户</span>-累计签到<span class="Lcr">满10次</span>赠送积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="SetConfig('old_user_total_SignCount20', this)" class="btn-sm btn-primary">确认设置</a>
+                    </td>
+                    <td width="120px">
+                        <input class="form-control" onEmpty="老用户-累计签到满20次赠送积分" placeholder="@ViewBag.old_user_total_SignCount20" />
+                    </td>
+                    <td><span class="Lcr">老用户</span>-累计签到<span class="Lcr">满20次</span>赠送积分</td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="ChangeKCGuid(this)" class="btn-success btn-sm">更换形象</a>
+                    </td>
+                    <td width="120px">
+                        <input type="file" id="selectKCGuid" onEmpty="课程咨询形象" />
+                    </td>
+                    <td>
+                        <img width="50" height="50" src="~/Content/img/kechengguid/invitehead.jpg" />
+                        <span>
+                            课程咨询形象设置
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="ChangeLogo(this,4)" class="btn-success btn-sm">更换LOGO</a>
+                    </td>
+                    <td width="120px">
+                        <input type="file" id="selectMaster" value="" onEmpty="管理员LOGO" />
+
+                    </td>
+                    <td>
+                        <img width="50" height="50" src="@("/Content/U/Site/master.png")" />
+                        <span>设置管理员LOGO</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="120px">
+                        <a onclick="ChangeLogo(this,1)" class="btn-success btn-sm">更换Logo</a>
+                    </td>
+                    <td width="120px">
+                        <input type="file" id="selectimg" value="" onEmpty="网站LOGO" />
+                    </td>
+                    <td>
+                        <img width="50" height="50" src="@("/favicon.ico")" />
+                        <span>
+                            网站Logo设置
+                        </span>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td width="120px">
+                    <a id="btn_setJinghua" class="btn-success btn-sm">更换精华标签</a>
+
+                </td>
+                <td width="120px">
+                    <input type="file" id="selectJinghua" value="" />
+
+                </td>
+                <td>
+                    <img width="50" height="50" src="@("/Content/U/Site/jinghuatie.png")" />
+                    <span>精华贴标签图像</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="120px">
+                    <a id="btn_setRemen" class="btn-success btn-sm">更换热门标签</a>
+                </td>
+                <td width="120px">
+                    <input type="file" id="selectRemen" value="" />
+                </td>
+                <td>
+                    <img width="50" height="50" src="@("/Content/U/Site/rementie.png")" />
+                    <span>热门贴标签图像</span>
+                </td>
+            </tr>
+        </table>
+        @if (isroot)
+        {
+            <script>
+                function SetConfig(key, target, notNumber) {
+                    var input = $(target).parent().find(".form-control");
+                    input = input.length > 0 ? input : $(target).parent().parent().find(".form-control");
+                    if (input.val() != "") {
+                        if (notNumber || (!notNumber && Leo.Regpx.isNumber(input.val()))) {
+                            var cache = key == "TagFixedNumber" || key == "TagRandomNumber" || key == "NewShowCount" ? !0 : !1;
+                            $.post("/Console/SetConfig/{0}".Format(key), { value: input.val(), cache: cache }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("设置成功");
+                                    input.attr("placeholder", input.val());
+                                    input.val("");
+                                }
+                            });
+                        } else {
+                            input.focus();
+                            MSG("请输入正整数");
+                        }
+                    } else {
+                        input.focus();
+                        MSG(input.attr("onEmpty") || "设置不能为空");
+                    }
+                }
+
+                //更换课程形象
+                function ChangeKCGuid(target) {
+                    var me = $(target);
+                    var _pickup = me.parent().next().children();
+                    if (CHECKNOTEMPTY(_pickup, _pickup.attr("onEmpty"))) {
+                        sendFile(_pickup, "/Tool/KEGUID", function (data) {
+                            if (data.Ok) {
+                                MSG("课程咨询形象更换成功", function () {
+                                    location.reload(!0);
+                                });
+                            } else {
+                                layer.msg(data.Msg);
+                            }
+                        });
+                    }
+                }
+
+                function ChangeLogo(target, type) {
+                    var me = $(target);
+                    var _pickup = me.parent().next().children();
+                    if (CHECKNOTEMPTY(_pickup, _pickup.attr("onEmpty"))) {
+                        sendFile(_pickup, "/Tool/ICO", function (data) {
+                            if (data.Ok) {
+                                MSG("LOGO更换成功", function () {
+                                    location.reload(!0);
+                                });
+                            } else {
+                                layer.msg(data.Msg);
+                            }
+                        }, { type: type });
+                    }
+                }
+
+                //$("#btn_changeIco").click(function () {
+                //    if (CHECKNOTEMPTY($("#selectimg"), "网站LOGO")) {
+                //        sendFile($("#selectimg"), "/Tool/ICO", function (data) {
+                //            if (data.Ok) {
+                //                layer.msg("LOGO更换成功", function () {
+                //                    location.reload(!0);
+                //                });
+                //            } else {
+                //                layer.msg(data.Msg);
+                //            }
+                //        });
+                //    }
+                //});
+
+                //$("#btn_LevelName").click(function () {
+                //    if (CHECKNOTEMPTY($("#selectLevelName"), "用户头衔LOGO")) {
+                //        sendFile($("#selectLevelName"), "/Tool/LEVEL", function (data) {
+                //            if (data.Ok) {
+                //                layer.msg("LOGO更换成功", function () {
+                //                    location.reload(!0);
+                //                });
+                //            } else {
+                //                layer.msg(data.Msg);
+                //            }
+                //        });
+                //    }
+                //});
+                //$("#btn_OnlyLevelName").click(function () {
+                //    if (CHECKNOTEMPTY($("#selectOnlyLevelName"), "用户专属头衔LOGO")) {
+                //        sendFile($("#selectOnlyLevelName"), "/Tool/ICO", function (data) {
+                //            if (data.Ok) {
+                //                layer.msg("LOGO更换成功", function () {
+                //                    location.reload(!0);
+                //                });
+                //            } else {
+                //                layer.msg(data.Msg);
+                //            }
+                //        });
+                //    }
+                //});
+                //$("#btn_Master").click(function () {
+                //    if (CHECKNOTEMPTY($("#selectMaster"), "管理员LOGO")) {
+                //        sendFile($("#selectMaster"), "/Tool/ICO", function (data) {
+                //            if (data.Ok) {
+                //                layer.msg("LOGO更换成功", function () {
+                //                    location.reload(!0);
+                //                });
+                //            } else {
+                //                layer.msg(data.Msg);
+                //            }
+                //        });
+                //    }
+                //});
+
+                function CHECKNOTEMPTY(item, msg) {
+                    var i = $.trim(item.val());
+                    var ok = !0;
+                    if (i == null || i == undefined | i == "") {
+                        ok = !1;
+                        layer.msg(msg + "不能为空")
+                        item.focus();
+                    }
+                    return ok;
+                }
+
+                //客服相关
+                $(".wechatImg").click(function () {
+                    var me = $(this);
+                    AlertConfirm("是否删除此微信客服", "确定删除", '我再想想', function () {
+                        $.post("/Console/DeleteWeChat", { wechat: me.attr("src") }, function (data) {
+                            if (data.Ok) {
+                                layer.msg("删除成功");
+                                setTimeout(function () {
+                                    me.remove();
+                                }, 100)
+                            } else {
+                                layer.msg("失败");
+                            }
+                        });
+                    });
+                });
+
+                //公众号二维码
+                $(".wechatGZHImg").click(function () {
+                    var me = $(this);
+                    AlertConfirm("是否删除此公众号二维码", "确定删除", '我再想想', function () {
+                        $.post("/Console/DeleteWeChatGZH", { wechat: me.attr("src") }, function (data) {
+                            if (data.Ok) {
+                                layer.msg("删除成功");
+                                setTimeout(function () {
+                                    me.remove();
+                                }, 100)
+                            } else {
+                                layer.msg("失败");
+                            }
+                        });
+                    });
+                });
+
+                $(".customerdelete").click(function () {
+                    var me = $(this);
+                    AlertConfirm("是否删除此客服", "确定删除", "我再想想", function () {
+                        $.post("/Console/customerdelete", { id: me.data("id") }, function (data) {
+                            if (data.Ok) {
+                                layer.msg("删除成功");
+                                me.remove();
+                            } else {
+                                layer.msg("失败");
+                            }
+                        });
+                    });
+                });
+
+                //$(".qqbtn_delete").click(function () {
+                //    var me = $(this);
+                //    AlertConfirm("是否删除此QQ客服", "确定删除", "我再想想", function () {
+                //        $.post("/Console/DeleteQQ", { qq: me.html() }, function (data) {
+                //            if (data.Ok) {
+                //                layer.msg("删除成功");
+                //                setTimeout(function () {
+                //                    me.remove();
+                //                }, 100)
+                //            } else {
+                //                layer.msg("失败");
+                //            }
+                //        });
+                //    });
+                //});
+
+                //设置QQ客服
+                $(".btn-setQQKefu").click(function () {
+                    var me = $(this);
+                    if (CHECKNOTEMPTY($(".qqkefuValue"), "QQ客服不能为空")) {
+                        if (CHECKNOTEMPTY($(".qqkefuname"), "QQ客服名称不能为空")) {
+                            $.post("/Console/SetQQKefu", { qq: $(".qqkefuValue").val(), name: $(".qqkefuname").val() }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("设置成功");
+                                    //me.attr("placeholder", $(".qqkefuValue").val());
+                                    location.reload(!0);
+                                }
+                            });
+                        }
+                    }
+                });
+
+                //添加微信客服
+                $("#btn-addWeChat-QRCode").click(function () {
+                    if (CHECKNOTEMPTY($("#wecharKefu-QRCode"), "微信客服二维码图片")) {
+                        if (CHECKNOTEMPTY($(".wxkefuname"), "客服名称不能为空")) {
+                            var formdata = new FormData();
+                            formdata.append("wechat", $("#selectwecharKefu-QRCode")[0].files[0]);
+                            formdata.append("name", $(".wxkefuname").val());
+                            $.ajax({
+                                url: "/Console/AddWeChatKefu",
+                                type: "post",
+                                dataType: "json",
+                                contentType: false,
+                                processData: false,
+                                data: formdata,
+                                success: function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("新增客服成功");
+                                        location.reload(!0);
+                                    } else {
+                                        layer.msg(data.Msg || "新增失败");
+                                    }
+                                }
+                            })
+                        }
+                    }
+                });
+
+                $("#wecharKefu-QRCode").on("click focus", (function () {
+                    $("#selectwecharKefu-QRCode").click();
+                }));
+
+                $("#selectwecharKefu-QRCode").change(function (data) {
+                    $("#wecharKefu-QRCode").val($("#selectwecharKefu-QRCode").val());
+                });
+
+                //添加微信公众号二维码
+                $("#btn-addWeChat-QRCode-gzh").click(function () {
+                    if (CHECKNOTEMPTY($("#wecharKefu-QRCode-gzh"), "公众号二维码图片")) {
+                        if (CHECKNOTEMPTY($(".gzhkefuname"), "客服名称不能为空")) {
+                            var formdata = new FormData();
+                            formdata.append("wechatgzh", $("#selectwecharKefu-QRCode-gzh")[0].files[0]);
+                            formdata.append("name", $(".gzhkefuname").val());
+                            $.ajax({
+                                url: "/Console/AddWeChatGZH",
+                                type: "post",
+                                dataType: "json",
+                                contentType: false,
+                                processData: false,
+                                data: formdata,
+                                success: function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("新增客服成功");
+                                        location.reload(!0);
+                                    } else {
+                                        layer.msg(data.Msg || "新增失败");
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+                $("#wecharKefu-QRCode-gzh").on("click focus", (function () {
+                    $("#selectwecharKefu-QRCode-gzh").click();
+                }));
+
+                $("#selectwecharKefu-QRCode-gzh").change(function (data) {
+                    $("#wecharKefu-QRCode-gzh").val($("#selectwecharKefu-QRCode-gzh").val());
+                });
+            </script>
+        }
+    </div>
+</div>
+<script>
+    $("#btn_setJinghua").click(function () {
+        sendFile($("#selectJinghua"), "/Tool/Jinghua/1", function (data) {
+            if (data.Ok) {
+                layer.msg("更换成功", function () {
+                    location.reload(!0);
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+    $("#btn_setRemen").click(function () {
+        sendFile($("#selectRemen"), "/Tool/Jinghua/2", function (data) {
+            if (data.Ok) {
+                layer.msg("更换成功", function () {
+                    location.reload(!0);
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+    function sendFile(files, url, callback, args) {
+        var formdata = new FormData();
+        formdata.append("file", files[0].files[0]);
+        formdata.append("IsThumbnail", 1);
+        for (var i in args) {
+            formdata.append(i, args[i]);
+        }
+        var lindex = LOAD("上传图片中");
+        $.ajax({
+            data: formdata,
+            type: "POST",
+            url: url,
+            cache: false,
+            contentType: false,
+            processData: false,
+            accept: {
+                title: 'Images',
+                extensions: 'ico',
+                mimeTypes: 'image/*'
+            },
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+                CLOSE(lindex);
+            },
+            error: function () {
+                alert("上传失败");
+                CLOSE(lindex);
+            }
+        });
+    }
+
+    Leo.ToolTip();
+</script>

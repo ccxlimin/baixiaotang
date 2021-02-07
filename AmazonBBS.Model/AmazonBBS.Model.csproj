@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AmazonBBS.Model</RootNamespace>
+    <AssemblyName>AmazonBBS.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="About.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Activity.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityFee.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ActivityJoin.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AD.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Against.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AmazonBBSEFModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AmazonBBSEFModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AmazonBBSEFModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AmazonBBSEFModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AmazonBBSEFModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Answer.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Article.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttachMent.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AttachMentBuyLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoReply.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="AutoReplyItem.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BBSEnum.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BuyOtherLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BXTOrder.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Chat.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ClickMsg.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Comment.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ContentBuyLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Customer.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EditLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmailNotice.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Enum\AttachEnumType.cs" />
+    <Compile Include="Enum\BBSEnumType.cs" />
+    <Compile Include="Enum\BitType.cs" />
+    <Compile Include="Enum\CoinSourceEnum.cs" />
+    <Compile Include="Enum\CommentEnumType.cs" />
+    <Compile Include="Enum\ContentFeeMainEnumType.cs" />
+    <Compile Include="Enum\ContentFeeTypeEnum.cs" />
+    <Compile Include="Enum\CustomerEnumType.cs" />
+    <Compile Include="Enum\HomeSortTypeEnum.cs" />
+    <Compile Include="Enum\ImgExtTypeEnum.cs" />
+    <Compile Include="Enum\JoinItemTypeEnum.cs" />
+    <Compile Include="Enum\LikeTypeEnum.cs" />
+    <Compile Include="Enum\MenuParentEnumType.cs" />
+    <Compile Include="Enum\NoticeTypeEnum.cs" />
+    <Compile Include="Enum\OrderCheckEnumType.cs" />
+    <Compile Include="Enum\OrderEnumType.cs" />
+    <Compile Include="Enum\OrderSendEnumType.cs" />
+    <Compile Include="Enum\PriseEnumType.cs" />
+    <Compile Include="Enum\PVEnum.cs" />
+    <Compile Include="Enum\RegistEnumType.cs" />
+    <Compile Include="Enum\ReportEnumType.cs" />
+    <Compile Include="Enum\ScoreBeloneMainEnumType.cs" />
+    <Compile Include="Enum\SearchTypeEnum.cs" />
+    <Compile Include="Enum\TagsSortTypeEnum.cs" />
+    <Compile Include="Enum\UserSetEnum.cs" />
+    <Compile Include="ErrorLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Express.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeAnswerLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="FeeHR.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Gift.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GiftFee.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="InviteInterview.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Job.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobComment.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JobTrade.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JoinItemAnswerExt.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="JoinItemQuestionExt.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LeaveWord.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Master.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MenuBelongTag.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ModelExtetion\UserBase.cs" />
+    <Compile Include="News.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Notice.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OAuth.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Order.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderCheck.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrderSend.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PayCBLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Prise.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PrivateKey.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Product.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductBuy.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QiuZhi.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Question.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ResultInfo\Paging.cs" />
+    <Compile Include="ResultInfo\ResultInfo.cs" />
+    <Compile Include="ScoreBeloneItem.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ScoreCoinLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SendCV.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShareLink.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShareRegistLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ShipAddress.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SiteHead.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SiteNotice.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Slide.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SoftLink.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SoftLinkType.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudyClass.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudyShareImgSet.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StudyUnit.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SuggestSite.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Tag.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserBase.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserDisabledLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserExt.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserGift.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserLike.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserLoginLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserScore.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserSet.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserShareLog.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserStudy.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\Article\ArticleViewModel.cs" />
+    <Compile Include="ViewModel\Article\_Article.cs" />
+    <Compile Include="ViewModel\AttachMentWithBuyInfo.cs" />
+    <Compile Include="ViewModel\Base\BaseListViewModel.cs" />
+    <Compile Include="ViewModel\BBS\BBSFileFee.cs" />
+    <Compile Include="ViewModel\BBS\BBSListViewModel.cs" />
+    <Compile Include="ViewModel\BBS\DiscuzLeftUserInfo.cs" />
+    <Compile Include="ViewModel\Chat\ChatViewModel.cs" />
+    <Compile Include="ViewModel\Chat\ListenChatAndNotice.cs" />
+    <Compile Include="ViewModel\Console\BBSEnumViewModel.cs" />
+    <Compile Include="ViewModel\CustomerVM.cs" />
+    <Compile Include="ViewModel\FansViewModel.cs" />
+    <Compile Include="ViewModel\Gift\GiftCreateViewModel.cs" />
+    <Compile Include="ViewModel\Gift\GiftViewModel.cs" />
+    <Compile Include="ViewModel\Gift\GiftBuyerManageViewModel.cs" />
+    <Compile Include="ViewModel\Gift\UserBuyGiftListInfo.cs" />
+    <Compile Include="ViewModel\Gift\_Gift.cs" />
+    <Compile Include="ViewModel\Gift\_BuyManageInfo.cs" />
+    <Compile Include="ViewModel\InBox\MyMessage.cs" />
+    <Compile Include="ViewModel\InBox\_MsgBox.cs" />
+    <Compile Include="ViewModel\Job\JobViewModel.cs" />
+    <Compile Include="ViewModel\MasterViewModel.cs" />
+    <Compile Include="ViewModel\MyCommentsViewModel.cs" />
+    <Compile Include="ViewModel\MyArticleViewModel.cs" />
+    <Compile Include="ViewModel\MyLikeViewModel.cs" />
+    <Compile Include="ViewModel\Notice\MyNotice.cs" />
+    <Compile Include="ViewModel\Party\ActiveListViewModel.cs" />
+    <Compile Include="ViewModel\Party\PartyCreateViewModel.cs" />
+    <Compile Include="ViewModel\Party\PartyJoinManageViewModel.cs" />
+    <Compile Include="ViewModel\Party\UserBuyPartyListInfo.cs" />
+    <Compile Include="ViewModel\Party\UserJoinItemViewModel.cs" />
+    <Compile Include="ViewModel\Party\_Activity.cs" />
+    <Compile Include="ViewModel\Party\_JoinManageInfo.cs" />
+    <Compile Include="ViewModel\Product\ProductViewModel.cs" />
+    <Compile Include="ViewModel\Product\_Product.cs" />
+    <Compile Include="ViewModel\QiuZhi\_QiuZhi.cs" />
+    <Compile Include="ViewModel\Share\MyShareViewModel.cs" />
+    <Compile Include="ViewModel\Share\ShareViewModel.cs" />
+    <Compile Include="ViewModel\SignCountAndLevel.cs" />
+    <Compile Include="ViewModel\SignUserViewModel.cs" />
+    <Compile Include="ViewModel\Study\SignUserStudyInfo.cs" />
+    <Compile Include="ViewModel\Study\StudyInfoVM.cs" />
+    <Compile Include="ViewModel\Study\UserStudyCenterVM.cs" />
+    <Compile Include="ViewModel\S\SearchResultViewModel.cs" />
+    <Compile Include="ViewModel\Tag\TagCategoryVM.cs" />
+    <Compile Include="ViewModel\Tag\TagViewModel.cs" />
+    <Compile Include="ViewModel\Tag\_Tag.cs" />
+    <Compile Include="ViewModel\Tag\TagsViewModel.cs" />
+    <Compile Include="ViewModel\ToSendOrder.cs" />
+    <Compile Include="ViewModel\UserDetailInfoViewModel.cs" />
+    <Compile Include="ViewModel\User\_UserBaseInfo.cs" />
+    <Compile Include="ViewModel\VIPHeadUrlViewModel.cs" />
+    <Compile Include="ViewModel\ZhaoPin\ZhaoPinViewModel.cs" />
+    <Compile Include="ViewModel\QiuZhiViewModel.cs" />
+    <Compile Include="ViewModel\UserInfo\UserInfoViewModel.cs" />
+    <Compile Include="ViewModel\UserManageViewModel.cs" />
+    <Compile Include="ViewModel\UserViewModel.cs" />
+    <Compile Include="ViewModel\ZhaoPin\_ZhaoPin.cs" />
+    <Compile Include="ViewModel\_Comment.cs" />
+    <Compile Include="ViewModel\_Answer.cs" />
+    <Compile Include="ViewModel\_Comments.cs" />
+    <Compile Include="ViewModel\_Answers.cs" />
+    <Compile Include="ViewModel\_MyComments.cs" />
+    <Compile Include="ViewModel\BBS\_QuestionInfo.cs" />
+    <Compile Include="VIPHead.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZhaoPin.cs">
+      <DependentUpon>AmazonBBSEFModel.tt</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EntityDeploy Include="AmazonBBSEFModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>AmazonBBSEFModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AmazonBBSEFModel.edmx.diagram">
+      <DependentUpon>AmazonBBSEFModel.edmx</DependentUpon>
+    </None>
+    <None Include="App.Config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AmazonBBSEFModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AmazonBBSEFModel.Context.cs</LastGenOutput>
+      <DependentUpon>AmazonBBSEFModel.edmx</DependentUpon>
+    </Content>
+    <Content Include="AmazonBBSEFModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>AmazonBBSEFModel.edmx</DependentUpon>
+      <LastGenOutput>AmazonBBSEFModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

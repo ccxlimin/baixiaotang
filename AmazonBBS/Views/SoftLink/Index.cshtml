@@ -1,0 +1,188 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<SoftLink>
+@{
+    ViewBag.Title = "开发链接";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SoftLinkType> listType = SoftLinkTypeBLL.Instance.SelectAll();
+    List<SoftLink> list = Model;
+
+    UserBaseBLL userbll = UserBaseBLL.Instance;
+
+    bool ismaster = userbll.IsMaster;
+
+    var grouped = list.GroupBy(a => a.SoftLinkType);
+}
+<style>
+    .softLink ul li {
+        float: left;
+        /*width: 196px;*/
+        width: 158px;
+        border: 1px solid #ddd;
+        padding: 5px 3px;
+        margin: -1px -1px 0 0;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+        .softLink ul li:hover {
+            background-color: #f2f8fd;
+            cursor: pointer;
+        }
+
+            .softLink ul li:hover a {
+                text-decoration: underline;
+            }
+
+        .softLink ul li a {
+            display: block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .softLink ul li p {
+            /*height: 30px;*/
+            height: 40px;
+            margin-bottom: 0;
+            font-size: 12px;
+            line-height: 20px;
+            max-height: 50px;
+            display: -webkit-box;
+            -webkit-box-orient;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+    /*.btnActions {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }*/
+</style>
+@if (ismaster)
+{
+    <h6><a href="/Console/SoftLink">设置软件导航分类</a></h6>
+}
+<div class="Lmgt15">
+    <div class="col-md-9">
+        <span style="display:inline-block;width:50%">
+            <input class="searchValue form-control" placeholder="搜索链接关键词" />
+        </span>
+        <span class="btn-search-softlink btn btn-primary ">
+            搜索
+        </span>
+    </div>
+    <div class="col-md-9 softLink">
+        @if (list.Count > 0)
+        {
+            <div class="well">
+                @foreach (var l in grouped)
+                {
+                    SoftLinkType softlinktype = listType.FirstOrDefault(a => { return a.SoftLinkTypeID == l.First().SoftLinkType; });
+                    <h4 class="Lmgt10" style="color:@softlinktype.SoftLinkColor">
+                        <img width="30" height="30" src="@softlinktype.SoftLinkLogo" alt="@softlinktype.SoftLinkTypeName" />
+                        <span class="Lvam">@softlinktype.SoftLinkTypeName</span>
+                    </h4>
+                    <ul class="clearfix">
+                        @foreach (SoftLink item in l)
+                        {
+                            <li class="softlinkitem Ltac" data-mid="@item.SoftLinkID">
+                                <a href="@item.LinkAddress" target="_blank" data-toggle="tooltip" title="@item.LinkName">@item.LinkName</a>
+                                <p title="@item.LinkMemo">@item.LinkMemo</p>
+                                @if (ismaster)
+                                {
+                                    <span class="btnActions Ldn" data-mid="@item.SoftLinkID">
+                                        <span class="editPV btn btn-primary btn-xs">浏览量</span>
+                                        <button class="btnEdit btn btn-primary btn-xs">编辑</button>
+                                        <button class="btnDelete btn btn-danger btn-xs">删除</button>
+                                    </span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+            </div>
+        }
+    </div>
+    @Html.Partial("/Views/AD/Index.cshtml")
+</div>
+<script>
+    Leo.init("softlink", 'index');
+    Leo.ToolTip();
+    $(".softlinkitem a").click(function () {
+        var me = $(this);
+        $.post("/PV/Record/{0}".Format(me.parent().data("mid")), { pvenum: "SoftLink" }, function (data) {
+            if (!data.Ok) {
+                console.warn(data.Msg);
+            }
+        });
+    });
+</script>
+@if (ismaster)
+{
+    <script>
+        $(".softlinkitem").mouseover(function () {
+            $(this).find(".btnActions").removeClass('Ldn');
+        }).mouseleave(function () {
+            $(this).find(".btnActions").addClass('Ldn');
+        });
+
+        $(".btnEdit").click(function () {
+            location.href = "/Console/SoftLink/" + $(this).parent().data("mid");
+        });
+
+        $(".btnDelete").click(function () {
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此导航链接吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD("删除中...");
+                setTimeout(function () {
+                    $.post("/SoftLink/DeleteSoft/{0}".Format(me.parent().data("mid")), function (data) {
+                        if (data.Ok) {
+                            MSG("删除成功");
+                            me.parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+
+        $(".editPV").unbind("click").click(function () {
+            var $me = $(this);
+            layer.prompt({ title: "请修改浏览量", formType: 3, shadeClose: !0 }, function (count, index) {
+                if (!isNaN(count)) {
+                    if (count > -1) {
+                        CLOSE(index);
+                        var loadIndex = LOAD("正在修改浏览量…");
+                        setTimeout(function () {
+                            $.post("/PV/Edit/{0}".Format($me.parent().data("mid")), { number: count, editEnum: 5, }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("修改成功");
+                                    //$me.parent().parent().find(".pageviews-pv").text(count + "次浏览");
+                                } else {
+                                    layer.msg(data.Msg || "修改失败");
+                                }
+                                layer.close(loadIndex);
+                            })
+                        }, 1000);
+                    } else {
+                        MSG("浏览量咋能为负呢？");
+                    }
+                }
+                else {
+                    MSG("请输入数字");
+                }
+            });
+        })
+    </script>
+}

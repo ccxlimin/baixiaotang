@@ -1,0 +1,193 @@
+﻿@{
+    ViewBag.Title = "审核帖子";
+    //bool hastopicmaster = (bool)ViewBag.HasTopicMaster;
+}
+@*<script src="~/Scripts/bootstrap.js"></script>*@
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#check-question" data-toggle="tab" data-index="1">
+                    帖子审核
+                </a>
+            </li>
+            <li><a href="#check-article" data-toggle="tab" data-index="2">文章审核</a></li>
+            <li><a href="#check-party" data-toggle="tab" data-index="3">活动审核</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="tab-pane fade in active" id="check-question">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+            <div class="tab-pane fade" id="check-article">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+            <div class="tab-pane fade" id="check-party">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function LoadWrap(element) {
+            $(element).html('<div class="loadwrap">查询中<img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>');
+        }
+
+        function BuildListHtml(headurl, username, userid, title, content, mainid, checkType) {
+            var divItem = $("<div>").addClass("aw-item");
+            var ausername = $("<a>").addClass("aw-user-name hidden-xs").attr({ "href": "/User/Detail/{0}".Format(username), "rel": "nofollow" }).append($("<img>").attr({ "src": headurl || '/Content/img/head_default.gif', "alt": username }));
+            var divContent = $("<div>").addClass("aw-question-content")
+                //.append($("<h4>").append($("<a>").attr("href", "/bbs/check/{0}".Format(mainid)).text(title)))
+                .append($("<h4>").append($("<a>").text(title).click(function () {
+                    var _content = $("<div>").html(content).appendTo($("body"));
+                    var layeriindex = AlertDivWithOutID_MAX(_content, title, function () { layer.close(layeriindex); });
+                })))
+                .append($("<p>").append(
+                    $("<span>").data("qid", mainid))
+                    .append($("<button>").text("审核通过").addClass("btn btn-primary btn-xs").click(function () {
+                        Pass(mainid, 2, checkType);
+                    }))
+                    .append($("<button>").text("不通过").addClass("btn btn-primary btn-xs Lmgl5").click(function () {
+                        Pass(mainid, 3, checkType);
+                    }))
+                );
+            return divItem.append(ausername, divContent);
+        }
+
+        function NoHtmlList() {
+            return $('<div style="text-align:center;"><div class="well"><h4>暂不需要审核</h4></div></div>');
+        }
+
+        function EachList(data, list, element, callback) {
+            setTimeout(function () {
+                if (data.Ok) {
+                    data = data.Data[list];
+                    var divWrap;
+                    if (data.length > 0) {
+                        divWrap = $("<div>").addClass("aw-common-list");
+                        $.each(data, function (i, n) {
+                            callback(n).appendTo(divWrap);
+                        });
+                    } else {
+                        divWrap = NoHtmlList();
+                    }
+                    $(element).html(divWrap);
+                }
+            }, 500)
+        }
+        function LoadQuestion() {
+            $.get("/Console/LoadQuestionCheck", function (data) {
+                EachList(data, "QuestionList", "#check-question", function (n) {
+                    return BuildListHtml(n.HeadUrl, n.UserName, n.UserID, n.Title, n.Body, n.QuestionId, 1);
+                });
+            });
+        }
+        function LoadArticle() {
+            $.get("/Console/LoadArticleCheck", function (data) {
+                EachList(data, "Articles", "#check-article", function (n) {
+                    return BuildListHtml(n.HeadUrl, n.UserName, n.UserID, n.Title, n.Body, n.ArticleId, 2);
+                });
+            });
+        }
+        function LoadParty() {
+            $.get("/Console/LoadPartyCheck", function (data) {
+                EachList(data, "Activis", "#check-party", function (n) {
+                    return BuildListHtml(n.HeadUrl, n.UserName, n.UserID, n.Title, n.Body, n.ActivityId, 3);
+                });
+            });
+        }
+
+        LoadQuestion();
+        $(function () {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                //var activeTab = $(e.target).text();
+                var index = $(e.target).data("index");
+                //var previousTab = $(e.relatedTarget).text();
+                if (index == "1") {
+                    LoadWrap("#check-question");
+                    LoadQuestion();
+                } else if (index == "2") {
+                    LoadWrap("#check-article");
+                    LoadArticle();
+                } else {
+                    LoadWrap("#check-party");
+                    LoadParty();
+                }
+            });
+        });
+
+        function Pass(id, check, checkType) {
+            $.post("/Console/Checked/{0}".Format(id), { check: check, type: checkType }, function (data) {
+                if (data.Ok) {
+                    MSG("操作成功", function () { location.reload(!0); })
+                } else {
+                    MSG("操作失败");
+                }
+            });
+        }
+
+        function OpenDetail(id, body) {
+            alert(body);
+        }
+    </script>
+    @*<div class="col-md-10">
+            @if (Model.QuestionList.Count > 0)
+            {
+                <div class="aw-mod aw-explore-list">
+                    <div class="mod-body">
+                        <div class="aw-common-list">
+                            @foreach (var question in Model.QuestionList)
+                    {
+                                <div class="aw-item">
+                                    <a class="aw-user-name hidden-xs" href="/user/detail/@question.UserID" rel="nofollow">
+                                        <img src="@(question.HeadUrl ?? defaultheadurl)" alt="@question.UserName">
+                                    </a>
+                                    <div class="aw-question-content">
+                                        <h4>
+                                            <a href="/bbs/check/@question.QuestionId">
+                                                @question.Title
+                                            </a>
+                                        </h4>
+                                        <p>
+                                            <span data-qid="@question.QuestionId">
+                                                <button onclick="Pass(@question.QuestionId,2)" class="btn btn-primary btn-xs">审核通过</button>
+                                                <button onclick="Pass(@question.QuestionId,3)" class="btn btn-primary btn-xs">不通过</button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                </div>
+                            }
+                            <div id="commentpage">
+                                @Html.Partial("_PageLink", Model.QuestionPage)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    Leo.init("bbs", "topic")
+                </script>
+
+                <script>
+                    function Pass(id, check) {
+                        $.post("/Console/Checked/{0}".Format(id), { check: check }, function (data) {
+                            if (data.Ok) {
+                                MSG("审核通过",function(){location.reload(!0);})
+                            } else {
+                                layer.msg("审核失败");
+                            }
+                        });
+                    }
+                </script>
+            }
+            else
+            {
+                <div style="text-align:center;">
+                    <div class="well">
+                        <h4>暂无需要审核的帖子</h4>
+                    </div>
+                </div>
+            }
+        </div>*@
+</div>

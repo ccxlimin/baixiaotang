@@ -1,0 +1,51 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyCommentsViewModel
+@{
+    //UserBase user = UserBaseBLL.Instance.UserInfo;
+    string headurl = string.IsNullOrEmpty(Model.CommentHeadUrl) ? "/Content/img/head_default.gif" : Model.CommentHeadUrl;
+}
+
+<div class="col-md-12">
+    @if (Model.CommentList != null)
+    {
+        <div class="aw-common-list">
+            @foreach (_MyComments answer in Model.CommentList)
+            {
+                <div class="aw-item">
+                    <a class="aw-user-name hidden-xs">
+                        <img src="@(headurl)" onerror="this.src = '/Content/img/head_default.gif'">
+                    </a>
+                    <div class="aw-question-content">
+                        <h4>
+                            他对问题
+                            <a target="_blank" href="/bbs/detail/@answer.QuestionId">
+                                《@answer.QuestionTitle》
+                            </a>
+                            <div class="Lmg5-0">评论了内容：</div>
+                            <div class="well">
+                                @Html.Raw(answer.CommentContent)
+                            </div>
+                        </h4>
+                        <p>
+                            <span class="text-color-999">
+                                @answer.ReplyCount 人回复了他的评论 •
+                                @answer.PrisedCount 人赞了他的评论 •
+                                @Html.Partial("_TimeLine", answer.CreateTime)
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            }
+            <div id="commentpage">
+                @Html.Partial("_Page", Model.CommentPage)
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="well">
+            还没有回答！
+        </div>
+    }
+</div>

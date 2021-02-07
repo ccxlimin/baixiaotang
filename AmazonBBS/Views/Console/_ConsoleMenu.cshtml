@@ -1,0 +1,294 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+    //是否超级管理员
+    bool isRoot = UserBaseBLL.Instance.IsRoot;
+    //bool isNormalMaster = UserBaseBLL.Instance.IsNormalMaster;
+}
+<div class="side-nav">
+    <div class="panel-group" id="accordion">
+        <div class="panel-usermenu">
+            <div class="panel-heading panel">
+                <span class="side-nav-item item-title">
+                    <span>后台管理</span>
+                    <b class="caret"></b>
+                </span>
+            </div>
+            @if (isRoot)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/baseconfig" class="side-nav-item item-title">
+                        百晓堂基本设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isMaster)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/slider" class="side-nav-item item-title">
+                        主页轮播管理
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isRoot)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/scrollnotice" class="side-nav-item item-title">
+                        滚屏公告设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/tagmanage" class="side-nav-item item-title">
+                        标签管理
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/batchtag" class="side-nav-item item-title">
+                        批量标签设置
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/jobmanage" class="side-nav-item item-title">
+                        行业岗位管理
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isMaster)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/accountmanage" class="side-nav-item item-title">
+                        成员帐号管理
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isRoot)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/homesortconfig" class="side-nav-item item-title">首页排序规则设置</a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/giftsortconfig" class="side-nav-item item-title">礼物数据课程排序</a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/signrandom" class="side-nav-item item-title">
+                        签到随机设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/tapshowinfo" class="side-nav-item item-title">
+                        点击显示随机信息
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isMaster)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/checkuserauth" class="side-nav-item item-title">
+                        用户法人认证审核
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isRoot)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/leaveword" class="side-nav-item item-title">课程留言管理</a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/softlink" class="side-nav-item item-title">
+                        软件导航设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/editmenu" class="side-nav-item item-title">
+                        菜单维护
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/editscorelevel" class="side-nav-item item-title">
+                        积分等级维护
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/editlevelname" class="side-nav-item item-title">
+                        头衔维护
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/editsharecoin" class="side-nav-item item-title">
+                        分享奖励设置
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/userv" class="side-nav-item item-title">
+                        用户认证
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+            @if (isMaster)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/checkviphead" class="side-nav-item item-title">
+                        用户头像审核
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/checknote" class="side-nav-item item-title">
+                        审核
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+            }
+            @*超级管理员拥有分配权限*@
+            @if (isRoot)
+            {
+                <div class="panel-heading panel">
+                    <a href="/console/suggestsite" class="side-nav-item item-title">
+                        设置推荐网站
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/master" class="side-nav-item item-title">
+                        设置管理员
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/head" class="side-nav-item item-title">
+                        设置头像
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/ad" class="side-nav-item item-title">
+                        广告设置
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/tosend" class="side-nav-item item-title">
+                        待发货订单列表
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/tosended" class="side-nav-item item-title">
+                        已发货订单列表
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/autoreply" class="side-nav-item item-title">
+                        设置购买自动回复
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/gift/create/1" class="side-nav-item item-title">
+                        新增礼品
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/gift/create/2" class="side-nav-item item-title">
+                        新增数据分析
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/gift/create/3" class="side-nav-item item-title">
+                        新增课程
+                    </a>
+                    <div class="item-body collapse"></div>
+                </div>
+                <div class="panel-heading panel">
+                    <a href="/console/addstudychapter" class="side-nav-item item-title">
+                        新增学习课程
+                    </a>
+                    <div class="item-body collapse">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@*<style>
+        .side-nav-item {
+            display: block;
+            padding: 10px 15px 10px 15px;
+            background-color: #FFFFFF;
+            cursor: pointer;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+            -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        }
+
+        .item-title {
+            background-color: #F5F5F5;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            border-bottom: 1px solid #DDDDDD;
+        }
+
+        .panel-heading {
+            /*margin-top: 5px;*/
+            padding: 0;
+            border-radius: 3px;
+            border: 1px solid transparent;
+            border-color: #DDDDDD;
+        }
+
+        .item-body {
+            padding: 10px 15px 5px 15px;
+            border-bottom: 1px solid #DDDDDD;
+        }
+
+        .item-second {
+            /*margin-top: 5px;*/
+            cursor: pointer;
+        }
+
+            .item-second a {
+                display: block;
+                height: 100%;
+                width: 100%;
+            }
+    </style>*@

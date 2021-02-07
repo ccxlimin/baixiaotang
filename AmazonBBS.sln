@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonBBS", "AmazonBBS\AmazonBBS.csproj", "{D8D9B392-ABA5-446E-A701-1ABE63375C10}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonBBS.BLL", "AmazonBBS.BLL\AmazonBBS.BLL.csproj", "{2678AE66-BA2D-420F-B1CE-A57243BC710E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonBBS.DAL", "AmazonBBS.DAL\AmazonBBS.DAL.csproj", "{F606633A-ABC5-44D0-9943-59DD44A7AE56}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonBBS.Model", "AmazonBBS.Model\AmazonBBS.Model.csproj", "{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonBBS.Common", "AmazonBBS.Common\AmazonBBS.Common.csproj", "{46C5EF58-C92E-4D95-852C-62F0EC8EDB58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AliPay", "AliPay\AliPay.csproj", "{618E9C51-F9B3-4564-8EA0-999DC524D5A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8D9B392-ABA5-446E-A701-1ABE63375C10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8D9B392-ABA5-446E-A701-1ABE63375C10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8D9B392-ABA5-446E-A701-1ABE63375C10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8D9B392-ABA5-446E-A701-1ABE63375C10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2678AE66-BA2D-420F-B1CE-A57243BC710E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2678AE66-BA2D-420F-B1CE-A57243BC710E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2678AE66-BA2D-420F-B1CE-A57243BC710E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2678AE66-BA2D-420F-B1CE-A57243BC710E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F606633A-ABC5-44D0-9943-59DD44A7AE56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F606633A-ABC5-44D0-9943-59DD44A7AE56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F606633A-ABC5-44D0-9943-59DD44A7AE56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F606633A-ABC5-44D0-9943-59DD44A7AE56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BCD6D0E5-27BB-4F7B-A510-32D5A643C287}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46C5EF58-C92E-4D95-852C-62F0EC8EDB58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46C5EF58-C92E-4D95-852C-62F0EC8EDB58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46C5EF58-C92E-4D95-852C-62F0EC8EDB58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46C5EF58-C92E-4D95-852C-62F0EC8EDB58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{618E9C51-F9B3-4564-8EA0-999DC524D5A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{618E9C51-F9B3-4564-8EA0-999DC524D5A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{618E9C51-F9B3-4564-8EA0-999DC524D5A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{618E9C51-F9B3-4564-8EA0-999DC524D5A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BA83740A-4DD8-475C-8EF4-6A27EC95204B}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,172 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@{
+    ViewBag.Title = "用户认证";
+    string auth1 = ConfigHelper.AppSettings("UserAuth1");
+    string auth2 = ConfigHelper.AppSettings("UserAuth2");
+    string auth3 = ConfigHelper.AppSettings("UserAuth3");
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div class="well">
+            <h1>用户认证</h1>
+            <div class="well">
+                <div class="form-group-sm clearfix">
+                    <div class="col-sm-3">
+                        <input type="text" class="form-control" id="searchUser" placeholder="查找用户" />
+                    </div>
+                    <a id="btn_search" class="btn btn-primary">开始查找</a>
+                </div>
+                <div class="form-group-sm clearfix Lmgt5">
+                    <div class="col-sm-3">
+                        <select id="userVType" class="form-control">
+                            <option value="">请选择认证级别</option>
+                            <option value="1">@auth1</option>
+                            <option value="2">@(auth2)</option>
+                            <option value="3">@(auth1)和@(auth2)</option>
+                        </select>
+                    </div>
+                    <a id="btn_give" class="btn btn-primary">确认认证</a>
+                </div>
+            </div>
+        </div>
+        <div class="well clearfix">
+            <div class="col-md-4 col-sm-4">
+                <h1>@(auth1)LOGO</h1>
+                <div class="well">
+                    <div class="col-xs-12 col-md-12">
+                        <img width="50" height="50" src="@("/Content/U/UserV/1.png")" />
+                        <input type="file" id="selectimg1" value="" />
+                        <a id="btn_changeone" class="btn-success btn-sm">更换Logo</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <h1>@(auth2)LOGO</h1>
+                <div class="well">
+                    <div class="col-xs-12 col-md-12">
+                        <img width="50" height="50" src="@("/Content/U/UserV/2.png")" />
+                        <input type="file" id="selectimg2" value="" />
+                        <a id="btn_changetwo" class="btn-success btn-sm">更换Logo</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-4">
+                <h1>@(auth3)LOGO</h1>
+                <div class="well">
+                    <div class="col-xs-12 col-md-12">
+                        <img width="50" height="50" src="@("/Content/U/UserV/4.png")" />
+                        <input type="file" id="selectimg3" value="" />
+                        <a id="btn_changethree" class="btn-success btn-sm">更换Logo</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $("#btn_search").unbind("click").click(function () {
+        if ($("#searchUser").val() == "") {
+            $("#searchUser").focus();
+            layer.msg("请输入用户名称进行查找", function () { $('.errorMsg1').addClass("Ldn") });
+            return !1;
+        } else {
+            $.post("/Console/CheckUser/{1}?t={0}".Format(Leo.getPK(), $.trim($("#searchUser").val()))
+                , function (data) {
+                    if (data.Ok) {
+                        $("#searchUser").attr("disabled", !0);
+                        layer.msg("匹配成功!可以进行头衔授予!");
+                        $("#btn_search").addClass("disabled").unbind("click");
+                        $("#btn_give").unbind("click").click(function () {
+                            if ($("#userVType").val() == "") {
+                                layer.msg("请选择认证级别");
+                                return !1;
+                            } else {
+                                $.post("/Console/UserV?t={0}".Format(Leo.getPK()),
+                                    { type: $("#userVType").val(), user: $("#searchUser").val() },
+                                    function (data) {
+                                        if (data.Ok) {
+                                            layer.msg(data.Msg);
+                                            setTimeout(function () {
+                                                location.reload(!0);
+                                            }, 500)
+                                        } else {
+                                            layer.msg(data.Msg);
+                                        }
+                                    })
+                            }
+                        });
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+    });
+
+    $("#btn_changeone").click(function () {
+        sendFile($("#selectimg1"), "/Tool/UserV/1", function (data) {
+            if (data.Ok) {
+                layer.msg("更换成功", function () {
+                    location.reload(!0);
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+
+    $("#btn_changetwo").click(function () {
+        sendFile($("#selectimg2"), "/Tool/UserV/2", function (data) {
+            if (data.Ok) {
+                layer.msg("更换成功", function () {
+                    location.reload(!0);
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+
+    $("#btn_changethree").click(function () {
+        sendFile($("#selectimg3"), "/Tool/UserV/4", function (data) {
+            if (data.Ok) {
+                layer.msg("更换成功", function () {
+                    location.reload(!0);
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+
+    function sendFile(files, url, callback) {
+        var formdata = new FormData();
+        formdata.append("file", files[0].files[0]);
+        formdata.append("IsThumbnail", 1);
+        $.ajax({
+            data: formdata,
+            type: "POST",
+            url: url,
+            cache: false,
+            contentType: false,
+            processData: false,
+            accept: {
+                title: 'Images',
+                extensions: 'ico',
+                mimeTypes: 'image/*'
+            },
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+            },
+            error: function () {
+                alert("上传失败");
+            }
+        });
+    }
+</script>

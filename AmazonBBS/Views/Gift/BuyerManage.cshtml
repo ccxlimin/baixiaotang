@@ -1,0 +1,109 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model GiftBuyerManageViewModel
+@{
+    Gift giftInfo = Model.GiftInfo;
+    int gtype = giftInfo.GType.Value;
+    string desc = gtype == 1 ? "礼品" : gtype == 2 ? "数据" : "百晓堂课程";
+    ViewBag.Title = "{0}购买管理".FormatWith(desc);
+    List<_BuyManageInfo> buyList = Model.BuyList;
+    List<JoinItemQuestionExt> joinQuestions = Model.JoinQuestions;
+    List<JoinItemAnswerExt> joinAnswers = Model.JoinAnswers;
+
+    string none = "-";
+}
+<div class="Lmgt15">
+    @if (giftInfo != null)
+    {
+        if (buyList.Count > 0)
+        {
+            <div>
+                <a class="btn btn-primary" href="/gift/export/@giftInfo.GiftID?gtype=@gtype">导出数据</a>
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>@(desc)名称</th>
+                        <th>昵称</th>
+                        <th>姓名</th>
+                        <th>手机</th>
+                        <th>票种</th>
+                        <th>数量</th>
+                        <th>付费类型</th>
+                        <th>单价</th>
+                        <th>实付金额</th>
+                        <th>付费状态</th>
+                        <th>购买时间</th>
+                        @foreach (JoinItemQuestionExt item in joinQuestions)
+                        {
+                            <th>@item.ItemName</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (_BuyManageInfo item in buyList)
+                    {
+                        <tr>
+                            <td>@giftInfo.GiftName</td>
+                            <td>@item.BuyerName</td>
+                            <td>@(item.LinkMan ?? item.BuyerName)</td>
+                            <td>@(item.LinkTel ?? none)</td>
+                            <td>@item.FeeName</td>
+                            <th>@item.BuyCount</th>
+                            <td>
+                                @if (item.FeeType == 0)
+                                {
+                                    <span>免费</span>
+                                }
+                                else if (item.FeeType == 10)
+                                {
+                                    <span>积分付费</span>
+                                }
+                                else if (item.FeeType == 20)
+                                {
+                                    <span>VIP分付费</span>
+                                }
+                                else if (item.FeeType == 30)
+                                {
+                                    <span>RMB付费</span>
+                                }
+                            </td>
+                            <td>@item.ItemSourceFee</td>
+                            <td>@item.Fee</td>
+                            <td>
+                                @if (item.IsPay == 1)
+                                {
+                                    <span>已付费</span>
+                                }
+                                else
+                                {
+                                    <span class="Lcr">未付费</span>
+                                }
+                            </td>
+                            <td>@item.BuyTime</td>
+                            @foreach (JoinItemQuestionExt joinquestion in joinQuestions)
+                            {
+                                var info = joinAnswers.FirstOrDefault(a => { return a.JoinItemQuestionExtId == joinquestion.JoinItemQuestionExtId && a.BuyerID == item.BuyUserID; });
+                                <td>@(info == null ? none : info.ItemAnswer)</td>
+                            }
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="well">
+                暂时没有人购买！
+            </div>
+        }
+    }
+    else
+    {
+        <div class="well">
+            @(desc)不存在！
+        </div>
+    }
+</div>

@@ -1,0 +1,104 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model JobViewModel
+@{
+    List<Job> jobTypes = Model.JobTypes;
+    List<Job> jobs = Model.Jobs;
+}
+@if (jobTypes.Count > 0)
+{
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover">
+            <caption>职位管理</caption>
+            <thead>
+                <tr>
+                    <th width="25%">序号</th>
+                    <th width="25%">职位分类</th>
+                    <th width="25%">职位</th>
+                    <th width="25%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 0;
+                    int change = 0;
+                    foreach (Job jobType in jobTypes)
+                    {
+                        var jobTypeID = jobType.JobId;
+                        var jobsBelone = jobs.Where(a => { return a.ParentJobId == jobTypeID; }).ToList();
+                        int jobsCount = jobsBelone.Count;
+                        if (jobsCount > 0)
+                        {
+                            for (int j = 0; j < jobsCount; j++)
+                            {
+                                <tr class="@(change%2==0?"active":"success")">
+                                    <td>@(++index)</td>
+                                    @if (j == 0)
+                                    {
+                                        <td rowspan="@jobsCount">@jobType.JobType</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="Ldn" rowspan="@jobsCount">@jobType.JobType</td>
+                                    }
+                                    <td>@jobsBelone[j].JobName</td>
+                                    <td>
+                                        <a onclick="EditJob(this,'@jobsBelone[j].JobId')" class="btn-sm btn-success">编辑</a>
+                                        <a onclick="DeleteJob(this,'@jobsBelone[j].JobId',1)" class="btn-sm btn-danger">删除</a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="@(change%2==0?"active":"success")">
+                                <td>@(++index)</td>
+                                <td>@jobType.JobType</td>
+                                <td>无</td>
+                                <td></td>
+                            </tr>
+                        }
+                        change++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function EditJob(target, id) {
+            var element = $(target).parent().parent().children().eq(2);
+            var oldValue = $.trim(element.html());
+            layer.prompt({
+                title: '请修改并确认',
+                value: oldValue,
+                formType: 3,
+                maxlength: 20
+            },
+                function (text, index) {
+                    text = $.trim(text);
+                    if (text != oldValue) {
+                        CLOSE(index);
+                        var layerindex = LOAD();
+                        $.post("/Common/EditJob/{0}".Format(id), {
+                            jobName: text,
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("修改成功");
+                                element.html(text);
+                            } else {
+                                MSG(data.Msg || "修改失败");
+                            }
+                        });
+                    } else {
+                        Leo.msgfail("值未改变！");
+                    }
+                });
+        }
+    </script>
+}
+else
+{
+    <div class="post">
+        暂未添加职位分类数据！
+    </div>
+}

@@ -1,0 +1,61 @@
+﻿@using AmazonBBS.Model
+@model News
+@{
+    ViewBag.Title = "新闻编辑";
+}
+
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <div class="col-sm-8 col-sm-offset-2">
+            <h3>新闻编辑</h3>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+            <input type="text" class="form-control" id="ntitle" value="@Model.NTitle"
+                   placeholder="请输入标题">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-8">
+            <div id="ContentHidden" class="Ldn">@Html.Raw(Model.NBody)</div>
+            <div id="summernote"></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a id="btn_editNews" class="btn btn-primary">确认编辑</a>
+        </div>
+    </div>
+</form>
+<script>
+    $("#btn_editNews").click(function () {
+        if ($("#ntitle").val() == "") {
+            layer.msg("新闻标题不能为空");
+            return;
+        }
+        if ($("#ntitle").val().length > 50) {
+            layer.msg("新闻标题长度不能超过50字");
+            return;
+        }
+        if ($('#summernote').summernote("isEmpty")) {
+            layer.msg("新闻内容不能为空");
+            return;
+        }
+        $.post("/news/edit", {
+            id:@Model.NewsID, title: $("#ntitle").val(), body: encodeURI($('#summernote').summernote('code'))
+        }, function (data) {
+            if (data.Ok) {
+                MSG("编辑成功", function () {
+                    location.href = data.Url;
+                });
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+    Leo.RichText("#summernote", "/Tool/UpLoadNewsIMG", "此处填写新闻内容", 500, 0, function (data) {
+        $('#summernote').summernote('insertImage', data.Url);
+    }, null, !1, $("#ContentHidden").html());
+</script>
+

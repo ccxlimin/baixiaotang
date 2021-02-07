@@ -1,0 +1,186 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _QiuZhi
+@{
+    ViewBag.Title = $"{Model.IWant}_求职详情";
+    var m = Model;
+    bool canSeeContact = (bool)ViewBag.canSeeContact;
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+    UserExt ext = UserExtBLL.Instance.GetExtInfo(Convert.ToInt64(m.Publisher));
+    bool isuserv = UserExtBLL.Instance.IsFaRenOauth(ext.UserV.Value);
+
+    long currentUid = UserBaseBLL.Instance.UserID;
+    //求职是否已过期
+    bool youxiao = DateTime.Now < Model.ValidTime;
+}
+<script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+
+<div class="post Lmgt20">
+    <div class="post-head">
+        @if (!youxiao)
+        {
+            <h3 class="Lcr">该求职信息已下线</h3>
+        }
+        <h3>
+            @m.IWant
+        </h3>
+    </div>
+    <div class="post-content">
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-4 col-sm-4 Lpdl0i ">
+                @m.UserName <span class="Lfs12 Lcr">@(isuserv ? "已认证" : "未认证")</span>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-4 col-sm-4 Lpdl0i ">
+                更新时间：@(m.UpdateTime.HasValue ? m.UpdateTime.Value.ToLongDateString() : m.CreateTime.Value.ToLongDateString())
+            </div>
+            <div class="col-md-4 col-sm-4 Lpdl0i">
+                求职截止日期：@m.ValidTime.Value.ToLongDateString()
+            </div>
+            <div class="col-md-4 col-sm-4 Lpdl0i">
+                <div class="col-md-7">
+                    @if (youxiao)
+                    {
+                        if (islogin && currentUid.ToString() != Model.Publisher)
+                        {
+                            if (InviteInterviewBLL.Instance.Hasinvited(Model.QiuZhiID, currentUid))
+                            {
+                                <a class="btn-sm btn-primary">已邀请面试</a>
+                            }
+                            else
+                            {
+                                <a class="btn-sm btn-primary btn-vidite">邀请面试</a>
+                            }
+                        }
+                    }
+                </div>
+                <div class="col-md-5">
+                    @if (youxiao)
+                    {
+                        if (islogin)
+                        {
+                            <button onclick="var me=$(this);me.hide();setTimeout(function(){me.show()},1);print()" class="btn btn-xs btn-primary ">打印</button>
+                        }
+                        else
+                        {
+                            <button class="btn_login btn btn-xs btn-primary ">打印</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-4 col-sm-6 Lpdl0i ">
+                求职薪资：@Html.Partial("~/Views/ZhaoPin/_XinChou.cshtml", m.Money)
+            </div>
+            <div class="col-md-4 col-sm-6 Lpdl0i ">
+                求职类型：@Html.Partial("~/Views/ZhaoPin/_WorkType.cshtml", m.WorkType)
+                @if (m.WorkType == 2)
+                {
+                    @Html.Partial("~/Views/ZhaoPin/_JianZhiTime.cshtml", m.WorkTime)
+                }
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-4 col-sm-6 Lpdl0i ">
+                学历要求：@Html.Partial("~/Views/ZhaoPin/_XueLi.cshtml", m.Study)
+            </div>
+            <div class="col-md-4 col-sm-6 Lpdl0i ">
+                工作经验：@Html.Partial("~/Views/ZhaoPin/_GongZuoJingYan.cshtml", m.WorkYear)
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-4 col-sm-6 Lpdl0i">
+                离职状态：@Html.Partial("_LiZhiStatus", m.WorkStatus)
+            </div>
+            <div class="col-md-4 col-sm-6 Lpdl0i ">
+                意向工作地点：@(m.IWantPlace ?? "全国")
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                联系方式：
+                @{
+                    if (youxiao)
+                    {
+                        if (canSeeContact)
+                        {
+                            <span>@m.Contact</span>
+                        }
+                        else
+                        {
+                            <span class="q_contact">********</span>
+                            <a class="btn-sm btn-danger @(islogin ? "feeSeeContact" : "btn_login")">消费VIP分查看联系方式</a>
+                            <script>
+                            $(".feeSeeContact").click(function () {
+                                var me = $(this);
+                                AlertConfirm("确认要付费查看联系方式吗？", "付费查看", "我再想想", function () {
+                                    $.post("/zhaopin/fee/{0}".Format(@m.QiuZhiID), { type: 2 }, function (data) {
+                                        if (data.Ok) {
+                                            layer.msg("付费成功");
+                                            $(".q_contact").text(data.Data);
+                                            me.remove();
+                                        } else {
+                                            layer.msg(data.Msg || "付费失败");
+                                            setTimeout(function () {
+                                                if (data.Url) {
+                                                    location.href = data.Url;
+                                                }
+                                            });
+                                        }
+                                    });
+                                });
+                            });
+                            </script>
+                        }
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            自我评价：<span>@Html.Raw(m.SelfAssessment.IsNotNullOrEmpty() ? m.SelfAssessment.Replace("\r\n", "<br>") : "未填写")</span>
+        </div>
+        <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+            自我简介：<span>@Html.Raw(m.MyDesc.IsNotNullOrEmpty() ? m.MyDesc.Replace("\r\n", "<br>") : "未填写")</span>
+        </div>
+        @if (Model.JianLiPic.IsNotNullOrEmpty())
+        {
+            <div class="col-md-12 col-sm-12 clearfix Lpdl0i">
+                简历信息：
+                @if (canSeeContact)
+                {
+                    <span class="layer-photos-wrap"><img style="max-width:418px;" src="@m.JianLiPic" /></span>
+                }
+                else
+                {
+                    <span>查看联系方式后即可查看简历信息！</span>
+                }
+            </div>
+        }
+    </div>
+    <div class="clearfix Lmgt10" data-mid="@m.QiuZhiID">
+        <button type="button" class="btn_comment btn btn-default" data-mid="@m.QiuZhiID">评论</button>
+        @if (currentUid != m.Publisher.ToInt64())
+        {
+            if (m.IsLiked)
+            {
+                <button type="button" class="btn btn-default btn_unlike">已关注</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-default @(islogin ? "btn_like" : "btn_login")">关注</button>
+            }
+        }
+    </div>
+    @Html.Partial("_DOComment", 0)
+</div>
+@{
+    ViewBag.UserID = Convert.ToInt64(m.Publisher);
+    ViewBag.MainID = m.QiuZhiID;
+}
+@Html.Partial("_CommentList", m.Comments)
+<script>
+    Leo.init("qiuzhi","detail",{id:@Model.QiuZhiID,error:@(youxiao?1:0)}).LoadCommentControl().LoadPriseControl().ShowMaxImg();
+</script>

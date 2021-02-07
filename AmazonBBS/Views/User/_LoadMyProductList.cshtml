@@ -1,0 +1,69 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model BaseListViewModel<Product>
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    List<Product> list = Model.DataList;
+    Paging page = Model.Page;
+    int count = list.Count;
+}
+@if (count > 0)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>产品标题</th>
+                <th>发布时间</th>
+                <th>有效期</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < count; i++)
+            {
+                Product item = list[i];
+                <tr>
+                    <td>@(i + 1)</td>
+                    <td><a href="/product/detail/@item.ProductID" target="_blank">@item.PTitle</a></td>
+                    <td>@item.CreateTime</td>
+                    <td class="validShow">
+                        @{ bool shixiao = item.ValidTime <= DateTime.Now;}
+                        @if (shixiao)
+                        {
+                            <span class="Lcr Lfs12">已失效</span>
+                        }
+                        else
+                        {
+                            <span>@item.ValidTime.Value.ToString(1)</span>
+                        }
+                    </td>
+                    <td>
+                        @if (shixiao)
+                        {
+                            <a data-mid="@item.ProductID" class="btn-light btn btn-success">擦亮</a>
+                            @*<a class="btn btn-primary">编辑</a>*@
+                        }
+                        else
+                        {
+                            <a class="btn btn-warning disabled">无需擦亮</a>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="myproductpage">
+        @Html.Partial("_Page", page)
+    </div>
+    <script>
+        Leo.init("user", "myproduct")
+    </script>
+}
+else
+{
+    <div class="well">
+        你没有发布过产品！
+    </div>
+}

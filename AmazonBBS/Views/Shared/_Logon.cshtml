@@ -1,0 +1,61 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model UserBase
+@{
+    Uri returnUrl = Request.Url;
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isBind = user.Source == 2;
+}
+@using (Html.BeginForm("logoff", "account", new { returnurl = returnUrl }, FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+{
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="nav_msg_bar dropdown">
+            <a class="msgbox dropdown-toggle" href="/user/inbox">消息<span class="msgcount"></span></a>
+        </li>
+        <li class="nav_notice_bar">
+            <a class="bxtnoticebox" href="/user/notice">通知<span class="noticecount badge"></span></a>
+        </li>
+        @if (UserBaseBLL.Instance.IsMaster)
+        {
+            <li>
+                @Html.ActionLink("后台", "index", "console", null, htmlAttributes: new { title = "网站后台管理" })
+            </li>
+            <li>
+                @Html.ActionLink("新订单", "tosend", "console", null, htmlAttributes: new { title = "新订单", @class = "newOrder" })
+            </li>
+        }
+        else
+        {
+            <li>
+                @Html.ActionLink("订单", "order", "user", null, htmlAttributes: new { title = "新订单", @class = "newOrder" })
+            </li>
+        }
+        <li>
+            <a class="dropdown-toggle" href="/user">
+                @Model.UserName
+            </a>
+            <ul class="dropdown-menu dropdown-toggle">
+                <li><a target="_blank" href="/user/myquestions">我的帖子</a></li>
+                <li><a target="_blank" href="/user/myarticle">我的文章</a></li>
+                <li><a target="_blank" href="/user/order">我的订单</a></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">退出</a></li>
+            </ul>
+            @*@Html.ActionLink("欢迎您， " + Model.UserName + "!", "Index", "User", routeValues: null, htmlAttributes: new { title = Model.UserName })*@
+        </li>
+        @if (!isBind && user.Source != 4)
+        {
+            <li>
+                <a href="/account/loginoauth" data-toggle="tooltip" data-placement="bottom" title="点击绑定邮箱帐号，同时所有数据均以邮箱帐号数据为准！">安全绑定</a>
+            </li>
+        }
+        else
+        {
+            <li>
+                @Html.ActionLink("分享", "myshare", "user", routeValues: null, htmlAttributes: new { title = Model.UserName })
+            </li>
+        }
+        @*<li><a href="javascript:document.getElementById('logoutForm').submit()">退出</a></li>*@
+    </ul>
+}

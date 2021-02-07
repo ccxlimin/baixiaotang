@@ -1,0 +1,213 @@
+﻿@using AmazonBBS.Common
+@using AmazonBBS.Model
+@using AmazonBBS.BLL
+
+@{
+    ViewBag.Title = "广告";
+    //获取广告
+    int adcount = Convert.ToInt32(ConfigHelper.AppSettings("ADCount"));
+    List<AD> ads = ADBLL.Instance.GetALLAD(adcount);
+
+    bool isroot = UserBaseBLL.Instance.IsRoot;
+}
+
+@if (ads != null && ads.Count > 0)
+{
+    <div class="col-md-3 clearfix">
+        <ul>
+            @foreach (AD item in ads)
+            {
+                <li class="clearfix adshowinfo">
+                    <div class="_adtitle" data-id="@item.ADID">@item.ADTitle</div>
+                    <div class="col-md-12 Lpd0 clearfix">
+                        <div class="col-md-6 Lpd0 ad-imgs-wrapper">
+                            <img style="width:100%;" src="@item.ADIMG" />
+                        </div>
+                        <div class="col-md-6 Lfs12 _addesc" data-id="@item.ADID">
+                            @item.ADMsg
+                        </div>
+                    </div>
+                    <div class="col-md-12 Lpd0 clearfix">
+                        <span class="pageviews-pv">@(item.ADViewCount)次浏览</span>
+                    </div>
+                    @if (isroot)
+                    {
+                        long aid = item.ADID;
+                        <span class="btnADActions Ldn" data-mid="@aid">
+                            <button onclick="editPV(this,@aid)" class="btn-primary btn btn-xs">浏览量</button>
+                            <button onclick="adEdit(this,@aid)" class="btnADEdit btn btn-primary btn-xs">编辑</button>
+                            <button onclick="adDelete(this,@aid)" class="btnADDelete btn btn-danger btn-xs">删除</button>
+                        </span>
+                    }
+                </li>
+            }
+        </ul>
+    </div>
+    <script>
+        Leo.ShowMaxImg(".ad-imgs-wrapper");
+        $(".adshowinfo ._addesc,.adshowinfo ._adtitle").click(function (e) {
+            var me = $(this);
+            try {
+                if (e.target.nodeName == "BUTTON") { return !1; }
+                var me = $(this);
+                $.post("/AD/AddPV/{0}".Format(me.data("id")), function (data) {
+                    AlertMsg("{0}的基本信息<br>联系方式：{1}<br>微信号：{2}".Format(data.Data.title, data.Data.contact, data.Data.wechat), 1, function () { });
+                });
+            }
+            catch (ex) {
+                var me = $(this);
+                $.post("/AD/AddPV/{0}".Format(me.data("id")), function (data) {
+                    AlertMsg("{0}的基本信息<br>联系方式：{1}<br>微信号：{2}".Format(data.Data.title, data.Data.contact, data.Data.wechat), 1, function () { });
+                });
+            }
+            var pv = me.find(".pageviews-pv");
+            pv.text((parseInt(pv.text().replace("次浏览", "")) + 1) + "次浏览");
+        });
+    </script>
+}
+
+@if (isroot)
+{
+    <div class="ADEditWrapper Ldn">
+        <div class="form-group-sm clearfix Lmgt5">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="ADTitle" placeholder="广告标题" />
+            </div>
+        </div>
+        @*<div class="form-group-sm clearfix Lmgt5">
+                <div class="col-sm-12">
+                    <input type="text" class="form-control" id="ADIMG" placeholder="广告图片" />
+                    <input style="display:none" type="file" id="selectADIMG" value="" />
+                </div>
+            </div>*@
+        <div class="form-group-sm clearfix Lmgt5">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="ADMSG" placeholder="广告描述" />
+            </div>
+        </div>
+        <div class="form-group-sm clearfix Lmgt5">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="ADContact" placeholder="联系方式" />
+            </div>
+        </div>
+        <div class="form-group-sm clearfix Lmgt5">
+            <div class="col-sm-12">
+                <input type="text" class="form-control" id="ADWeChat" placeholder="设置微信号" />
+            </div>
+        </div>
+        @*<div class="form-group-sm clearfix Lmgt5">
+                <div class="col-sm-12 Ltac">
+                    <a id="btn_editADInfo" class="btn btn-primary">确认编辑</a>
+                </div>
+            </div>*@
+    </div>
+    <style>
+        .adshowinfo {
+            position: relative;
+        }
+
+            .adshowinfo .btnADActions {
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                margin: 0 0 0 -38px;
+            }
+    </style>
+    <script>
+        $(".adshowinfo").mouseover(function () {
+            $(this).find(".btnADActions").removeClass("Ldn");
+        }).mouseleave(function () {
+            $(this).find(".btnADActions").addClass("Ldn");
+        });
+
+        function editPV(me, aid) {
+            var $me = $(me);
+            layer.prompt({ title: "请修改浏览量", formType: 3, shadeClose: !0 }, function (count, index) {
+                if (!isNaN(count)) {
+                    if (count > -1) {
+                        CLOSE(index);
+                        var loadIndex = LOAD("正在修改浏览量…");
+                        setTimeout(function () {
+                            $.post("/PV/ADPV/{0}".Format(aid), { number: count }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("修改成功");
+                                    $me.parent().parent().find(".pageviews-pv").text(count + "次浏览");
+                                } else {
+                                    layer.msg(data.Msg || "修改失败");
+                                }
+                                layer.close(loadIndex);
+                            })
+                        }, 1000);
+                    } else {
+                        MSG("浏览量咋能为负呢？");
+                    }
+                }
+                else {
+                    MSG("请输入数字");
+                }
+            });
+        }
+
+        function adEdit(me, aid) {
+            var layerindex = layer.load();
+            $.get("/AD/Info/{0}".Format(aid), function (data) {
+                if (data.Ok) {
+                    layer.close(layerindex);
+                    var ADTitle = $("#ADTitle"),
+                        ADMSG = $("#ADMSG"),
+                        ADContact = $("#ADContact"),
+                        ADWeChat = $("#ADWeChat");
+                    ADTitle.val(data.Data.title);
+                    ADMSG.val(data.Data.desc);
+                    ADContact.val(data.Data.contact);
+                    ADWeChat.val(data.Data.wechat);
+                    var layindex = AlertActionAreaWithConfirmWithSize($(".ADEditWrapper"), "广告编辑", "300px", null, "确认编辑", null, function () {
+                        submit(aid, function () {
+                            $(me).parent().parent().find("._adtitle").html(ADTitle.val());
+                            $(me).parent().parent().find("._addesc").html(ADMSG.val());
+                            layer.close(layindex);
+                            clearEditForm();
+                        }, {
+                                title: ADTitle.val(),
+                                desc: ADMSG.val(),
+                                contact: ADContact.val(),
+                                wechat: ADWeChat.val()
+                            });
+                    }, function () { clearEditForm(); })
+                } else {
+                    layer.msg(data.Msg || "获取信息失败");
+                }
+            });
+        }
+        function clearEditForm() {
+            $("#ADTitle").val(""), $("#ADMSG").val(""), $("#ADContact").val(""), $("#ADWeChat").val("");
+        }
+        function submit(aid, callback, form) {
+            $.post("/AD/Edit/{0}".Format(aid), form, function (data) {
+                if (data.Ok) {
+                    layer.msg("编辑成功");
+                    callback();
+                } else {
+                    layer.msg(data.Msg || "编辑失败");
+                }
+            });
+        }
+
+        function adDelete(me, aid) {
+            AlertConfirm("确定删除此广告信息吗？删除后不可撤销！", "删除", "我点错了", function () {
+                $.post("/AD/Delete/{0}".Format(aid), function (data) {
+                    if (data.Ok) {
+                        layer.msg("删除成功", {
+                            time: 300,
+                            end: function () {
+                                $(me).parent().parent().remove();
+                            }
+                        });
+                    } else {
+                        layer.msg("删除失败");
+                    }
+                });
+            });
+        }
+    </script>
+}

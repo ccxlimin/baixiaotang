@@ -1,0 +1,25 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyMessage
+@{
+    ViewBag.Title = "我的消息 - 个人中心";
+    //long meID = UserBaseBLL.Instance.UserID;
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                @if (Model.ChatList.Count > 0)
+                {
+                    <div class="mod-body aw-feed-list aw-feed-list-big inbox-list">
+                        @Html.Partial("_InBoxs", Model)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "inbox");
+</script>

@@ -1,0 +1,34 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model _QuestionInfo
+@{
+    ViewBag.Title = "审核";
+}
+
+<article class="post">
+    <div class="post-head">
+        <h1><a href="javascript:history.back(-1)" class="btn btn-primary">返回审核</a></h1>
+        <h1 class="post-title">
+            <span>@Model.Title</span>
+        </h1>
+        @*标题*@
+        <div class="post-meta">
+            <span class="author">
+                作者：<a href="/user/detail/@Model.UserName" target="_blank" data-toggle="popover" data-placement="bottom">@Model.UserName</a>
+                •
+                @{
+                    string now = Convert.ToDateTime(Model.CreateTime).ToString("yyyy.MM.dd");
+                }
+                <time class="post-date" datetime="@now title=@now">
+                    @now
+                </time>
+            </span>
+        </div>
+        @*内容展示部分*@
+        <div class="post-content">
+            <p>
+                @Html.Raw(Model.Body)
+            </p>
+        </div>
+    </div>
+</article>

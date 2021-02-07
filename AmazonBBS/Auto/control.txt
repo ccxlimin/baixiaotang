@@ -1,0 +1,59 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Business;
+using Entity;
+namespace HsStock.Controllers
+{
+    public class $table$Controller : Controller
+    {       
+		$table$Biz biz = new $table$Biz();
+        
+		public ActionResult Index(int? pageIndex)
+        {
+            var query = biz.Query(pageIndex??1);
+            return View(query);
+        }
+
+        public ActionResult Create()
+        {
+            $table$ model = new $table$();
+
+            return View(model);
+        }
+
+		[HttpPost]
+        public ActionResult Create($table$ model,FormCollection form)
+        {
+            var ri = biz.Create(model);
+
+            return Json(ri);
+        }
+
+
+        public ActionResult Edit(int id)
+        {
+            var model = biz.GetModel(id);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Edit($table$ model, FormCollection form)
+        {
+            var ri = biz.Update(model);
+
+            return Json(ri);
+        }      
+
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var result = biz.Delete(id);
+            return Json(result);
+        }
+
+    }
+}

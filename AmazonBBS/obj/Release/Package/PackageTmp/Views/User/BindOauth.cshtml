@@ -1,0 +1,24 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    UserExt userext = UserExtBLL.Instance.GetExtInfo(user.UserID);
+    ViewBag.Title = "绑定 - 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                @*<div class="well-lg" style="background:#fff;">*@
+                <div class="well-lg">
+                    @Html.Raw(ViewBag.Html)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+      Leo.init("account", "login", { wxcallback: '@ViewBag.WXCallback', wxappid: '@ViewBag.WXAppID' });
+</script>

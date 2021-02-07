@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F606633A-ABC5-44D0-9943-59DD44A7AE56}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AmazonBBS.DAL</RootNamespace>
+    <AssemblyName>AmazonBBS.DAL</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutDAL.cs" />
+    <Compile Include="ActivityDAL.cs" />
+    <Compile Include="ActivityFeeDAL.cs" />
+    <Compile Include="ActivityJoinDAL.cs" />
+    <Compile Include="ADDAL.cs" />
+    <Compile Include="AnswerDAL.cs" />
+    <Compile Include="ArticleDAL.cs" />
+    <Compile Include="Auto\Auto_AboutDAL.cs" />
+    <Compile Include="Auto\Auto_ActivityDAL.cs" />
+    <Compile Include="Auto\Auto_ActivityFeeDAL.cs" />
+    <Compile Include="Auto\Auto_ActivityJoinDAL.cs" />
+    <Compile Include="Auto\Auto_ADDAL.cs" />
+    <Compile Include="Auto\Auto_BBSEnumDAL.cs" />
+    <Compile Include="Auto\Auto_BXTOrderDAL.cs" />
+    <Compile Include="Auto\Auto_ClickMsgDAL.cs" />
+    <Compile Include="Auto\Auto_CommentDAL.cs" />
+    <Compile Include="Auto\Auto_EditLogDAL.cs" />
+    <Compile Include="Auto\Auto_EmailNoticeDAL.cs" />
+    <Compile Include="Auto\Auto_FeeAnswerLogDAL.cs" />
+    <Compile Include="Auto\Auto_FeeHRDAL.cs" />
+    <Compile Include="Auto\Auto_GiftFeeDAL.cs" />
+    <Compile Include="Auto\Auto_InviteInterviewDAL.cs" />
+    <Compile Include="Auto\Auto_JobCommentDAL.cs" />
+    <Compile Include="Auto\Auto_JobDAL.cs" />
+    <Compile Include="Auto\Auto_JobTradeDAL.cs" />
+    <Compile Include="Auto\Auto_JoinItemAnswerExtDAL.cs" />
+    <Compile Include="Auto\Auto_JoinItemQuestionExtDAL.cs" />
+    <Compile Include="Auto\Auto_LeaveWordDAL.cs" />
+    <Compile Include="Auto\Auto_MasterDAL.cs" />
+    <Compile Include="Auto\Auto_MenuBelongTagDAL.cs" />
+    <Compile Include="Auto\Auto_NewsDAL.cs" />
+    <Compile Include="Auto\Auto_NoticeDAL.cs" />
+    <Compile Include="Auto\Auto_OAuthDAL.cs" />
+    <Compile Include="Auto\Auto_PayCBLogDAL.cs" />
+    <Compile Include="Auto\Auto_ProductBuyDAL.cs" />
+    <Compile Include="Auto\Auto_ProductDAL.cs" />
+    <Compile Include="Auto\Auto_QiuZhiDAL.cs" />
+    <Compile Include="Auto\Auto_QuestionDAL.cs" />
+    <Compile Include="Auto\Auto_ScoreCoinLogDAL.cs" />
+    <Compile Include="Auto\Auto_SendCVDAL.cs" />
+    <Compile Include="Auto\Auto_ShareLinkDAL.cs" />
+    <Compile Include="Auto\Auto_ShareRegistLogDAL.cs" />
+    <Compile Include="Auto\Auto_SiteHeadDAL.cs" />
+    <Compile Include="Auto\Auto_SlideDAL.cs" />
+    <Compile Include="Auto\Auto_SoftLinkDAL.cs" />
+    <Compile Include="Auto\Auto_SoftLinkTypeDAL.cs" />
+    <Compile Include="Auto\Auto_SuggestSiteDAL.cs" />
+    <Compile Include="Auto\Auto_TagDAL.cs" />
+    <Compile Include="Auto\Auto_UserBaseDAL.cs" />
+    <Compile Include="Auto\Auto_UserLikeDAL.cs" />
+    <Compile Include="Auto\Auto_UserScoreDAL.cs" />
+    <Compile Include="Auto\Auto_UserExtDAL.cs" />
+    <Compile Include="Auto\Auto_AnswerDAL.cs" />
+    <Compile Include="Auto\Auto_PriseDAL.cs" />
+    <Compile Include="Auto\Auto_GiftDAL.cs" />
+    <Compile Include="Auto\Auto_UserGiftDAL.cs" />
+    <Compile Include="Auto\Auto_ArticleDAL.cs" />
+    <Compile Include="Auto\Auto_ChatDAL.cs" />
+    <Compile Include="Auto\Auto_VIPHeadDAL.cs" />
+    <Compile Include="Auto\Auto_ZhaoPinDAL.cs" />
+    <Compile Include="BXTOrderDAL.cs" />
+    <Compile Include="ChatDAL.cs" />
+    <Compile Include="ClickMsgDAL.cs" />
+    <Compile Include="CommentDAL.cs" />
+    <Compile Include="EditLogDAL.cs" />
+    <Compile Include="EmailNoticeDAL.cs" />
+    <Compile Include="FeeHRDAL.cs" />
+    <Compile Include="GiftDAL.cs" />
+    <Compile Include="GiftFeeDAL.cs" />
+    <Compile Include="InviteInterviewDAL.cs" />
+    <Compile Include="JobCommentDAL.cs" />
+    <Compile Include="JobDAL.cs" />
+    <Compile Include="JobTradeDAL.cs" />
+    <Compile Include="JoinItemAnswerExtDAL.cs" />
+    <Compile Include="JoinItemQuestionExtDAL.cs" />
+    <Compile Include="LeaveWordDAL.cs" />
+    <Compile Include="MenuBelongTagDAL.cs" />
+    <Compile Include="NewsDAL.cs" />
+    <Compile Include="NoticeDAL.cs" />
+    <Compile Include="OAuthDAL.cs" />
+    <Compile Include="PayCBLogDAL.cs" />
+    <Compile Include="ProductBuyDAL.cs" />
+    <Compile Include="ProductDAL.cs" />
+    <Compile Include="PVDAL.cs" />
+    <Compile Include="QiuZhiDAL.cs" />
+    <Compile Include="SendCVDAL.cs" />
+    <Compile Include="ShareLinkDAL.cs" />
+    <Compile Include="ShareRegistLogDAL.cs" />
+    <Compile Include="SiteHeadDAL.cs" />
+    <Compile Include="SlideDAL.cs" />
+    <Compile Include="SoftLinkDAL.cs" />
+    <Compile Include="SoftLinkTypeDAL.cs" />
+    <Compile Include="SuggestSiteDAL.cs" />
+    <Compile Include="TagDAL.cs" />
+    <Compile Include="UserGiftDAL.cs" />
+    <Compile Include="UserLikeDAL.cs" />
+    <Compile Include="BBSEnumDAL.cs" />
+    <Compile Include="FeeAnswerLogDAL.cs" />
+    <Compile Include="MasterDAL.cs" />
+    <Compile Include="PriseDAL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuestionDAL.cs" />
+    <Compile Include="ScoreCoinLogDAL.cs" />
+    <Compile Include="UserBaseDAL.cs" />
+    <Compile Include="UserExtDAL.cs" />
+    <Compile Include="UserScoreDAL.cs" />
+    <Compile Include="VIPHeadDAL.cs" />
+    <Compile Include="ZhaoPinDAL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AmazonBBS.Common\AmazonBBS.Common.csproj">
+      <Project>{46c5ef58-c92e-4d95-852c-62f0ec8edb58}</Project>
+      <Name>AmazonBBS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.Model\AmazonBBS.Model.csproj">
+      <Project>{bcd6d0e5-27bb-4f7b-a510-32d5a643c287}</Project>
+      <Name>AmazonBBS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

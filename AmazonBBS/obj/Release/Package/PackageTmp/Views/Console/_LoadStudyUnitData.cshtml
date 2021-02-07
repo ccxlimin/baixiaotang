@@ -1,0 +1,86 @@
+﻿@using AmazonBBS.Model
+@model List<StudyUnit>
+@{
+    List<StudyUnit> list = Model;
+}
+@if (list.Count > 0)
+{
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover table-console-studyunitdata">
+            <caption>课程章节单元管理</caption>
+            <thead>
+                <tr>
+                    <th width="33.33%">单元序号</th>
+                    <th width="33.33%">单元名称</th>
+                    <th width="33.33%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < list.Count; i++)
+                {
+                    StudyUnit item = list[i];
+                    Guid id = item.StudyUnitId;
+                    <tr>
+                        <td>第@(i + 1)章</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a onclick="EditUnit(this,'@id')" class="btn-sm btn-primary">编辑</a>
+                            <a onclick="DeleteUnit(this,'@id',1)" class="btn-sm btn-danger">删除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function DeleteUnit(target, id) {
+            AlertConfirm("确定要删除吗？删除该章节后，该章节下所有的课时将全被删除！请核实好再进行操作！", "删除", "取消", function () {
+                $.post("/console/deleteunit/{0}".Format(id), function (d) {
+                    if (d.Ok) {
+                        Leo.msg("删除成功");
+                        $(target).parent().parent().remove();
+                    } else {
+                        Leo.msgfail("删除失败");
+                    }
+                })
+            });
+        }
+
+        function EditUnit(target, id) {
+            var element = $(target).parent().parent().children().eq(1);
+            var oldValue = $.trim(element.html());
+            layer.prompt({
+                title: '请修改并确认',
+                value: oldValue,
+                formType: 3,
+                maxlength: 20
+            },
+                function (text, index) {
+                    text = $.trim(text);
+                    if (text != oldValue) {
+                        CLOSE(index);
+                        var layerindex = LOAD();
+                        $.post("/console/EditUnitStudyUnit/{0}".Format(id), {
+                            unitName: text,
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("修改成功");
+                                element.html(text);
+                            } else {
+                                MSG(data.Msg || "修改失败");
+                            }
+                            CLOSE(layerindex);
+                        });
+                    } else {
+                        Leo.msgfail("值未改变！");
+                    }
+                });
+        }
+    </script>
+}
+else
+{
+    <div class="post">
+        暂无相关课程！
+    </div>
+}

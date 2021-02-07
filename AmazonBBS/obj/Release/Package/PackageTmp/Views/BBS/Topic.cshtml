@@ -1,0 +1,31 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model BBSListViewModel
+@{
+    ViewBag.Title = ViewBag.Topic + "板块";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Html.Partial("_LoadMenuDisplay", 1)
+<div class="clearfix">
+    <h2>
+        @(ViewBag.Topic)列表
+        <a href="/bbs/add?topic=@ViewBag.TopicCode" class="btn btn-primary">发布新贴</a>
+        <span class="btn-search-leo btn btn-primary Lfr">
+            搜索
+        </span>
+        <span style="display:inline-block;float:right;width:30%">
+            <input class="searchValue form-control" placeholder="搜索你想要的内容(标题/作者/用户)" />
+        </span>
+    </h2>
+</div>
+<div class="col-md-9 aw-mod aw-explore-list">
+    <div class="mod-body">
+        <div class="aw-common-list">
+            @Html.Partial("_Search", Model)
+        </div>
+    </div>
+</div>
+@Html.Partial("/Views/AD/Index.cshtml")
+<script>
+    Leo.init("bbs", "topic",'@ViewBag.TopicCode');
+</script>

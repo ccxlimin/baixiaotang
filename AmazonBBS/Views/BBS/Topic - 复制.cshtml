@@ -1,0 +1,51 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model BBSListViewModel
+@{
+    ViewBag.Title = ViewBag.Topic + "板块";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+}
+
+<h2>
+    @ViewBag.Topic
+    <a href="/BBS/Add?topic=@ViewBag.TopicCode" class="btn btn-primary">我要发贴</a>
+</h2>
+
+<div class="aw-mod aw-explore-list">
+    <div class="mod-body">
+        <div class="aw-common-list">
+            @foreach (var question in Model.QuestionList)
+            {
+                <div class="aw-item " data-topic-id="9,2,24,">
+                    <a class="aw-user-name hidden-xs" data-id="7705" href="/User/Detail/@question.UserID" rel="nofollow">
+                        <img src="@(question.HeadUrl??defaultheadurl)" alt="@question.UserName">
+                    </a>
+                    <div class="aw-question-content">
+                        <h4>
+                            <a target="_blank" href="/BBS/Detail/@question.QuestionId">
+                                @question.Title
+                            </a>
+                        </h4>
+                        <p>
+                            <span class="text-color-999">
+                                @question.LikeCount 人关注 •
+                                @question.CommentCount 条评论 •
+                                @question.PVCount 次浏览 •
+                                @Html.Partial("_TimeLine", question.CreateTime)
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            }
+            <div id="commentpage">
+                @Html.Partial("_PageLink", Model.QuestionPage)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Leo.init("bbs", "topic")
+</script>

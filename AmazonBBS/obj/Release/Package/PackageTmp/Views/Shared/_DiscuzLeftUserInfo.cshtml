@@ -1,0 +1,335 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model DiscuzLeftUserInfo
+@{
+    /**/
+
+    string descUrl = ConfigHelper.AppSettings("scoreName_levelName_desc_url");
+    /**/
+    bool isAuthor = ViewBag.isAuthor == null ? false : ViewBag.isAuthor;//是否作者
+
+    string baseurl = ViewBag.baseurl;
+    long currentloginuserid = ViewBag.currentUid;
+
+    //string defaultUrl = baseurl + "/Content/img/head_default.gif";
+    //可能是作者或者评论者的ID
+    long uid = Model.UserID.HasValue && Model.UserID > 0 ? Model.UserID.Value : Model.CommentUserID.Value;
+
+    ////获取积分等级表 //移到下面了
+    //List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode(), true);
+    <div id="favatar@(uid)" class="pls favatar Lusn discuz-left-userinfo">
+        @*<div class="p_pop blk bui vuimg card_gender_0" id="userinfo@uid" style="display: none; margin-top: -11px;">
+                <div class="m z">
+                    <div id="userinfo@uid_ma"></div>
+                </div>
+                <div class="i y">
+                    <div>
+                        <strong><a href="http://www.51bestseller.com/home.php?mod=space&amp;uid=8077" target="_blank" class="xi2">pengxianging</a></strong>
+                        <em>当前离线</em>
+                    </div><dl class="cl">
+                        <dt>积分</dt>
+                        <dd><a href="http://www.51bestseller.com/home.php?mod=space&amp;uid=8077&amp;do=profile" target="_blank" class="xi2">133</a></dd>
+                    </dl><div class="imicn">
+                        <a href="http://www.51bestseller.com/home.php?mod=space&amp;uid=8077&amp;do=profile" target="_blank" title="查看详细资料"><img src="static/image/common/userinfo.gif" alt="查看详细资料"></a>
+                    </div>
+                    <div id="avatarfeed"><span id="threadsortswait"></span></div>
+                </div>
+            </div>*@
+        @{
+            string authorUrl = baseurl + "/user/detail/" + (Model.UserName.IndexOf(".") > -1 ? Model.UserID.ToString() : Model.UserName);
+        }
+        <div class="avatar">
+            <a href="@authorUrl" class="avtm" target="_blank">
+                <img src="@Model.HeadUrl" />
+            </a>
+        </div>
+        @if (isAuthor)
+        {
+            <div class="pi">
+                <div class="authi">
+                    <a href="@authorUrl" target="_blank">@Model.UserName</a>
+                </div>
+                <div class="authi">
+                    <a href="@authorUrl" target="_blank">
+                        @{
+                            ViewBag.VIP = Model.VIP;
+                            ViewBag.Time = Model.VIPExpiryTime;
+                            var htm = Html.Partial("_VIP");
+                            @Html.Raw(htm)
+                        }
+                    </a>
+                </div>
+            </div>
+            <table class="currentPageTable">
+                <tr>
+                    @if (Model.SignCount == 0)
+                    {
+                        <td colspan="2">该用户从未签到</td>
+                    }
+                    else
+                    {
+                        <td class="currentPageTable-td">签到天数：</td>
+                        <td>@(Model.SignCount) 天</td>
+                    }
+                </tr>
+            </table>
+            @*if (Model.SignCount == 0)
+                {
+                    <p>该用户从未签到</p>
+                }
+                else
+                {
+                    <p style="line-height:24px;">签到天数： @(Model.SignCount) 天</p>
+                }*@
+        }
+        @{
+            //头衔或专属头衔
+            if (Model.HeadNameShowType == 1)
+            {
+                string levelName = Model.LevelName;
+                if (!string.IsNullOrEmpty(Model.LevelName))
+                {
+                    <table class="currentPageTable">
+                        <tr>
+                            <td class="currentPageTable-td" data-toggle="tooltip" title="签到次数越多则头衔越高，详情可双击查看" ondblclick="window.open('@descUrl')">
+                                <span class="currentPageTable-td-title">头<span style="text-indent:2em;display:inline-block;">衔：</span></span>
+                            </td>
+                            <td>
+                                @{
+                                    string levelNameUrls = Model.LevelNameUrls;
+                                    string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                                    if (imgs != null)
+                                    {
+                                        foreach (string imgSrc in imgs)
+                                        {
+                                            <img width="24" height="24" src="@imgSrc" alt="@levelName" data-toggle="tooltip" title="@levelName" />
+                                        }
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                    @*<p class="@(isAuthor?string.Empty:"commentLevel")">
+                        <span class="Lvam">头<span style="text-indent:2em;display:inline-block;">衔：</span></span>
+                        @{
+                            string levelNameUrls = Model.LevelNameUrls;
+                            string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                            if (imgs != null)
+                            {
+                                foreach (string imgSrc in imgs)
+                                {
+                                    <img width="22" height="22" src="@imgSrc" alt="@levelName" data-toggle="tooltip" title="@levelName" />
+                                }
+                            }
+                        }*@
+                    @*<img data-toggle="tooltip" title="@Model.LevelName" width="24" height="24" src="/Content/img/LevelLogo/levelname_@(Model.LevelName).png" />*@
+                    @*@Model.LevelName*@
+                    @*</p>*@
+                }
+            }
+            else
+            {
+                if (!string.IsNullOrEmpty(Model.OnlyLevelName))
+                {
+                    <table class="currentPageTable">
+                        <tr>
+                            <td class="currentPageTable-td" data-toggle="tooltip" title="专属头衔由管理员赠送，详情可双击查看" ondblclick="window.open('@descUrl')">
+                                <span class="currentPageTable-td-title">专属头衔：</span>
+                            </td>
+                            <td>
+                                <img data-toggle="tooltip" title="@Model.OnlyLevelName" width="24" height="24" src="/Content/img/LevelLogo/onlylevelname_@(Model.OnlyLevelName).png" />
+                            </td>
+                        </tr>
+                    </table>
+                    @*<p class="@(isAuthor?string.Empty:"commentLevel")">
+                        <span class="Lvam">专属头衔：</span>
+                        <img data-toggle="tooltip" title="@Model.OnlyLevelName" width="24" height="24" src="/Content/img/LevelLogo/onlylevelname_@(Model.OnlyLevelName).png" />*@
+                    @*<span class="Lvam">@Model.OnlyLevelName</span>*@
+                    @*</p>*@
+                }
+            }
+        }
+        @if (isAuthor)
+        {
+            @*<p>
+                    <em>
+                        <a href="http://www.51bestseller.com/home.php?mod=spacecp&amp;ac=usergroup&amp;gid=11" target="_blank">注册会员</a>
+                    </em>
+                </p>*@
+            @*<p>
+                    <span id="g_up@uid">
+                        <img src="static/image/common/star_level2.gif" alt="Rank: 2">
+                    </span>
+                </p>*@
+            @*<div id="g_up@uid_menu" class="tip tip_4" style="display: none;">
+                    <div class="tip_horn"></div>
+                    <div class="tip_c">注册会员, 积分 133, 距离下一级还需 67 积分</div>
+                </div>*@
+            @*<p>
+                    <span class="Lvam">社区等级：</span>
+                    @{
+                        //获取积分等级表
+                        List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode(), true);
+                        int userScore = Model.TotalScore;
+                        var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                        var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                        if (item != null)
+                        {
+                            string title = nextItem == null ? "，全站最高等级啦！" : "，下一级还需" + (nextItem.SortIndex - userScore) + "积分升级到:" + nextItem.EnumDesc;
+                            //循环计算等级称号
+                            int loopCount = scoreLevelList.Count;
+                            for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                            {
+                                var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                if (findItem != null)
+                                {
+                                    <img width="22" height="22" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" alt="@item.EnumDesc" data-toggle="tooltip" title="当前等级:@item.EnumDesc@title" />
+                                    if (userScore > 0 && findItem.SortIndex > 0)
+                                    {
+                                        userScore -= findItem.SortIndex.Value;
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                                else
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                </p>*@
+            <table class="currentPageTable">
+                <tr>
+                    <td class="currentPageTable-td" data-toggle="tooltip" title="签到、提问、点赞和回答问题可以获取积分，详情可双击查看" ondblclick="window.open('@descUrl')">社区等级：</td>
+                    <td>
+                        @{
+                            //获取积分等级表
+                            List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode(), true);
+                            int userScore = Model.TotalScore;
+                            var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                            var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                            if (item != null)
+                            {
+                                string title = nextItem == null ? "，全站最高等级啦！" : "，下一级还需" + (nextItem.SortIndex - userScore) + "积分升级到:" + nextItem.EnumDesc;
+                                //循环计算等级称号
+                                int loopCount = scoreLevelList.Count;
+                                for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                                {
+                                    var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                    if (findItem != null)
+                                    {
+                                        <img width="24" height="24" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" alt="@item.EnumDesc" data-toggle="tooltip" title="当前等级:@item.EnumDesc@title" />
+                                        if (userScore > 0 && findItem.SortIndex > 0)
+                                        {
+                                            userScore -= findItem.SortIndex.Value;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <span class="pbg2" id="upgradeprogress_@uid">
+                    @if (nextItem == null)
+                    {
+                        <span class="pbr2" style="width:100%;" title="积分：@(Model.TotalScore)， 已到顶级"></span>
+                    }
+                    else
+                    {
+                        <span class="pbr2" style="width:@(100 * userScore / nextItem.SortIndex)%;" title="积分：@(userScore)， 距离下一级还需 @(nextItem.SortIndex - userScore) 分"></span>
+                    }
+                </span>
+            </p>
+            @*<div id="g_up@uid_menu" class="tip tip_4" style="display: none;">
+                    <div class="tip_horn"></div>
+                    <div class="tip_c">注册会员, 积分 133, 距离下一级还需 67 积分</div>
+                </div>*@
+            <dl class="pil cl">
+                <dt>积分：</dt>
+                <dd>
+                    <span class="xi2">@Model.TotalScore</span>
+                </dd>
+            </dl>
+            <dl class="pil cl">
+                <dt>VIP分：</dt>
+                <dd>
+                    <span class="xi2">@Model.TotalCoin</span>
+                </dd>
+            </dl>
+            <div class="tns xg2">
+                <table cellspacing="0" cellpadding="0">
+                    <tr>
+                        <th>
+                            <p>
+                                <a href="/user/detail/@(uid)#question" class="xi2">@Model.User_BBS_Count</a>
+                            </p>贴吧
+                        </th>
+                        <th>
+                            <p>
+                                <a href="/user/detail/@(uid)#article" class="xi2">@Model.User_Article_Count</a>
+                            </p>文章
+                        </th>
+                        <td>
+                            <p>
+                                <a href="/user/detail/@(uid)#fans" class="xi2">@Model.User_Fans_Count</a>
+                            </p>粉丝
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            if (Model.Questions_3 != null && Model.Questions_3.Count > 0)
+            {
+                <dl class="pil cl">相关帖子：</dl>
+                foreach (var q in Model.Questions_3)
+                {
+                    <dl class="pil cl only_one_line">
+                        <a href="/bbs/detail/@q.QuestionId" target="_blank" title="@q.Title">@q.Title</a>
+                    </dl>
+                }
+            }
+            if (Model.Articles_3 != null && Model.Articles_3.Count > 0)
+            {
+                <dl class="pil cl">相关文章：</dl>
+                foreach (var a in Model.Articles_3)
+                {
+                    <dl class="pil cl only_one_line">
+                        <a href="/article/detail/@a.ArticleId" target="_blank" title="@a.Title">@a.Title</a>
+                    </dl>
+                }
+            }
+        }
+        @if (currentloginuserid != uid)
+        {
+            if (isAuthor)
+            {
+                <ul class="plso cl">
+                    <li class="pm2">
+                        <a title="发消息" class="xi2 btn_sendMsg" data-id="@uid" data-name="@Model.UserName">发消息</a>
+                    </li>
+                </ul>
+            }
+            else
+            {
+                <ul class="plso cl" style="margin-left:0 !important;margin-right:0 !important;">
+                    <li class="pm2" style="float:none;margin:auto;">
+                        <a title="发消息" class="xi2 btn_sendMsg" data-id="@uid" data-name="@Model.UserName">发消息</a>
+                    </li>
+                </ul>
+            }
+        }
+    </div>
+}

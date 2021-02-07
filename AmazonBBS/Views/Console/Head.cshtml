@@ -1,0 +1,84 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model  List<SiteHead>
+@{
+    ViewBag.Title = "系统头像";
+    List<SiteHead> list = Model;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <a class="btn-primary btn" onclick="addNewHead()">新增头像</a>
+        @if (list.Count > 0)
+        {
+            <table class="manageUserTable table table-bordered table-hover">
+                <caption>头像管理</caption>
+                <thead>
+                    <tr>
+                        <th width="33%">头像</th>
+                        <th width="33%">添加时间</th>
+                        <th width="33%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (SiteHead item in Model)
+                        {
+                            <tr>
+                                <td><img width="30" height="30" src="@item.HeadImg" /></td>
+                                <td>@item.CreateTime</td>
+                                <td>
+                                    <a onclick="Delete(this,@item.SiteHeadId)" class="btn-sm btn-danger">删除</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+<div id="newHeadWrap" class="Lmg20 Ldn">
+    <div class="form-horizontal">
+        <div class="form-group">
+            <div class="col-md-12">系统头像(最好为正文形)</div>
+            <div class="col-md-12">
+                <input id="systemHead" class="form-control" type="file" />
+            </div>
+        </div>
+        <div class="form-group Ltac">
+            <a class="btn-subHeadImg btn btn-primary">确定</a>
+        </div>
+    </div>
+</div>
+<script>
+    function addNewHead() {
+        var layerIndex = AlertDiv("#newHeadWrap", "350px", "200px", "新增系统头像");
+        Leo.SendFile("/Console/AddHeadIMG", $("#systemHead")[0], !1, function (data) {
+            CLOSE(layerIndex);
+            if (data.Ok) {
+                MSG("添加成功", function () { location.reload(!0); })
+            } else {
+                MSG("添加失败");
+            }
+        }, ".btn-subHeadImg");
+    }
+    function Delete(target, id) {
+        AlertConfirm("确定删除该头像吗？", "确定删除", "我再想想", function () {
+            var layerindex = LOAD("正在删除头像中");
+            $.post("/Console/DeleteHead/{0}".Format(id), function (data) {
+                if (data.Ok) {
+                    MSG("删除成功");
+                    $(target).parent().parent().remove();
+                }
+                else {
+                    MSG("删除失败");
+                }
+            });
+        });
+    }
+</script>

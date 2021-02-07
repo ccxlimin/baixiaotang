@@ -1,0 +1,736 @@
+﻿--人才招聘(以论坛帖子形式)
+--人才求职、产品服务、数据分析、百晓堂课程、百晓堂主页(以淘宝店铺窗口形式)
+
+insert into BBSEnum (EnumType,EnumDesc,EnumCode,Url,IsBBS,SortIndex,CreateTime,CreateUser,UpdateTime,UpdateUser,IsDelete)
+VALUES
+(1,'开发','Develop','',1,1,getdate(),'system',getdate(),'system',0),
+(1,'运营','Running','',1,2,getdate(),'system',getdate(),'system',0),
+(1,'推广','SEO','',1,3,getdate(),'system',getdate(),'system',0),
+(1,'其他','Other','',1,4,getdate(),'system',getdate(),'system',0),
+(1,'文章','Article','',0,5,getdate(),'system',getdate(),'system',0),
+(1,'活动','Party','',0,6,getdate(),'system',getdate(),'system',0),
+(1,'礼物兑换','Gift','',0,7,getdate(),'system',getdate(),'system',0),
+
+(1,'导航','SoftLink','',0,8,getdate(),'system',getdate(),'system',0),
+
+(1,'招聘','ZhaoPin','',2,9,getdate(),'system',getdate(),'system',0),
+(1,'求职','QiuZhi','',2,10,getdate(),'system',getdate(),'system',0),
+(1,'产品服务','ChanPinFuWu','',0,11,getdate(),'system',getdate(),'system',0),
+(1,'数据分析','ShuJuFenXi','',0,12,getdate(),'system',getdate(),'system',0),
+(1,'课程','BXTKeCheng','',0,13,getdate(),'system',getdate(),'system',0),
+(1,'主页','BXTZhuYe','',0,14,getdate(),'system',getdate(),'system',0)
+
+
+--帐号封禁
+alter table userext add CloseTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'账号封禁到期时间',N'SCHEMA',N'dbo',N'table',N'userext',N'column',N'CloseTime'
+go
+
+--精华、热门、置顶
+alter table Question add IsJinghua int
+go
+execute sp_addextendedproperty N'MS_Description',N'精华贴',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'IsJinghua'
+alter table Question add IsRemen int
+go
+execute sp_addextendedproperty N'MS_Description',N'热门贴',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'IsRemen'
+go
+alter table Question add IsTop int
+go
+execute sp_addextendedproperty N'MS_Description',N'置顶贴',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'IsTop'
+go
+
+--礼物兑换表 
+alter table Gift add GType int 
+go
+execute sp_addextendedproperty N'MS_Description',N'兑换类型(1-礼物 2-数据分析 3-百晓堂课程)',N'SCHEMA',N'dbo',N'table',N'Gift',N'column',N'GType'
+
+--审核
+alter table Question add IsNeedCheck int 
+go
+execute sp_addextendedproperty N'MS_Description',N'需要审核（0  不需要审核 1  未审核  2 已审核 ）',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'IsNeedCheck'
+
+
+--用户法人认证
+alter table UserExt add RealName nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'真实姓名',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'RealName'
+go
+alter table UserExt add CardID varchar(18)
+go
+execute sp_addextendedproperty N'MS_Description',N'身份证号码',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'CardID'
+go
+alter table UserExt add CompanyName nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'公司名称',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'CompanyName'
+go
+alter table UserExt add CompanyTel varchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'公司联系电话',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'CompanyTel'
+go
+
+
+--用户基本表
+alter table UserBase add Gender int
+go
+execute sp_addextendedproperty N'MS_Description',N'性别',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'Gender'
+go
+
+alter table UserBase add Province nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'所在省',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'Province'
+go
+
+alter table UserBase add City nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'所在市',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'City'
+go
+
+alter table UserBase add County nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'所在县',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'County'
+go
+
+alter table UserBase add Birth varchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'出生年月日',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'Birth'
+go
+
+alter table UserBase add Work nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'岗位',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'Work'
+go
+
+alter table UserBase add JingYing nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'经营类目',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'JingYing'
+go
+
+alter table UserBase add WorkYear nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'工作年限',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'WorkYear'
+go
+alter table UserBase add LoginTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'登录时间',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'LoginTime'
+go
+alter table UserBase add LoginIP varchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'登录IP地址',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'LoginIP'
+go
+
+
+--问题表 优秀回答
+alter table Question add NiceAnswerId bigint
+go
+execute sp_addextendedproperty N'MS_Description',N'优秀回答',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'NiceAnswerId'
+go
+
+--求职
+alter table QiuZhi add SelfAssessment nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'自我评价',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'SelfAssessment'
+go
+
+alter table QiuZhi add JianLiPic nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'照片简历',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'JianLiPic'
+go
+
+alter table QiuZhi add PayType int
+go
+execute sp_addextendedproperty N'MS_Description',N'支付方式',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'PayType'
+go
+
+alter table QiuZhi add IsPay int
+go
+execute sp_addextendedproperty N'MS_Description',N'是否支付',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'IsPay'
+go
+
+alter table QiuZhi add JianLiWord nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'文档简历',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'JianLiWord'
+go
+
+--招聘
+alter table ZhaoPin add JobWord nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'职位描述文档',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'JobWord'
+go
+
+alter table ZhaoPin add JobPic nvarchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'职位描述照片',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'JobPic'
+go
+
+alter table ZhaoPin add PayType int
+go
+execute sp_addextendedproperty N'MS_Description',N'支付方式',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'PayType'
+go
+
+alter table ZhaoPin add IsPay int
+go
+execute sp_addextendedproperty N'MS_Description',N'是否支付',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'IsPay'
+go
+
+alter table ZhaoPin add CDesc nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'公司简介',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'CDesc'
+go
+
+--活动
+alter table Activity add IsDelete int
+go
+execute sp_addextendedproperty N'MS_Description',N'',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'IsDelete'
+go
+
+--招聘求职消费记录
+alter table FeeHR add FeeCoin int
+go
+execute sp_addextendedproperty N'MS_Description',N'消费金额',N'SCHEMA',N'dbo',N'table',N'FeeHR',N'column',N'FeeCoin'
+go
+alter table FeeHR add FeeCoinType int
+go
+execute sp_addextendedproperty N'MS_Description',N'消费金额类型(1积分 2金钱/VIP分)',N'SCHEMA',N'dbo',N'table',N'FeeHR',N'column',N'FeeCoinType'
+go
+
+--------------------------------2018.5.28
+
+alter table SoftLinkType add SoftLinkColor varchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'导航名颜色',N'SCHEMA',N'dbo',N'table',N'SoftLinkType',N'column',N'SoftLinkColor'
+go
+alter table SoftLinkType add SoftLinkLogo varchar(100)
+go
+execute sp_addextendedproperty N'MS_Description',N'导航logo',N'SCHEMA',N'dbo',N'table',N'SoftLinkType',N'column',N'SoftLinkLogo'
+go
+
+--导航
+alter table SoftLink add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'SoftLink',N'column',N'PVCount'
+go
+update SoftLink set PVCount=0
+
+--招聘
+alter table ZhaoPin add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'PVCount'
+go
+update ZhaoPin set PVCount=0
+
+--求职
+alter table QiuZhi add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'PVCount'
+go
+update QiuZhi set PVCount=0
+
+--产品
+alter table Product add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'PVCount'
+go
+update Product set PVCount=0
+
+--主页
+alter table About add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'About',N'column',N'PVCount'
+go
+update About set PVCount=0
+
+--20180529
+--产品图片
+alter table Product add ProductPic nvarchar(500) 
+go
+execute sp_addextendedproperty N'MS_Description',N'产品图片',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'ProductPic'
+go
+alter table Product add Contact nvarchar(20) 
+go
+execute sp_addextendedproperty N'MS_Description',N'联系方式',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'Contact'
+go
+
+--新闻
+alter table News add PVCount bigint default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'浏览量',N'SCHEMA',N'dbo',N'table',N'News',N'column',N'PVCount'
+go
+update News set PVCount=0
+
+
+--职位
+alter table ZhaoPin add JobRequire nvarchar(200) 
+go
+execute sp_addextendedproperty N'MS_Description',N'职位要求',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'JobRequire'
+go
+
+--扩展 
+alter table UserExt add CardPic nvarchar(50) 
+go
+execute sp_addextendedproperty N'MS_Description',N'身份证（照片）',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'CardPic'
+go
+alter table UserExt add FaRenPic nvarchar(50) 
+go
+execute sp_addextendedproperty N'MS_Description',N'法人执照',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'FaRenPic'
+go
+
+--文章
+alter table Article add IsChecked int
+go
+execute sp_addextendedproperty N'MS_Description',N'需要审核（ 1  未审核  2 不需要审核/已审核 3 审核不通过 ）',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'IsChecked'
+go
+update Article set IsChecked=2
+
+--活动
+alter table Activity add IsChecked int
+go
+execute sp_addextendedproperty N'MS_Description',N'需要审核（ 1  未审核  2 不需要审核/已审核 3 审核不通过 ）--用户发布的活动要审核',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'IsChecked'
+go
+update Activity set IsChecked=2
+
+
+--修改联系方式字段类型
+alter table Product alter column Contact nvarchar(50)
+alter table QiuZhi alter column Contact nvarchar(50)
+alter table ZhaoPin alter column Contact nvarchar(50)
+
+
+
+--VIP
+alter table UserExt add VIP int default 0
+go
+execute sp_addextendedproperty N'MS_Description',N'VIP标签（1，2，3……等级无上限）',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'VIP'
+go
+update UserExt set VIP=0
+go
+alter table UserExt add VIPExpiryTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'VIP有效时间',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'VIPExpiryTime'
+go
+
+alter table UserExt add HeadNameShowType int
+go
+execute sp_addextendedproperty N'MS_Description',N'头衔显示类型(1头衔(默认)   2专属头衔)',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'HeadNameShowType'
+go
+update UserExt set HeadNameShowType=1
+go
+
+alter table UserBase add OpenId varchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'第三方登录ID',N'SCHEMA',N'dbo',N'table',N'UserBase',N'column',N'OpenId'
+go
+
+
+
+
+
+
+
+------从此处开始 20180609
+alter table BBSEnum add FontColor varchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'字体颜色',N'SCHEMA',N'dbo',N'table',N'BBSEnum',N'column',N'FontColor'
+go
+update BBSEnum set FontColor='#ff552e' where EnumType=1
+go
+
+alter table BBSEnum add FontBGColor varchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'字体底色',N'SCHEMA',N'dbo',N'table',N'BBSEnum',N'column',N'FontBGColor'
+go
+update BBSEnum set FontBGColor='#ffff00' where EnumType=1
+go
+
+alter table BBSEnum add PageBGColor varchar(50)
+go
+execute sp_addextendedproperty N'MS_Description',N'页面底色',N'SCHEMA',N'dbo',N'table',N'BBSEnum',N'column',N'PageBGColor'
+go
+update BBSEnum set PageBGColor='#ebebeb' where EnumType=1
+
+----------------------------------------
+alter table ZhaoPin add IsJinghua int
+go
+execute sp_addextendedproperty N'MS_Description',N'精华',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'IsJinghua'
+go
+update ZhaoPin set IsJinghua=0
+go
+
+alter table ZhaoPin add IsRemen int
+go
+execute sp_addextendedproperty N'MS_Description',N'热门',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'IsRemen'
+go
+update ZhaoPin set IsRemen=0
+go
+
+alter table ZhaoPin add IsTop int
+go
+execute sp_addextendedproperty N'MS_Description',N'置顶',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'IsTop'
+go
+update ZhaoPin set IsTop=0
+
+
+alter table QiuZhi add IsJinghua int
+go
+execute sp_addextendedproperty N'MS_Description',N'精华',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'IsJinghua'
+go
+update QiuZhi set IsJinghua=0
+go
+
+alter table QiuZhi add IsRemen int
+go
+execute sp_addextendedproperty N'MS_Description',N'热门',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'IsRemen'
+go
+update QiuZhi set IsRemen=0
+go
+
+alter table QiuZhi add IsTop int
+go
+execute sp_addextendedproperty N'MS_Description',N'置顶',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'IsTop'
+go
+update QiuZhi set IsTop=0
+
+
+alter table Product add IsJinghua int
+go
+execute sp_addextendedproperty N'MS_Description',N'精华',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'IsJinghua'
+go
+update Product set IsJinghua=0
+go
+
+alter table Product add IsRemen int
+go
+execute sp_addextendedproperty N'MS_Description',N'热门',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'IsRemen'
+go
+update Product set IsRemen=0
+go
+
+alter table Product add IsTop int
+go
+execute sp_addextendedproperty N'MS_Description',N'置顶',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'IsTop'
+go
+update Product set IsTop=0
+
+
+
+alter table UserExt add CheckBBS int
+go
+execute sp_addextendedproperty N'MS_Description',N'发贴需要审核(0不需要审核 1需要审核)',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'CheckBBS'
+go
+update UserExt set CheckBBS=0
+
+
+--修改字段长度
+alter table UserBase alter column UserName varchar(100)
+
+alter table Question add EditCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'修改次数',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'EditCount'
+go
+update Question set EditCount=0
+
+alter table Question add FilePath nvarchar(100)
+go
+execute sp_addextendedproperty N'MS_Description',N'附件路径',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'FilePath'
+go
+
+alter table ZhaoPin add WorkeType int
+go
+execute sp_addextendedproperty N'MS_Description',N'工作性质（1 全职 2兼职）',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'WorkeType'
+go
+update ZhaoPin set WorkeType=1
+
+
+alter table ZhaoPin add WorkTime varchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'兼职周期',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'WorkTime'
+go
+
+alter table ZhaoPin add BelongJobTrade uniqueidentifier
+go
+execute sp_addextendedproperty N'MS_Description',N'行业',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'BelongJobTrade'
+go
+
+alter table ZhaoPin add BelongJob uniqueidentifier
+go
+execute sp_addextendedproperty N'MS_Description',N'岗位',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'BelongJob'
+go
+alter table ZhaoPin add JobFuLi nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'职位福利',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'JobFuLi'
+go
+alter table QiuZhi add WorkType int
+go
+execute sp_addextendedproperty N'MS_Description',N'求职类型',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'WorkType'
+go
+update QiuZhi set WorkType=1
+alter table QiuZhi add WorkTime varchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'兼职周期',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'WorkTime'
+go
+alter table QiuZhi add BelongJobTrade uniqueidentifier
+go
+execute sp_addextendedproperty N'MS_Description',N'所属行业',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'BelongJobTrade'
+go
+
+alter table QiuZhi add BelongJob uniqueidentifier
+go
+execute sp_addextendedproperty N'MS_Description',N'所属岗位',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'BelongJob'
+go
+
+alter table QiuZhi add IWantPlace nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'意向工作地点',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'IWantPlace'
+go
+alter table ZhaoPin add NeedCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'招聘人数',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'NeedCount'
+go
+update ZhaoPin set NeedCount=1
+
+alter table ActivityFee add FeeName nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'票种名称',N'SCHEMA',N'dbo',N'table',N'ActivityFee',N'column',N'FeeName'
+go
+--------
+alter table Activity add DIY1 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏1',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY1'
+go
+alter table Activity add DIY2 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏2',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY2'
+go
+alter table Activity add DIY3 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏3',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY3'
+go
+alter table Activity add DIY4 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏4',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY4'
+go
+alter table Activity add DIY5 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏5',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY5'
+go
+alter table Activity add DIY6 nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏6',N'SCHEMA',N'dbo',N'table',N'Activity',N'column',N'DIY6'
+go
+alter table ActivityJoin add DIY1 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏1',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY1'
+go
+alter table ActivityJoin add DIY2 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏2',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY2'
+go
+alter table ActivityJoin add DIY3 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏3',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY3'
+go
+alter table ActivityJoin add DIY4 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏4',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY4'
+go
+alter table ActivityJoin add DIY5 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏5',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY5'
+go
+alter table ActivityJoin add DIY6 nvarchar(200)
+go
+execute sp_addextendedproperty N'MS_Description',N'报名自定义栏6',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'DIY6'
+go
+
+alter table Article add FilePath nvarchar(100)
+go
+execute sp_addextendedproperty N'MS_Description',N'附件路径',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'FilePath'
+go
+
+alter table Article add EditCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'修改次数',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'EditCount'
+go
+update Article set EditCount=0
+
+alter table ActivityJoin add ActivityFeeId bigint
+go
+execute sp_addextendedproperty N'MS_Description',N'费用类型',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'ActivityFeeId'
+go
+
+alter table SoftLinkType alter column SoftLinkColor nvarchar(20)
+alter table SoftLinkType alter column SoftLinkLogo nvarchar(100)
+
+alter table Product add UpdateUser nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'更新人',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'UpdateUser'
+go
+alter table Product add UpdateTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'更新时间',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'UpdateUser'
+go
+
+
+alter table Product add SendDay int
+go
+execute sp_addextendedproperty N'MS_Description',N'发货天数',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'SendDay'
+go
+update Product set SendDay=30
+
+alter table Product add PWeight nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'产品重量',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'PWeight'
+go
+
+alter table Product add PUnit int
+go
+execute sp_addextendedproperty N'MS_Description',N'产品单位',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'PUnit'
+go
+update Product set PUnit=1
+
+-----------------20180816----------------
+update Product set ValidTime=30
+update ZhaoPin set ValidTime=30
+update QiuZhi set ValidTime=30
+
+
+alter table QiuZhi add UpdateUser nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'更新人',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'UpdateUser'
+go
+
+alter table ZhaoPin add UpdateUser nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'更新人',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'UpdateUser'
+go
+
+alter table Product add ValidTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'有效时间',N'SCHEMA',N'dbo',N'table',N'Product',N'column',N'ValidTime'
+go
+
+alter table ZhaoPin add ValidTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'有效时间',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'ValidTime'
+go
+
+alter table QiuZhi add ValidTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'有效时间',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'ValidTime'
+go
+
+alter table ZhaoPin add UpdateTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'更新时间',N'SCHEMA',N'dbo',N'table',N'ZhaoPin',N'column',N'UpdateTime'
+go
+
+alter table QiuZhi add UpdateTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'更新时间',N'SCHEMA',N'dbo',N'table',N'QiuZhi',N'column',N'UpdateTime'
+go
+
+alter table Article add UpdateTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'更新时间',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'UpdateTime'
+go
+
+alter table Article add UpdateUser nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'更新人',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'UpdateUser'
+go
+
+alter table Article add CreateUser nvarchar(20)
+go
+execute sp_addextendedproperty N'MS_Description',N'创建人',N'SCHEMA',N'dbo',N'table',N'Article',N'column',N'CreateUser'
+go
+
+alter table Gift add OpenJoinItem int
+go
+execute sp_addextendedproperty N'MS_Description',N'购买时是否填写资料(1 填写  0不填写）',N'SCHEMA',N'dbo',N'table',N'Gift',N'column',N'OpenJoinItem'
+go
+update Gift set OpenJoinItem=0
+
+alter table BBSEnum add GroupBy int
+go
+execute sp_addextendedproperty N'MS_Description',N'菜单分组',N'SCHEMA',N'dbo',N'table',N'BBSEnum',N'column',N'GroupBy'
+go
+
+alter table Slide add FontColor nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'字段颜色',N'SCHEMA',N'dbo',N'table',N'Slide',N'column',N'FontColor'
+go
+
+alter table UserExt add UserCenterSkin nvarchar(10)
+go
+execute sp_addextendedproperty N'MS_Description',N'用户个人中心皮肤',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'UserCenterSkin'
+go
+
+
+alter table BXTOrder add BuyCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'购买份数',N'SCHEMA',N'dbo',N'table',N'BXTOrder',N'column',N'BuyCount'
+go
+
+update BXTOrder set BuyCount=1
+
+
+alter table ActivityJoin add RealPayFee int
+go
+execute sp_addextendedproperty N'MS_Description',N'实际付费',N'SCHEMA',N'dbo',N'table',N'ActivityJoin',N'column',N'RealPayFee'
+go
+
+
+------------------------------2019-01-13
+
+alter table Question add ContentNeedPay bit
+go
+execute sp_addextendedproperty N'MS_Description',N'内容需要付费',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'ContentNeedPay'
+go
+
+alter table Question add ContentFeeType int
+go
+execute sp_addextendedproperty N'MS_Description',N'付费类型（1积分 2金钱）',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'ContentFeeType'
+go
+
+alter table Question add ContentFee int
+go
+execute sp_addextendedproperty N'MS_Description',N'内容费用',N'SCHEMA',N'dbo',N'table',N'Question',N'column',N'ContentFee'
+go
+
+
+------------------------------2019-12-24
+alter table Chat add Batch bit
+go
+execute sp_addextendedproperty N'MS_Description',N'是否批量发送消息',N'SCHEMA',N'dbo',N'table',N'Chat',N'column',N'Batch'
+go
+
+alter table Slide add SlideType int
+go
+execute sp_addextendedproperty N'MS_Description',N'轮播类型 11 左侧   21 右上 22 右下',N'SCHEMA',N'dbo',N'table',N'Slide',N'column',N'SlideType'
+go
+
+-----------------------------2020.1.2
+alter table UserExt add UserSignTotalCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'用户总签到次数',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'UserSignTotalCount'
+go
+
+alter table UserExt add UserSignContinueCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'用户总连续签到次数',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'UserSignContinueCount'
+go
+
+alter table UserExt add UserMonthSignContinueCount int
+go
+execute sp_addextendedproperty N'MS_Description',N'用户本月连续签到次数',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'UserMonthSignContinueCount'
+go
+
+alter table UserExt add UserSignTime datetime
+go
+execute sp_addextendedproperty N'MS_Description',N'用户上次签到时间',N'SCHEMA',N'dbo',N'table',N'UserExt',N'column',N'UserSignTime'
+go
+
+
+--
+alter table ScoreCoinLog alter column UserName varchar(100)
+ 

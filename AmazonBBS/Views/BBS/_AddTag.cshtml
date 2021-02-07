@@ -1,0 +1,110 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+
+}
+
+<div class="col-md-12 Lmgt5">
+    <input id="inputTag" class="form-control" placeholder="在此输入标签关键词" />
+</div>
+<div class="col-md-12 Lmgt5">
+    <a class="btn-selectTag btn btn-primary">确认添加</a>
+</div>
+<hr />
+<div class="col-md-12">
+    没有想要的标签？手动创建吧！<br />
+    <span class="Lcr Lfs12">注：每个用户每个自然月只能创建3个标签！</span>
+</div>
+<div class="col-md-12 Lmgt5">
+    <input id="newTagInput" class="form-control" placeholder="添加新标签(6字内)" />
+</div>
+<div class="col-md-12 Lmgt5">
+    <a class="btn-addNewTag btn btn-primary">创建新标签并添加</a>
+</div>
+
+<script src="~/Scripts/BootStrap-autocompleter/bootstrap.autocomplete.js"></script>
+<script>
+    $('#inputTag').autocomplete({
+        source: function (query, process) {
+            var matchCount = this.options.items;//返回结果集最大数量
+            //$.post("/Common/MatchTags", { "queryType": $("#menuType").val(), "matchKey": query }, function (data) {
+            $.post("/Common/MatchTags", { "matchKey": query }, function (data) {
+                if (data.length == 0) {
+                    Leo.msgfail("未匹配到标签！");
+                }
+                return process(data);
+            });
+        },
+        formatItem: function (item) {
+            return item["Key"];
+        },
+        setValue: function (item) {
+            return { 'data-value': item["Key"], 'real-value': item.Key + "|" + item["Value"] };
+        },
+        delay: 200
+    });
+
+    $(".btn-selectTag").click(function () {
+        var input = $("#inputTag");
+        if (Leo.tools.CheckFormNotEmpty(input, "请选择标签")) {
+            var selected = input.attr("real-value").split("|");
+            var taglistwrap = $(".TagListWrap"), nowTagList = taglistwrap.children("span"), isAdded = !1;
+            if (nowTagList.length < 3) {
+                //判断是否已添加过该标签
+                nowTagList.each(function (i, n) {
+                    var value = $(this).data("value");
+                    if (value[0] == selected[0] && value[1] == selected[1]) {
+                        isAdded = !0; return;
+                    }
+                });
+                if (!isAdded) {
+                    BuildTag(selected);
+                } else {
+                    Leo.msgfail("已存在该标签！");
+                }
+            } else {
+                Leo.msgfail("最多只能添加3个标签！");
+            }
+        }
+    });
+
+    $(".btn-addNewTag").click(function () {
+        if (Leo.tools.CheckFormNotEmpty($("#newTagInput"), "新标签名", !0)) {
+            if (Leo.tools.CheckLength($("#newTagInput").val(), 1, 10, "新标签名")) {
+                $.post("/Common/AddTag", { name: $.trim($("#newTagInput").val()), pageModel: $("#menuType").val() }, function (data) {
+                    if (data.Ok) {
+                        var selected = [$("#newTagInput").val(), data.ID.toString()];
+                        $("#newTagInput").val("");
+                        BuildTag(selected);
+                        Leo.msgsuccess(data.Msg || "新增标签成功");
+                    } else {
+                        if (data.Type == 1) {
+                            $("#inputTag").focus();
+                            $("#newTagInput").val("");
+                        }
+                        Leo.msgfail(data.Msg || "添加失败");
+                    }
+                });
+            }
+        }
+    });
+
+    function BuildTag(selected) {
+        var taglistwrap = $(".TagListWrap");
+        taglistwrap.append($("<span>").addClass("label label-success Lmgr5").attr({ "data-toggle": "tooltip", "title": "点击移除此标签！" }).text(selected[0]).data("value", selected)
+            .click(function () {
+                //关闭当前添加的标签
+                $(this).remove();
+                taglistwrap.find(".tooltip").remove();
+                taglistwrap.data("TagCount", taglistwrap.children().length);
+                $("#btn-addtag").removeClass("Ldn");
+            }));
+        layer.closeAll();
+        $("#inputTag,#newTagInput").val("");
+        Leo.ToolTip();
+        //如果达到上限3个，则隐藏添加按钮
+        if (taglistwrap.find("span").length == 3) {
+            $("#btn-addtag").addClass("Ldn");
+        }
+    }
+</script>

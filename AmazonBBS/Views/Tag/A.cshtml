@@ -1,0 +1,32 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ArticleViewModel
+@{
+    ViewBag.Title = ViewBag.Name + " - 话题";
+}
+
+<div class="clearfix">
+    <h2>
+        话题 - @ViewBag.Name
+    </h2>
+</div>
+<div class="col-md-9 aw-mod aw-explore-list">
+    <div class="mod-body">
+        @if (Model.Articles.Count > 0)
+        {
+            <div class="aw-common-list">
+                @Html.Partial("/Views/Article/_Search.cshtml", Model)
+            </div>
+        }
+        else
+        {
+            <div class="well">
+                该话题下暂时没有内容！<a href="/tag" target="_blank">更多话题</a>
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("/Views/AD/Index.cshtml")
+<script>
+    Leo.ToolTip();
+</script>

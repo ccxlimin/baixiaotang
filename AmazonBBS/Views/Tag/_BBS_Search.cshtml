@@ -1,0 +1,158 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model List<_QuestionInfo>
+@{
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    int higescore = Convert.ToInt32(ConfigHelper.AppSettings("HigeScoreFlag"));
+    //string defaultdesc = "点击查看正文内容";
+    //获取积分等级表
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+
+    long userid = UserBaseBLL.Instance.UserID;
+    bool needEditScript = false;
+}
+<style>
+</style>
+@foreach (_QuestionInfo question in Model)
+{
+    bool isshow = !question.IsAnonymous || ismaster || userid == question.UserID;
+    <div class="aw-item">
+        @if (isshow)
+        {
+            <a class="aw-user-name" href="/user/detail/@question.UserName" rel="nofollow">
+                <img src="@(question.HeadUrl ?? defaultheadurl)" onerror="javascript:this.src='/Content/img/head_default.gif'" alt="@question.UserName">
+            </a>
+        }
+        else
+        {
+            <a class="aw-user-name" >
+                <img src="~/Content/img/anonymous.png" alt="匿名用户" />
+            </a>
+        }
+        <div class="aw-question-content">
+            <h4 oncontextmenu="return !1;" style="user-select:none;">
+                @if (question.CoinType != 0)
+                {
+                    <span style="border:red 1px solid;color:red;padding:0 5px;font-size:12px;">悬赏@(question.Coin)</span>
+                    if (question.Coin >= higescore)
+                    {
+                        <span style="border:#162ff6 1px solid;color:#162ff6;padding:0 5px;font-size:12px;">高分贴</span>
+                    }
+                }
+                @if (question.IsTop == 1)
+                {
+                    <span style="border:orange 1px solid;color:orange;padding:0 5px;font-size:12px;">置顶</span>
+                }
+                @if (question.IsJinghua == 1)
+                {
+                    <img height="24" data-toggle="tooltip" title="精华贴" src="/Content/U/Site/jinghuatie.png" />
+                }
+                @if (question.IsRemen == 1)
+                {
+                    <img height="24" data-toggle="tooltip" title="热门贴" src="/Content/U/Site/rementie.png" />
+                }
+                <a target="_blank" href="/bbs/detail/@question.QuestionId">
+                    [贴吧]@question.Title
+                </a>
+                @{
+                    @Html.Partial("_UserV", question.UserV)
+                }
+            </h4>
+            @{
+                string body = HtmlRegexHelper.ToText(question.Body);
+                var length = body.Length;
+                if (length > 0)
+                {
+                    if (length > 39)
+                    {
+                        body = body.Substring(0, 39);
+                    }
+                    <div class="Lfs12">@(body)...</div>
+                }
+            }
+            <div class="user-title" oncontextmenu="return !1;">
+                @{
+                    if (isshow)
+                    {
+                        ViewBag.VIP = question.VIP;
+                        ViewBag.Time = question.VIPExpiryTime;
+                        var htm = Html.Partial("_VIP");
+                    <span style="vertical-align:middle;">
+                        @question.UserName • @Html.Raw(htm)
+                    </span>
+                        //管理员
+                        if (question.IsMaster)
+                        {
+                        <span data-toggle="tooltip" title="管理员">
+                            <img width="20" height="20" src="/Content/U/Site/master.png" />
+                        </span>
+                        }
+                        //积分等级
+                        var item = ScoreLevelList.Where(a => a.SortIndex <= question.TotalScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                        if (item != null)
+                        {
+                        <span data-toggle="tooltip" title="@item.EnumDesc">
+                            <img width="20" height="20" src="/Content/img/LevelLogo/scorelevelname_@(item.EnumDesc).png" />
+                        </span>
+                        }
+                        //头衔或专属头衔
+                        if (question.HeadNameShowType == 1)
+                        {
+                            if (!string.IsNullOrEmpty(question.LevelName))
+                            {
+                            <span data-toggle="tooltip" title="@question.LevelName">
+                                <img width="20" height="20" src="/Content/img/LevelLogo/levelname_@(question.LevelName).png" />
+                            </span>
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(question.OnlyLevelName))
+                            {
+                            <span data-toggle="tooltip" title="@question.OnlyLevelName">
+                                <img width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(question.OnlyLevelName).png" />
+                            </span>
+                            }
+                        }
+                    }
+                    <span class="itemdata">
+                        @(question.PriseCount)赞 •
+                        @(question.LikeCount)人关注 •
+                        @(question.CommentCount) 条评论 •
+                        <span class="pageviews-pv">@(question.PVCount)次浏览</span> •
+                        <span data-toggle="tooltip" title="发布时间">@Html.Partial("_TimeLine", question.CreateTime)</span>
+                        @if (question.UpdateTime != question.CreateTime)
+                        {
+                            <span data-toggle="tooltip" title="更新时间"> • @Html.Partial("_TimeLine", question.UpdateTime)</span>
+                        }
+                        @if (question.LastCommentTime.HasValue)
+                        {
+                            <span data-toggle="tooltip" title="最后回复时间">
+                                • @question.LastCommentTime.Value.ToString(2)
+                            </span>
+                        }
+                        @if (question.UserID == userid && question.EditCount < 3)
+                        {
+                            needEditScript = true;
+                            <span class="btnActionsNoPosition" data-mid="@question.QuestionId">
+                                <button class="editContent btn btn-primary btn-xs">编辑</button>
+                            </span>
+                        }
+                        @*</p>*@
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+}
+@if (needEditScript)
+{
+    <script>
+        //编辑
+        $(".editContent").click(function () {
+            location.href = "/bbs/edit/" + $(this).parent().data("mid");
+        });
+    </script>
+}

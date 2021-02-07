@@ -1,0 +1,44 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyArticleViewModel
+@{
+    string headurl = string.IsNullOrEmpty(Model.ArticleHeadUrl) ? "/Content/img/head_default.gif" : Model.ArticleHeadUrl;
+}
+<div class="col-md-12">
+    @if (Model.Articles != null)
+    {
+        <div class="aw-common-list">
+            @foreach (_Article article in Model.Articles)
+            {
+                <div class="aw-item ">
+                    <a class="aw-user-name hidden-xs" href="/user/detail/@article.UserID" rel="nofollow" data-toggle="popover" data-placement="bottom">
+                        <img src="@(headurl)" onerror="this.src = '/Content/img/head_default.gif'">
+                    </a>
+                    <div class="aw-question-content">
+                        <h4>
+                            <a target="_blank" href="/article/detail/@article.ArticleId">
+                                @article.Title
+                            </a>
+                        </h4>
+                        <p>
+                            <span class="text-color-999">
+                                @article.LikeCount 人关注 •
+                                @article.PVCount 次浏览 •
+                                @Html.Partial("_TimeLine", article.CreateTime)
+                            </span>
+                        </p>
+                    </div>
+                </div>
+            }
+        </div>
+        <div id="commentpage">
+            @Html.Partial("_Page", Model.ArticlePage)
+        </div>
+    }
+    else
+    {
+        <div class="well">
+            还没有文章！
+        </div>
+    }
+</div>

@@ -1,0 +1,1241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AmazonBBSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="About">
+    <Key>
+      <PropertyRef Name="AboutID" />
+    </Key>
+    <Property Name="AboutID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Desc" Type="nvarchar(max)" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+  </EntityType>
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="ActivityId" />
+    </Key>
+    <Property Name="ActivityId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" />
+    <Property Name="Body" Type="nvarchar(max)" />
+    <Property Name="ActivityIMG" Type="varchar" MaxLength="500" />
+    <Property Name="ActivityType" Type="int" />
+    <Property Name="Address" Type="nvarchar" MaxLength="100" />
+    <Property Name="BeginTime" Type="datetime" />
+    <Property Name="EndTime" Type="datetime" />
+    <Property Name="CanJoinOnBegin" Type="int" />
+    <Property Name="JoinBeginTime" Type="datetime" />
+    <Property Name="JoinEndTime" Type="datetime" />
+    <Property Name="ActivityCreateTIme" Type="datetime" />
+    <Property Name="PVCount" Type="bigint" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="IsChecked" Type="int" />
+  </EntityType>
+  <EntityType Name="ActivityFee">
+    <Key>
+      <PropertyRef Name="ActivityFeeId" />
+    </Key>
+    <Property Name="ActivityFeeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FeeType" Type="int" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FeeCount" Type="int" />
+    <Property Name="ActivityId" Type="bigint" />
+    <Property Name="FeeName" Type="nvarchar" MaxLength="15" />
+  </EntityType>
+  <EntityType Name="ActivityJoin">
+    <Key>
+      <PropertyRef Name="ActivityJoinId" />
+    </Key>
+    <Property Name="ActivityJoinId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ActivityId" Type="bigint" />
+    <Property Name="JoinUserID" Type="bigint" />
+    <Property Name="JoinUserName" Type="nvarchar" MaxLength="20" />
+    <Property Name="FeeType" Type="int" />
+    <Property Name="IsFeed" Type="int" />
+    <Property Name="JoinTime" Type="datetime" />
+    <Property Name="JoinCount" Type="int" />
+    <Property Name="LinkMan" Type="nvarchar" MaxLength="20" />
+    <Property Name="LinkTel" Type="nvarchar" MaxLength="20" />
+    <Property Name="ActivityFeeId" Type="bigint" />
+    <Property Name="RealPayFee" Type="decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="AD">
+    <Key>
+      <PropertyRef Name="ADID" />
+    </Key>
+    <Property Name="ADID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ADIMG" Type="varchar" MaxLength="200" />
+    <Property Name="ADTitle" Type="nvarchar" MaxLength="100" />
+    <Property Name="ADMsg" Type="nvarchar(max)" />
+    <Property Name="ADContact" Type="nvarchar" MaxLength="50" />
+    <Property Name="ADWeChat" Type="varchar" MaxLength="50" />
+    <Property Name="ADViewCount" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Against">
+    <Key>
+      <PropertyRef Name="AgainstId" />
+    </Key>
+    <Property Name="AgainstId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="TargetID" Type="bigint" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="AgainstTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="AnswerId" />
+    </Key>
+    <Property Name="AnswerId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="QuestionId" Type="bigint" />
+    <Property Name="AnswerUserId" Type="bigint" />
+    <Property Name="AnswerContent" Type="text" />
+    <Property Name="IsCanSee" Type="int" />
+    <Property Name="CoinType" Type="int" />
+    <Property Name="NeedCoin" Type="int" />
+    <Property Name="AType" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="ReplyTopAnswerId" Type="bigint" />
+    <Property Name="ReplyToUserID" Type="bigint" />
+    <Property Name="ReplyToAnswerID" Type="bigint" />
+  </EntityType>
+  <EntityType Name="Article">
+    <Key>
+      <PropertyRef Name="ArticleId" />
+    </Key>
+    <Property Name="ArticleId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" />
+    <Property Name="Body" Type="nvarchar(max)" />
+    <Property Name="PVCount" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="IsChecked" Type="int" />
+    <Property Name="FilePath" Type="nvarchar" MaxLength="100" />
+    <Property Name="EditCount" Type="int" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="ContentNeedPay" Type="bit" />
+    <Property Name="ContentFeeType" Type="int" />
+    <Property Name="ContentFee" Type="int" />
+    <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AttachMent">
+    <Key>
+      <PropertyRef Name="AttachMentId" />
+    </Key>
+    <Property Name="AttachMentId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MainId" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="int" Nullable="false" />
+    <Property Name="FileName" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="FilePath" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="FileSize" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="DownCount" Type="int" Nullable="false" />
+    <Property Name="IsFee" Type="bit" Nullable="false" />
+    <Property Name="Fee" Type="int" Nullable="false" />
+    <Property Name="FeeType" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AttachMentBuyLog">
+    <Key>
+      <PropertyRef Name="AttachMentBuyLogId" />
+    </Key>
+    <Property Name="AttachMentBuyLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainID" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="int" Nullable="false" />
+    <Property Name="AttachMentId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="BuyerId" Type="bigint" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AutoReply">
+    <Key>
+      <PropertyRef Name="AutoReplyId" />
+    </Key>
+    <Property Name="AutoReplyId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="OrderType" Type="int" Nullable="false" />
+    <Property Name="ItemID" Type="bigint" Nullable="false" />
+    <Property Name="Content" Type="nvarchar" MaxLength="500" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AutoReplyItem">
+    <Key>
+      <PropertyRef Name="AutoReplyItemId" />
+    </Key>
+    <Property Name="AutoReplyItemId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AutoReplyId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="ReplaceKey" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="ReplaceValue" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
+    <Property Name="IsUsed" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BBSEnum">
+    <Key>
+      <PropertyRef Name="BBSEnumId" />
+    </Key>
+    <Property Name="BBSEnumId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EnumType" Type="int" />
+    <Property Name="EnumDesc" Type="nvarchar" MaxLength="10" />
+    <Property Name="EnumCode" Type="varchar" MaxLength="50" />
+    <Property Name="Url" Type="varchar" MaxLength="1000" />
+    <Property Name="IsBBS" Type="int" />
+    <Property Name="SortIndex" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="CanArticle" Type="int" />
+    <Property Name="FontColor" Type="varchar" MaxLength="50" />
+    <Property Name="FontBGColor" Type="varchar" MaxLength="50" />
+    <Property Name="PageBGColor" Type="varchar" MaxLength="50" />
+    <Property Name="GroupBy" Type="int" />
+  </EntityType>
+  <EntityType Name="BuyOtherLog">
+    <Key>
+      <PropertyRef Name="BuyOtherLogId" />
+    </Key>
+    <Property Name="BuyOtherLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainID" Type="bigint" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="Fee" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BXTOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PayOrderID" Type="varchar" MaxLength="50" />
+    <Property Name="OrderType" Type="int" />
+    <Property Name="ItemID" Type="bigint" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="OrerDesc" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsPay" Type="int" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="BuyCount" Type="int" />
+  </EntityType>
+  <EntityType Name="Chat">
+    <Key>
+      <PropertyRef Name="ChatID" />
+    </Key>
+    <Property Name="ChatID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FromID" Type="bigint" />
+    <Property Name="FromUserName" Type="varchar" MaxLength="100" />
+    <Property Name="ToID" Type="bigint" />
+    <Property Name="ToUserName" Type="varchar" MaxLength="100" />
+    <Property Name="Message" Type="nvarchar(max)" />
+    <Property Name="SendTime" Type="datetime" />
+    <Property Name="IsRead" Type="int" />
+    <Property Name="ReadTime" Type="datetime" />
+    <Property Name="Batch" Type="bit" />
+  </EntityType>
+  <EntityType Name="ClickMsg">
+    <Key>
+      <PropertyRef Name="ClickMsgId" />
+    </Key>
+    <Property Name="ClickMsgId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Msg" Type="nvarchar" MaxLength="300" />
+    <Property Name="Msg_en" Type="nvarchar" MaxLength="300" />
+    <Property Name="Color" Type="nvarchar" MaxLength="10" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="CommentId" />
+    </Key>
+    <Property Name="CommentId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainType" Type="int" />
+    <Property Name="MainID" Type="bigint" />
+    <Property Name="CommentUserID" Type="bigint" />
+    <Property Name="CommentContent" Type="text" />
+    <Property Name="IsHideOrFeeToSee" Type="int" />
+    <Property Name="FeeCoinType" Type="int" />
+    <Property Name="NeedCoin" Type="int" />
+    <Property Name="CommentOrReplyType" Type="int" />
+    <Property Name="ReplyTopCommentId" Type="bigint" />
+    <Property Name="ReplyToUserID" Type="bigint" />
+    <Property Name="ReplyToCommentID" Type="bigint" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ContentBuyLog">
+    <Key>
+      <PropertyRef Name="ContentBuyLogId" />
+    </Key>
+    <Property Name="ContentBuyLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainType" Type="int" Nullable="false" />
+    <Property Name="MainID" Type="bigint" Nullable="false" />
+    <Property Name="BuyerId" Type="bigint" Nullable="false" />
+    <Property Name="Fee" Type="int" Nullable="false" />
+    <Property Name="FeeType" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="Img" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Type" Type="int" Nullable="false" />
+    <Property Name="QQ" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdadteTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EditLog">
+    <Key>
+      <PropertyRef Name="EditLogId" />
+    </Key>
+    <Property Name="EditLogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="OldValue" Type="nvarchar" MaxLength="200" />
+    <Property Name="NewValue" Type="nvarchar" MaxLength="200" />
+    <Property Name="Type" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="EmailNotice">
+    <Key>
+      <PropertyRef Name="EmailNoticeId" />
+    </Key>
+    <Property Name="EmailNoticeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="EmailNoticeAuthor" Type="int" />
+    <Property Name="AuthorID" Type="bigint" />
+    <Property Name="MainID" Type="bigint" />
+    <Property Name="MainType" Type="int" />
+    <Property Name="MD5Key" Type="varchar" MaxLength="8" />
+    <Property Name="MD5Sign" Type="varchar" MaxLength="200" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ErrorLog">
+    <Key>
+      <PropertyRef Name="ErrorLogID" />
+    </Key>
+    <Property Name="ErrorLogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ErrorMsg" Type="text" />
+    <Property Name="ErrorTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Express">
+    <Key>
+      <PropertyRef Name="ExpressId" />
+    </Key>
+    <Property Name="ExpressId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserGiftId" Type="bigint" Nullable="false" />
+    <Property Name="ExpressNo" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="ExpressName" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="ExpressType" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FeeAnswerLog">
+    <Key>
+      <PropertyRef Name="FeeAnswerLogId" />
+    </Key>
+    <Property Name="FeeAnswerLogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AnswerId" Type="bigint" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="FeeTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="FeeHR">
+    <Key>
+      <PropertyRef Name="FeeHRID" />
+    </Key>
+    <Property Name="FeeHRID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainID" Type="bigint" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="FeeTime" Type="datetime" />
+    <Property Name="FeeType" Type="int" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="FeeCoin" Type="int" />
+    <Property Name="FeeCoinType" Type="int" />
+  </EntityType>
+  <EntityType Name="Gift">
+    <Key>
+      <PropertyRef Name="GiftID" />
+    </Key>
+    <Property Name="GiftID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GiftName" Type="nvarchar" MaxLength="100" />
+    <Property Name="GiftPrise" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="GiftPriseType" Type="int" />
+    <Property Name="GiftDesc" Type="nvarchar" MaxLength="500" />
+    <Property Name="GiftInfo" Type="nvarchar(max)" />
+    <Property Name="GiftCount" Type="int" />
+    <Property Name="GiftImgs" Type="nvarchar(max)" />
+    <Property Name="PVCount" Type="bigint" />
+    <Property Name="GiftCreateTime" Type="datetime" />
+    <Property Name="GiftCreateUserID" Type="bigint" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="GType" Type="int" />
+    <Property Name="OpenJoinItem" Type="int" />
+  </EntityType>
+  <EntityType Name="GiftFee">
+    <Key>
+      <PropertyRef Name="GiftFeeId" />
+    </Key>
+    <Property Name="GiftFeeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GiftID" Type="bigint" />
+    <Property Name="FeeName" Type="nvarchar" MaxLength="15" />
+    <Property Name="FeeType" Type="int" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FeeCount" Type="int" />
+  </EntityType>
+  <EntityType Name="InviteInterview">
+    <Key>
+      <PropertyRef Name="InviteInterviewId" />
+    </Key>
+    <Property Name="InviteInterviewId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ZhaoPinID" Type="bigint" />
+    <Property Name="InviteTime" Type="datetime" />
+    <Property Name="ViewAddress" Type="nvarchar" MaxLength="100" />
+    <Property Name="QiuZhiID" Type="bigint" />
+    <Property Name="QiuZhiPublisher" Type="bigint" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Job">
+    <Key>
+      <PropertyRef Name="JobId" />
+    </Key>
+    <Property Name="JobId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="JobType" Type="nvarchar" MaxLength="20" />
+    <Property Name="JobName" Type="nvarchar" MaxLength="20" />
+    <Property Name="ParentJobId" Type="uniqueidentifier" />
+    <Property Name="IsJobType" Type="int" />
+    <Property Name="IsJob" Type="int" />
+    <Property Name="CreateType" Type="int" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="JobComment">
+    <Key>
+      <PropertyRef Name="JobCommentID" />
+    </Key>
+    <Property Name="JobCommentID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainID" Type="bigint" />
+    <Property Name="Comment" Type="nvarchar(max)" />
+    <Property Name="CreateHeadUrl" Type="nvarchar" MaxLength="500" />
+    <Property Name="CreateNickName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="CommentType" Type="int" />
+  </EntityType>
+  <EntityType Name="JobTrade">
+    <Key>
+      <PropertyRef Name="JobTradeId" />
+    </Key>
+    <Property Name="JobTradeId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="JobTradeName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateType" Type="int" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="JoinItemAnswerExt">
+    <Key>
+      <PropertyRef Name="JoinItemAnswerExtId" />
+    </Key>
+    <Property Name="JoinItemAnswerExtId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="JoinItemQuestionExtId" Type="bigint" />
+    <Property Name="JoinMainID" Type="bigint" />
+    <Property Name="JoinType" Type="int" />
+    <Property Name="BuyerID" Type="bigint" />
+    <Property Name="ItemAnswer" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="JoinItemQuestionExt">
+    <Key>
+      <PropertyRef Name="JoinItemQuestionExtId" />
+    </Key>
+    <Property Name="JoinItemQuestionExtId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainType" Type="int" />
+    <Property Name="MainID" Type="bigint" />
+    <Property Name="ItemName" Type="nvarchar" MaxLength="10" />
+    <Property Name="IsMustWrite" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="LeaveWord">
+    <Key>
+      <PropertyRef Name="LeaveWordId" />
+    </Key>
+    <Property Name="LeaveWordId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Telephone" Type="varchar" MaxLength="11" />
+    <Property Name="Name" Type="nvarchar" MaxLength="20" />
+    <Property Name="Age" Type="int" />
+    <Property Name="DIY1" Type="nvarchar" MaxLength="100" />
+    <Property Name="DIY2" Type="nvarchar" MaxLength="100" />
+    <Property Name="DIY3" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Master">
+    <Key>
+      <PropertyRef Name="MasterId" />
+    </Key>
+    <Property Name="MasterId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="BBSMenuId" Type="int" />
+    <Property Name="IsRoot" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="MenuBelongTag">
+    <Key>
+      <PropertyRef Name="MenuBelongTagId" />
+    </Key>
+    <Property Name="MenuBelongTagId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MainId" Type="bigint" />
+    <Property Name="MainType" Type="int" />
+    <Property Name="TagId" Type="bigint" />
+  </EntityType>
+  <EntityType Name="News">
+    <Key>
+      <PropertyRef Name="NewsID" />
+    </Key>
+    <Property Name="NewsID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NTitle" Type="nvarchar" MaxLength="50" />
+    <Property Name="NBody" Type="nvarchar(max)" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsTop" Type="int" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+  </EntityType>
+  <EntityType Name="Notice">
+    <Key>
+      <PropertyRef Name="NoticeId" />
+    </Key>
+    <Property Name="NoticeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NoticeTitle" Type="nvarchar" MaxLength="30" />
+    <Property Name="NoticeContent" Type="nvarchar(max)" />
+    <Property Name="NoticeType" Type="int" />
+    <Property Name="ToUserID" Type="bigint" />
+    <Property Name="IsRead" Type="int" />
+    <Property Name="ReadTime" Type="datetime" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="OAuth">
+    <Key>
+      <PropertyRef Name="OAuthID" />
+    </Key>
+    <Property Name="OAuthID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="OAuthType" Type="int" />
+    <Property Name="OpenId" Type="varchar" MaxLength="100" />
+    <Property Name="NickName" Type="nvarchar" MaxLength="30" />
+    <Property Name="HeadUrl" Type="varchar" MaxLength="500" />
+    <Property Name="IsBind" Type="int" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PayOrderID" Type="varchar" MaxLength="50" />
+    <Property Name="OrderType" Type="int" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="OrerDesc" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsPay" Type="int" />
+  </EntityType>
+  <EntityType Name="OrderCheck">
+    <Key>
+      <PropertyRef Name="OrderCheckId" />
+    </Key>
+    <Property Name="OrderCheckId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderID" Type="bigint" Nullable="false" />
+    <Property Name="UserGiftId" Type="bigint" Nullable="false" />
+    <Property Name="MainID" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="bigint" Nullable="false" />
+    <Property Name="CheckStatus" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderSend">
+    <Key>
+      <PropertyRef Name="OrderSendId" />
+    </Key>
+    <Property Name="OrderSendId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OrderID" Type="bigint" Nullable="false" />
+    <Property Name="UserGiftId" Type="bigint" Nullable="false" />
+    <Property Name="MainID" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="bigint" Nullable="false" />
+    <Property Name="SendStatus" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PayCBLog">
+    <Key>
+      <PropertyRef Name="PayCBLogID" />
+    </Key>
+    <Property Name="PayCBLogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CallBackTime" Type="datetime" />
+    <Property Name="TradeNo" Type="varchar" MaxLength="50" />
+    <Property Name="IsPay" Type="int" />
+    <Property Name="TradeStatus" Type="varchar" MaxLength="20" />
+    <Property Name="Memo" Type="nvarchar(max)" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Prise">
+    <Key>
+      <PropertyRef Name="PriseId" />
+    </Key>
+    <Property Name="PriseId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TargetID" Type="bigint" />
+    <Property Name="Type" Type="int" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="PriseTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="PrivateKey">
+    <Key>
+      <PropertyRef Name="PrivateKeyId" />
+    </Key>
+    <Property Name="PrivateKeyId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProtectKey" Type="varchar" MaxLength="500" Nullable="false" />
+    <Property Name="timespan" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="userID" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PLogo" Type="nvarchar" MaxLength="100" />
+    <Property Name="PTitle" Type="nvarchar" MaxLength="20" />
+    <Property Name="PLocation" Type="nvarchar" MaxLength="20" />
+    <Property Name="PDesc" Type="nvarchar" MaxLength="200" />
+    <Property Name="PFunction" Type="nvarchar" MaxLength="200" />
+    <Property Name="PPrice" Type="int" />
+    <Property Name="PSize" Type="nvarchar" MaxLength="20" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="10" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+    <Property Name="ProductPic" Type="nvarchar" MaxLength="500" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsJinghua" Type="int" />
+    <Property Name="IsRemen" Type="int" />
+    <Property Name="IsTop" Type="int" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="SendDay" Type="int" />
+    <Property Name="PWeight" Type="nvarchar" MaxLength="20" />
+    <Property Name="PUnit" Type="int" />
+    <Property Name="ValidTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ProductBuy">
+    <Key>
+      <PropertyRef Name="ProductBuyId" />
+    </Key>
+    <Property Name="ProductBuyId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProductID" Type="bigint" />
+    <Property Name="BuyUserID" Type="bigint" />
+    <Property Name="LinkName" Type="nvarchar" MaxLength="20" />
+    <Property Name="LinkTel" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="QiuZhi">
+    <Key>
+      <PropertyRef Name="QiuZhiID" />
+    </Key>
+    <Property Name="QiuZhiID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Publisher" Type="nvarchar" MaxLength="20" />
+    <Property Name="IWant" Type="nvarchar" MaxLength="20" />
+    <Property Name="Money" Type="int" />
+    <Property Name="NowWork" Type="nvarchar" MaxLength="20" />
+    <Property Name="WorkStatus" Type="int" />
+    <Property Name="Study" Type="int" />
+    <Property Name="WorkYear" Type="int" />
+    <Property Name="MyDesc" Type="nvarchar" MaxLength="200" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="SelfAssessment" Type="nvarchar" MaxLength="200" />
+    <Property Name="JianLiPic" Type="nvarchar" MaxLength="50" />
+    <Property Name="JianLiWord" Type="nvarchar" MaxLength="50" />
+    <Property Name="IsPay" Type="int" />
+    <Property Name="PayType" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+    <Property Name="IsJinghua" Type="int" />
+    <Property Name="IsRemen" Type="int" />
+    <Property Name="IsTop" Type="int" />
+    <Property Name="WorkType" Type="int" />
+    <Property Name="WorkTime" Type="varchar" MaxLength="20" />
+    <Property Name="BelongJobTrade" Type="uniqueidentifier" />
+    <Property Name="BelongJob" Type="uniqueidentifier" />
+    <Property Name="IWantPlace" Type="nvarchar" MaxLength="15" />
+    <Property Name="ValidTime" Type="datetime" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="QuestionId" />
+    </Key>
+    <Property Name="QuestionId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" />
+    <Property Name="Body" Type="nvarchar(max)" />
+    <Property Name="TopicID" Type="int" />
+    <Property Name="Coin" Type="int" />
+    <Property Name="CoinType" Type="int" />
+    <Property Name="PVCount" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="BestAnswerId" Type="bigint" />
+    <Property Name="IsJinghua" Type="int" />
+    <Property Name="IsRemen" Type="int" />
+    <Property Name="IsTop" Type="int" />
+    <Property Name="IsChecked" Type="int" />
+    <Property Name="NiceAnswerId" Type="bigint" />
+    <Property Name="EditCount" Type="int" />
+    <Property Name="FilePath" Type="nvarchar" MaxLength="100" />
+    <Property Name="ContentNeedPay" Type="bit" />
+    <Property Name="ContentFeeType" Type="int" />
+    <Property Name="ContentFee" Type="int" />
+    <Property Name="IsAnonymous" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Report">
+    <Key>
+      <PropertyRef Name="ReportId" />
+    </Key>
+    <Property Name="ReportId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="MainId" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="int" Nullable="false" />
+    <Property Name="Desc" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+    <Property Name="IsHandle" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ScoreBeloneItem">
+    <Key>
+      <PropertyRef Name="ScoreBeloneItemId" />
+    </Key>
+    <Property Name="ScoreBeloneItemId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ScoreCoinLogId" Type="bigint" Nullable="false" />
+    <Property Name="MainId" Type="bigint" Nullable="false" />
+    <Property Name="MainType" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ScoreCoinLog">
+    <Key>
+      <PropertyRef Name="ScoreCoinLogId" />
+    </Key>
+    <Property Name="ScoreCoinLogId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="100" />
+    <Property Name="CoinType" Type="int" Nullable="false" />
+    <Property Name="Coin" Type="int" Nullable="false" />
+    <Property Name="CoinSource" Type="int" Nullable="false" />
+    <Property Name="CoinTime" Type="datetime" Nullable="false" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SendCV">
+    <Key>
+      <PropertyRef Name="SendCVId" />
+    </Key>
+    <Property Name="SendCVId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ZhaoPinPublisher" Type="bigint" />
+    <Property Name="ZhaoPinID" Type="bigint" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CVPath" Type="nvarchar" MaxLength="100" />
+    <Property Name="SendTime" Type="datetime" />
+    <Property Name="IsRead" Type="int" />
+    <Property Name="ReadTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="ShareLink">
+    <Key>
+      <PropertyRef Name="ShareLinkID" />
+    </Key>
+    <Property Name="ShareLinkID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="ShareOpenId" Type="varchar" MaxLength="18" />
+    <Property Name="ShareToken" Type="varchar" MaxLength="100" />
+    <Property Name="ShareMd5Key" Type="varchar" MaxLength="8" />
+    <Property Name="ShareAddress" Type="varchar" MaxLength="200" />
+    <Property Name="PVCount" Type="int" />
+  </EntityType>
+  <EntityType Name="ShareRegistLog">
+    <Key>
+      <PropertyRef Name="ShareRegistLogID" />
+    </Key>
+    <Property Name="ShareRegistLogID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShareUserID" Type="bigint" />
+    <Property Name="ShareUserName" Type="nvarchar" MaxLength="20" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="ShipAddress">
+    <Key>
+      <PropertyRef Name="ShipAddressId" />
+    </Key>
+    <Property Name="ShipAddressId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="ReceiveName" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="WeChatNo" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="ReceiveAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="Tel" Type="nvarchar" MaxLength="15" Nullable="false" />
+    <Property Name="IsDefault" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SiteHead">
+    <Key>
+      <PropertyRef Name="SiteHeadId" />
+    </Key>
+    <Property Name="SiteHeadId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="HeadImg" Type="varchar" MaxLength="100" />
+    <Property Name="IsDefault" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="SiteNotice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NoticeType" Type="int" Nullable="false" />
+    <Property Name="ShortTitle" Type="nvarchar" MaxLength="10" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ShortTitleBGColor" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="ShortTitleFontColor" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="TitleBGColor" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="TitleFontColor" Type="varchar" MaxLength="7" Nullable="false" />
+    <Property Name="Url" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="UserId" Type="bigint" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Slide">
+    <Key>
+      <PropertyRef Name="SlideId" />
+    </Key>
+    <Property Name="SlideId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="50" />
+    <Property Name="Img" Type="nvarchar" MaxLength="50" />
+    <Property Name="Url" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="EndTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="FontColor" Type="nvarchar" MaxLength="10" />
+    <Property Name="SlideType" Type="int" />
+  </EntityType>
+  <EntityType Name="SoftLink">
+    <Key>
+      <PropertyRef Name="SoftLinkID" />
+    </Key>
+    <Property Name="SoftLinkID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SoftLinkType" Type="int" />
+    <Property Name="LinkName" Type="nvarchar" MaxLength="20" />
+    <Property Name="LinkAddress" Type="nvarchar" MaxLength="200" />
+    <Property Name="LinkMemo" Type="nvarchar" MaxLength="200" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+  </EntityType>
+  <EntityType Name="SoftLinkType">
+    <Key>
+      <PropertyRef Name="SoftLinkTypeID" />
+    </Key>
+    <Property Name="SoftLinkTypeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SoftLinkTypeName" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="SoftLinkColor" Type="nvarchar" MaxLength="20" />
+    <Property Name="SoftLinkLogo" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="StudyClass">
+    <Key>
+      <PropertyRef Name="StudyClassId" />
+    </Key>
+    <Property Name="StudyClassId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="StudyUnitId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SortIndex" Type="int" Nullable="false" />
+    <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudyShareImgSet">
+    <Key>
+      <PropertyRef Name="StudyShareImgSetId" />
+    </Key>
+    <Property Name="StudyShareImgSetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Url" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="IsUse" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="StudyUnit">
+    <Key>
+      <PropertyRef Name="StudyUnitId" />
+    </Key>
+    <Property Name="StudyUnitId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
+    <Property Name="SortIndex" Type="int" Nullable="false" />
+    <Property Name="CreateUser" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SuggestSite">
+    <Key>
+      <PropertyRef Name="SuggestSiteId" />
+    </Key>
+    <Property Name="SuggestSiteId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SiteName" Type="nvarchar" MaxLength="20" />
+    <Property Name="SiteAddress" Type="nvarchar" MaxLength="100" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="TagId" />
+    </Key>
+    <Property Name="TagId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TagName" Type="nvarchar" MaxLength="10" />
+    <Property Name="TagCreateType" Type="int" />
+    <Property Name="TagBelongId" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="nvarchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="UserBase">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="varchar" MaxLength="100" />
+    <Property Name="Account" Type="varchar" MaxLength="50" />
+    <Property Name="Password" Type="varchar" MaxLength="20" />
+    <Property Name="Source" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="Sign" Type="varchar" MaxLength="100" />
+    <Property Name="HeadUrl" Type="varchar" MaxLength="500" />
+    <Property Name="Gender" Type="int" />
+    <Property Name="Province" Type="nvarchar" MaxLength="20" />
+    <Property Name="City" Type="nvarchar" MaxLength="20" />
+    <Property Name="County" Type="nvarchar" MaxLength="20" />
+    <Property Name="Birth" Type="varchar" MaxLength="10" />
+    <Property Name="Work" Type="nvarchar" MaxLength="20" />
+    <Property Name="JingYing" Type="nvarchar" MaxLength="50" />
+    <Property Name="WorkYear" Type="nvarchar" MaxLength="10" />
+    <Property Name="LoginTime" Type="datetime" />
+    <Property Name="LoginIP" Type="varchar" MaxLength="20" />
+    <Property Name="OpenId" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="UserDisabledLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="bigint" Nullable="false" />
+    <Property Name="ActionUserId" Type="bigint" Nullable="false" />
+    <Property Name="ExpriseTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserExt">
+    <Key>
+      <PropertyRef Name="UserExtId" />
+    </Key>
+    <Property Name="UserExtId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="TotalScore" Type="int" />
+    <Property Name="TotalCoin" Type="int" />
+    <Property Name="LevelName" Type="int" />
+    <Property Name="OnlyLevelName" Type="int" />
+    <Property Name="CloseTime" Type="datetime" />
+    <Property Name="UserV" Type="int" />
+    <Property Name="RealName" Type="nvarchar" MaxLength="10" />
+    <Property Name="CardID" Type="varchar" MaxLength="18" />
+    <Property Name="CardPic" Type="nvarchar" MaxLength="50" />
+    <Property Name="FaRenPic" Type="nvarchar" MaxLength="50" />
+    <Property Name="CompanyName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CompanyTel" Type="varchar" MaxLength="20" />
+    <Property Name="VIP" Type="int" />
+    <Property Name="VIPExpiryTime" Type="datetime" />
+    <Property Name="HeadNameShowType" Type="int" />
+    <Property Name="CheckBBS" Type="int" />
+    <Property Name="UserCenterSkin" Type="nvarchar" MaxLength="10" />
+    <Property Name="UserSignTotalCount" Type="int" />
+    <Property Name="UserSignContinueCount" Type="int" />
+    <Property Name="UserMonthSignContinueCount" Type="int" />
+    <Property Name="UserSignTime" Type="datetime" />
+  </EntityType>
+  <EntityType Name="UserGift">
+    <Key>
+      <PropertyRef Name="UserGiftId" />
+    </Key>
+    <Property Name="UserGiftId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GiftID" Type="bigint" />
+    <Property Name="BuyUserID" Type="bigint" />
+    <Property Name="BuyTime" Type="datetime" />
+    <Property Name="BuyCount" Type="int" />
+    <Property Name="GType" Type="int" />
+    <Property Name="GiftFeeId" Type="bigint" />
+    <Property Name="Fee" Type="decimal" Precision="18" Scale="2" />
+    <Property Name="FeeType" Type="int" />
+    <Property Name="IsPay" Type="int" />
+    <Property Name="LinkMan" Type="nvarchar" MaxLength="20" />
+    <Property Name="LinkTel" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="UserLike">
+    <Key>
+      <PropertyRef Name="UserLikeId" />
+    </Key>
+    <Property Name="UserLikeId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="LikeTargetID" Type="bigint" />
+    <Property Name="LikeType" Type="bigint" />
+    <Property Name="LikeTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="UserLoginLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="bigint" Nullable="false" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="UpdateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserScore">
+    <Key>
+      <PropertyRef Name="UserScoreId" />
+    </Key>
+    <Property Name="UserScoreId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="Score" Type="int" />
+    <Property Name="ScoreType" Type="int" />
+    <Property Name="CreateUser" Type="varchar" MaxLength="20" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="varchar" MaxLength="20" />
+    <Property Name="UpdateTIme" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="UserSet">
+    <Key>
+      <PropertyRef Name="UserSetId" />
+    </Key>
+    <Property Name="UserSetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserId" Type="bigint" Nullable="false" />
+    <Property Name="ShowOrHideBaseInfo" Type="bit" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="IsDelete" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserShareLog">
+    <Key>
+      <PropertyRef Name="UserShareLogId" />
+    </Key>
+    <Property Name="UserShareLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ShareTime" Type="datetime" Nullable="false" />
+    <Property Name="ClassId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IsDelete" Type="bit" Nullable="false" />
+    <Property Name="Url" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+    <Property Name="UseImage" Type="int" />
+  </EntityType>
+  <EntityType Name="UserStudy">
+    <Key>
+      <PropertyRef Name="UserStudyId" />
+    </Key>
+    <Property Name="UserStudyId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="StudyUnitId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="StudyClassId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IsStudyed" Type="bit" Nullable="false" />
+    <Property Name="UserID" Type="bigint" Nullable="false" />
+    <Property Name="CreateTime" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="VIPHead">
+    <Key>
+      <PropertyRef Name="VIPHeadId" />
+    </Key>
+    <Property Name="VIPHeadId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserID" Type="bigint" />
+    <Property Name="HeadUrl" Type="nvarchar" MaxLength="100" />
+    <Property Name="IsChecked" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+  </EntityType>
+  <EntityType Name="ZhaoPin">
+    <Key>
+      <PropertyRef Name="ZhaoPinID" />
+    </Key>
+    <Property Name="ZhaoPinID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Publisher" Type="nvarchar" MaxLength="20" />
+    <Property Name="Gangwei" Type="nvarchar" MaxLength="20" />
+    <Property Name="Money" Type="int" />
+    <Property Name="Study" Type="int" />
+    <Property Name="WorkHistory" Type="int" />
+    <Property Name="WorkPlace" Type="nvarchar" MaxLength="50" />
+    <Property Name="CName" Type="nvarchar" MaxLength="50" />
+    <Property Name="CLogo" Type="nvarchar" MaxLength="200" />
+    <Property Name="CPeople" Type="int" />
+    <Property Name="CVip" Type="int" />
+    <Property Name="CDesc" Type="nvarchar" MaxLength="200" />
+    <Property Name="JobPic" Type="nvarchar" MaxLength="50" />
+    <Property Name="JobWord" Type="nvarchar" MaxLength="50" />
+    <Property Name="Contact" Type="nvarchar" MaxLength="50" />
+    <Property Name="PayType" Type="int" />
+    <Property Name="IsPay" Type="int" />
+    <Property Name="CreateTime" Type="datetime" />
+    <Property Name="IsDelete" Type="int" />
+    <Property Name="PVCount" Type="bigint" />
+    <Property Name="JobRequire" Type="nvarchar" MaxLength="200" />
+    <Property Name="IsJinghua" Type="int" />
+    <Property Name="IsRemen" Type="int" />
+    <Property Name="IsTop" Type="int" />
+    <Property Name="WorkeType" Type="int" />
+    <Property Name="WorkTime" Type="varchar" MaxLength="20" />
+    <Property Name="BelongJobTrade" Type="uniqueidentifier" />
+    <Property Name="BelongJob" Type="uniqueidentifier" />
+    <Property Name="JobFuLi" Type="nvarchar" MaxLength="200" />
+    <Property Name="NeedCount" Type="int" />
+    <Property Name="ValidTime" Type="datetime" />
+    <Property Name="UpdateTime" Type="datetime" />
+    <Property Name="UpdateUser" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityContainer Name="AmazonBBSModelStoreContainer">
+    <EntitySet Name="About" EntityType="Self.About" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Activity" EntityType="Self.Activity" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActivityFee" EntityType="Self.ActivityFee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ActivityJoin" EntityType="Self.ActivityJoin" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AD" EntityType="Self.AD" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Against" EntityType="Self.Against" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Answer" EntityType="Self.Answer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Article" EntityType="Self.Article" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AttachMent" EntityType="Self.AttachMent" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AttachMentBuyLog" EntityType="Self.AttachMentBuyLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AutoReply" EntityType="Self.AutoReply" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AutoReplyItem" EntityType="Self.AutoReplyItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BBSEnum" EntityType="Self.BBSEnum" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BuyOtherLog" EntityType="Self.BuyOtherLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BXTOrder" EntityType="Self.BXTOrder" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Chat" EntityType="Self.Chat" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ClickMsg" EntityType="Self.ClickMsg" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Comment" EntityType="Self.Comment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ContentBuyLog" EntityType="Self.ContentBuyLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EditLog" EntityType="Self.EditLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EmailNotice" EntityType="Self.EmailNotice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ErrorLog" EntityType="Self.ErrorLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Express" EntityType="Self.Express" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FeeAnswerLog" EntityType="Self.FeeAnswerLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FeeHR" EntityType="Self.FeeHR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Gift" EntityType="Self.Gift" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GiftFee" EntityType="Self.GiftFee" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="InviteInterview" EntityType="Self.InviteInterview" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Job" EntityType="Self.Job" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JobComment" EntityType="Self.JobComment" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JobTrade" EntityType="Self.JobTrade" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JoinItemAnswerExt" EntityType="Self.JoinItemAnswerExt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="JoinItemQuestionExt" EntityType="Self.JoinItemQuestionExt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LeaveWord" EntityType="Self.LeaveWord" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Master" EntityType="Self.Master" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MenuBelongTag" EntityType="Self.MenuBelongTag" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="News" EntityType="Self.News" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Notice" EntityType="Self.Notice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OAuth" EntityType="Self.OAuth" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderCheck" EntityType="Self.OrderCheck" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="OrderSend" EntityType="Self.OrderSend" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PayCBLog" EntityType="Self.PayCBLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Prise" EntityType="Self.Prise" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PrivateKey" EntityType="Self.PrivateKey" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ProductBuy" EntityType="Self.ProductBuy" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="QiuZhi" EntityType="Self.QiuZhi" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Question" EntityType="Self.Question" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Report" EntityType="Self.Report" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScoreBeloneItem" EntityType="Self.ScoreBeloneItem" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ScoreCoinLog" EntityType="Self.ScoreCoinLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SendCV" EntityType="Self.SendCV" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShareLink" EntityType="Self.ShareLink" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShareRegistLog" EntityType="Self.ShareRegistLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ShipAddress" EntityType="Self.ShipAddress" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SiteHead" EntityType="Self.SiteHead" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SiteNotice" EntityType="Self.SiteNotice" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Slide" EntityType="Self.Slide" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SoftLink" EntityType="Self.SoftLink" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SoftLinkType" EntityType="Self.SoftLinkType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudyClass" EntityType="Self.StudyClass" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudyShareImgSet" EntityType="Self.StudyShareImgSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="StudyUnit" EntityType="Self.StudyUnit" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="SuggestSite" EntityType="Self.SuggestSite" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tag" EntityType="Self.Tag" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserBase" EntityType="Self.UserBase" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserDisabledLog" EntityType="Self.UserDisabledLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserExt" EntityType="Self.UserExt" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserGift" EntityType="Self.UserGift" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserLike" EntityType="Self.UserLike" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserLoginLog" EntityType="Self.UserLoginLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserScore" EntityType="Self.UserScore" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserSet" EntityType="Self.UserSet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserShareLog" EntityType="Self.UserShareLog" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserStudy" EntityType="Self.UserStudy" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="VIPHead" EntityType="Self.VIPHead" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ZhaoPin" EntityType="Self.ZhaoPin" Schema="dbo" store:Type="Tables" />
+  </EntityContainer>
+</Schema>

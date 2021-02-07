@@ -1,0 +1,14 @@
+﻿@using AmazonBBS.Model
+@model BaseListViewModel<News>
+@{
+    ViewBag.Title = "公告列表";
+}
+<div class="col-md-offset-1 col-md-10">
+    <h3>本站公告</h3>
+    <div class="newList">
+        @Html.Partial("_LoadNews", Model)
+    </div>
+</div>
+<script>
+    Leo.BootStrap_Tab_Change(".newList", ".newList", ".newsPageWrap", "/news/loadnews");
+</script>

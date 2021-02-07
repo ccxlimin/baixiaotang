@@ -1,0 +1,65 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<VIPHeadUrlViewModel>
+@{
+    ViewBag.Title = "审核用户动态头像";
+    List<VIPHeadUrlViewModel> list = Model;
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        @if (list.Count > 0)
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>用户名</th>
+                        <th>待审核头像</th>
+                        <th>上传时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (VIPHeadUrlViewModel item in list)
+                    {
+                        <tr>
+                            <td>@item.UserName</td>
+                            <td class="layer-photos-wrap"><img width="40" height="40" src="@item.HeadUrl" /></td>
+                            <td>@item.CreateTime.Value.ToShortDateString()</td>
+                            <td>
+                                <a onclick="pass(this,'@item.VIPHeadId',1)" class="btn-pass btn btn-primary">审核通过</a>
+                                <a onclick="pass(this,'@item.VIPHeadId',3)" class="btn-deny btn btn-danger">审核不通过</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <script>
+                Leo.ShowMaxImg();
+                function pass(target, id, passordeny) {
+                    var me = $(target);
+                    AlertConfirm("确定将该头像审核通过吗？", "确定", "取消", function () {
+                        var lindex = LOAD("提交中...");
+                        $.post("/Console/CheckVIPHead/{0}".Format(id), { passOrDeny: passordeny }, function (data) {
+                            if (data.Ok) {
+                                Leo.msgsuccess("操作成功");
+                                me.parent().parent().remove();
+                            } else {
+                                Leo.msgfail("操作失败");
+                            }
+                            CLOSE(lindex);
+                        });
+                    });
+                }
+            </script>
+        }
+        else
+        {
+            <div class="well">
+                暂时没有需要审核的用户！
+            </div>
+        }
+    </div>
+</div>

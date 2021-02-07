@@ -1,0 +1,160 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ActiveListViewModel
+@{
+    List<_Activity> list = Model.Activis;
+    UserBaseBLL userbll = UserBaseBLL.Instance;
+    bool ismaster = userbll.IsMaster;
+}
+<div class="leo col-sm-12">
+    @if (list != null)
+    {
+        <div class="clearfix">
+            <style>
+                .leo {
+                    float: left;
+                    padding: 20px;
+                    user-select: none;
+                }
+
+                    .leo .partyItem {
+                        padding: 0 15px 15px 0 !important;
+                    }
+
+                        .leo .partyItem a {
+                            position: relative;
+                        }
+
+                    .leo .thumbnail {
+                        padding: 0;
+                    }
+
+                        .leo .thumbnail img {
+                            width: 100%;
+                            height: auto;
+                            max-height: 100%;
+                        }
+
+                        .leo .thumbnail .caption {
+                            color: #999;
+                            font-size: 14px;
+                            word-break: break-all;
+                        }
+
+                    .leo .partyItem a .caption .party-title {
+                        margin: 3px 0 0 0;
+                        color: #000;
+                        display: inline-block;
+                        overflow: hidden;
+                        -webkit-line-clamp: 2;
+                        max-height: 30px;
+                        word-break: break-all;
+                        font-size: 14px;
+                        height: 30px;
+                        line-height: 15px;
+                        text-align: left;
+                        text-overflow: ellipsis;
+                    }
+            </style>
+            @foreach (_Activity item in list)
+            {
+            <div class="col-md-4 col-sm-6 col-xs-6 partyItem">
+                <a target="_blank" href="/party/detail/@item.ActivityId" class="thumbnail">
+                    <div>
+                        <img src="@(item.ActivityIMG ?? "/Content/img/party/poster_image_shangwu_10.jpg")" onerror="this.src='/Content/img/party/poster_image_shangwu_10.jpg'" />
+                    </div>
+                    <div class="caption">
+                        <p class="party-title">@item.Title</p>
+                        <p>
+                            @if (item.BeginTime > DateTime.Now)
+                            {
+                                <span>@(Convert.ToDateTime(item.BeginTime).ToString("yyyy-MM-dd")) 开始</span>
+                            }
+                            else
+                            {
+                                if (item.EndTime <= DateTime.Now)
+                                {
+                                    <span>已结束</span>
+                                }
+                                else
+                                {
+                                    <span style="color:red;">进行中</span>
+                                }
+                            }
+                        </p>
+                        @*<p>
+                            @item.Address
+                            </p>*@
+                        <p>
+                            @if (item.FeeType == 0)
+                            {
+                                <span class="Lco">免费</span>
+                            }
+                            else
+                            {
+                                <span class="Lcr">付费:@item.Fee</span>
+                            }
+                            <span class="pageviews-pv Lfr">@(item.PVCount)次浏览</span>
+                        </p>
+                    </div>
+                    <span class="btnActions Ldn" data-mid="@item.ActivityId">
+                        <span class="editPV btn btn-primary btn-xs">修改浏览量</span>
+                        <span class="btnEdit btn btn-primary btn-xs">编辑</span>
+                        <span class="btnDelete btn btn-danger btn-xs">删除</span>
+                    </span>
+                </a>
+            </div>
+            }
+        </div>
+        <div class="party_Page_Wrap">
+            @Html.Partial("_Page", Model.ActivityPage)
+        </div>
+    }
+    else
+    {
+        <div class="well Ltac">
+            官方暂时未发布活动，敬请期待
+        </div>
+    }
+</div>
+@if (ismaster)
+{
+    @Html.Partial("_LoadEditPVScript")
+    <script>
+        $(".partyItem").mouseover(function () {
+            $(this).find(".btnActions").removeClass("Ldn");
+        }).mouseleave(function () {
+            $(this).find(".btnActions").addClass('Ldn');
+        });
+        //修改浏览量
+        $(".editPV").click(function (e) {
+            e.preventDefault();
+
+        });
+        ///编辑
+        $(".btnEdit").click(function (e) {
+            e.preventDefault();
+            location.href = "/party/edit/" + $(this).parent().data("mid");
+        });
+
+        $(".btnDelete").click(function (e) {
+            e.preventDefault();
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此活动吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD("删除中...");
+                setTimeout(function () {
+                    $.post("/party/delete/{0}".Format(me.parent().data("mid")), function (data) {
+                        if (data.Ok) {
+                            MSG(data.Msg || "删除成功");
+                            me.parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+    </script>
+}

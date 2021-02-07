@@ -1,0 +1,56 @@
+﻿@using AmazonBBS.Model
+@model UserBase
+@{
+    ViewBag.Title = "找回密码";
+}
+
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "nmform" }))
+            {
+                @Html.AntiForgeryToken()
+                <h4>
+                    找回密码
+                </h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Account, "用户名", new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Account, new { @class = "form-control", placeholder = "请填写正确邮箱" })
+                        @Html.ValidationMessageFor(m => m.Account, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="vaCode" class="col-md-2 control-label">验证码</label>
+                    <div class="col-md-10">
+                        <div class="col-md-8 col-sm-8 Lpd0">
+                            <input id="vaCode" type="text" class="form-control" placeholder="请输入验证码" />
+                        </div>
+                        <div class="col-md-4 col-sm-4 Lpd0">
+                            <img src="/Tool/VerificationImage" onclick="this.src = '/Tool/VerificationImage?t='+ +new Date()" class="col-md-4 vaCode" title="点击刷新" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <a id="btn-findpwd" class="btn btn-primary">找回密码</a>
+                    </div>
+                </div>
+                <p>
+                    @Html.ActionLink("登录", "Login")
+                    <span style="padding:0 10px;">|</span>
+                    没有会员？ @Html.ActionLink("注册", "Register")
+                </p>
+            }
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    Leo.init("account", "forget");
+</script>

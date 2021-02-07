@@ -1,0 +1,211 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model About
+@{
+    ViewBag.Title = "关于百晓堂";
+    List<News> news = ViewBag.News;
+    About m = Model;
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+}
+@Html.Partial("_LoadMenuDisplay", 5)
+<div class="row">
+    <div class="col-md-8 col-sm-8">
+        @if (m != null)
+        {
+            if (isMaster)
+            {
+                <a class="btn btn-primary" id="editAbout">编辑主页</a>
+                <div>
+                    <div id="aboutWrapper"></div>
+                </div>
+            }
+            <div id="aboutContent">
+                @Html.Raw(m.Desc)
+            </div>
+        }
+        else if (isMaster)
+        {
+            <a class="btn btn-primary" id="addAbout">添加主页</a>
+            <div>
+                <div id="aboutWrapper"></div>
+            </div>
+        }
+    </div>
+    <div class="col-md-4 col-sm-4 sidebar">
+        @if (isMaster)
+        {
+            <div class="widget">
+                <a class="btn btn-primary" href="/news/publish">发布新闻</a>
+            </div>
+        }
+        @if (news.Count > 0)
+        {
+            <div class="widget">
+                <h4 class="title">动态新闻</h4>
+                <ul>
+                    @foreach (News item in news)
+                    {
+                        <li class="newsItem Lpr">
+                            <a target="_blank" href="/news/detail/@item.NewsID">@(item.NTitle)<span class="badge badge-success pvcount">@item.PVCount</span></a>
+                            @if (isMaster)
+                            {
+                                <span class="btnActions Ldn">
+                                    <span onclick="editPV(this,@item.NewsID)" class="btn-primary btn-xs">修改浏览量</span>
+                                    <span onclick="NewsEdit(this,@item.NewsID)" class="btn-primary btn-xs">编辑</span>
+                                    <span onclick="NewsDelete(this,@item.NewsID)" class="btn-danger btn-xs">删除</span>
+                                </span>
+                            }
+                        </li>
+                    }
+                    <li class="Ltar">
+                        <a href="/news/list?from=about" target="_blank">+更多新闻</a>
+                    </li>
+                </ul>
+            </div>
+        }
+    </div>
+</div>
+@*左侧栏客服图标*@
+@Html.Partial("_CustomService", 2)
+@if (isMaster)
+{
+    <script>
+        function NewsEdit(me, mid) {
+            location.href = "/news/edit/" + mid;
+        }
+        function editPV(me, mid) {
+            var $me = $(me);
+            layer.prompt({ title: "请修改浏览量", formType: 3, shadeClose: !0 }, function (count, index) {
+                if (!isNaN(count)) {
+                    if (count > -1) {
+                        CLOSE(index);
+                        var loadIndex = LOAD("正在修改浏览量…");
+                        setTimeout(function () {
+                            $.post("/PV/newsPV/{0}".Format(mid), { number: count }, function (data) {
+                                if (data.Ok) {
+                                    layer.msg("修改成功");
+                                    $me.parent().parent().find(".pvcount").text(count);
+                                } else {
+                                    layer.msg(data.Msg || "修改失败");
+                                }
+                                layer.close(loadIndex);
+                            })
+                        }, 1000);
+                    } else {
+                        MSG("浏览量咋能为负呢？");
+                    }
+                }
+                else {
+                    MSG("请输入数字");
+                }
+            });
+        }
+        function NewsDelete(me, mid) {
+            var me = $(me);
+            AlertConfirm("确定删除此新闻吗？删除后不可撤销！", "删除", "我点错了", function () {
+                $.post("/news/Delete/{0}".Format(mid), function (data) {
+                    if (data.Ok) {
+                        layer.msg("删除成功", {
+                            time: 300,
+                            end: function () {
+                                var _parent = me.parent().parent(),
+                                    _top = _parent.parent().parent();
+                                _parent.remove();
+                                _top.find("li").length == 0 && _top.remove();
+                            }
+                        });
+                    } else {
+                        layer.msg("删除失败");
+                    }
+                });
+            });
+        }
+
+        $(".newsItem").mouseover(function () {
+            $(this).find(".btnActions").removeClass("Ldn");
+        }).mouseleave(function () {
+            $(this).find(".btnActions").addClass("Ldn");
+        });
+
+        $("#editAbout").click(function () {
+            var me = $(this);
+            BeforeEditor(me);
+            EditorInit(2, me);
+        });
+        $("#addAbout").click(function () {
+            var me = $(this);
+            BeforeEditor(me);
+            EditorInit(1, me);
+        });
+
+        function BeforeEditor(me) {
+            me.parent().append(
+                $("<a>").addClass('btn btn-primary').click(function () {
+                    if ($("#aboutWrapper").summernote("isEmpty")) {
+                        layer.msg("公司介绍不能为空");
+                    } else {
+                        $.post("/About/Add", {
+                            desc: encodeURI($("#aboutWrapper").summernote("code"))
+                        }, function (data) {
+                            layer.msg(data.Msg);
+                            if (data.Ok) { location.reload(!0); }
+                        })
+                    }
+                }).text("确 认")
+            );
+            me.remove();
+        }
+
+        function EditorInit(type, me) {
+            $('#aboutWrapper').summernote({
+                placeholder: '此处填写公司介绍',
+                tabsize: 2,
+                height: 500,
+                lang: 'zh-CN',
+                focus: !1,
+                callbacks: {
+                    onImageUpload: function (files, editor, $editable) {
+                        sendFile(files);
+                    },
+                    onPaste: function (ne) {
+                        debugger
+                        var bufferText = ((ne.originalEvent || ne).clipboardData || window.clipboardData).getData('Text/plain');
+                        //    ne.preventDefault();
+                        ne.preventDefault ? ne.preventDefault() : (ne.returnValue = false);
+                        // Firefox fix
+                        setTimeout(function () {
+                            document.execCommand("insertText", false, bufferText);
+                        }, 10);
+                        /*  */
+                    }
+                },
+            });
+            if (type == 2) {
+                $('#aboutWrapper').summernote("code", $("#aboutContent").html());
+                $("#aboutContent").remove();
+            }
+        }
+
+        function sendFile(files, editor, $editable) {
+            var formdata = new FormData();
+            formdata.append("file", $('.note-image-input')[0].files[0]);
+            formdata.append("IsThumbnail", 1);
+            $.ajax({
+                data: formdata,
+                type: "POST",
+                url: "/Tool/UpLoadAboutIMG",
+                cache: false,
+                contentType: false,
+                processData: false,
+                dataType: "json",
+                success: function (data) {
+                    $('#aboutWrapper').summernote('insertImage', data.Url);
+                },
+                error: function () {
+                    alert("上传失败");
+                }
+            });
+        }
+    </script>
+}

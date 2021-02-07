@@ -1,0 +1,95 @@
+﻿@{
+    string time = Model;
+    List<string> times = null;
+    bool isJianZhi = true;
+    string cls = string.Empty;
+    if (string.IsNullOrEmpty(time))
+    {
+        isJianZhi = false;
+        cls = "Ldn";
+    }
+    else
+    {
+        times = time.Split('_').ToList();
+    }
+}
+<div class="form-group @cls" id="jianzhi">
+    <label class="col-md-2 control-label">兼职周期</label>
+    <div class="col-md-10 Lpdl0">
+        <div class="col-md-2">
+            <select class="form-control" id="SelectworkMonth">
+                <option value="0">每个月</option>
+                <option value="1">一月</option>
+                <option value="2">二月</option>
+                <option value="3">三月</option>
+                <option value="4">四月</option>
+                <option value="5">五月</option>
+                <option value="6">六月</option>
+                <option value="7">七月</option>
+                <option value="8">八月</option>
+                <option value="9">九月</option>
+                <option value="10">十月</option>
+                <option value="11">十一月</option>
+                <option value="12">十二月</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="SelectworkWeek">
+                <option value="0">每周</option>
+                <option value="1">第一周</option>
+                <option value="2">第二周</option>
+                <option value="3">第三周</option>
+                <option value="4">第四周</option>
+                <option value="5">第五周</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="SelectworkStartWeek">
+                <option value="1">周一</option>
+                <option value="2">周二</option>
+                <option value="3">周三</option>
+                <option value="4">周四</option>
+                <option value="5">周五</option>
+                <option value="6">周六</option>
+                <option value="7">周日</option>
+            </select>
+        </div>
+        <div class="col-md-1">到</div>
+        <div class="col-md-2">
+            <select class="form-control" id="SelectworkEndWeek">
+                <option value="5">周五</option>
+                <option value="4">周四</option>
+                <option value="3">周三</option>
+                <option value="2">周二</option>
+                <option value="1">周一</option>
+                <option value="7">周日</option>
+                <option value="6">周六</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control" id="SelectworkHour">
+                @for (int i = 1; i <= 16; i++)
+                {
+                    if (i == 8)
+                    {
+                        <option value="@i" selected>兼职@(i)小时</option>
+                    }
+                    else
+                    {
+                        <option value="@i">兼职@(i)小时</option>
+                    }
+                }
+            </select>
+        </div>
+        @if (isJianZhi)
+        {
+            <script>
+                $("#SelectworkMonth").val(@times[0]);
+                $("#SelectworkWeek").val(@times[1]);
+                $("#SelectworkStartWeek").val(@times[2]);
+                $("#SelectworkEndWeek").val(@times[3]);
+                $("#SelectworkHour").val(@times[4]);
+            </script>
+        }
+    </div>
+</div>

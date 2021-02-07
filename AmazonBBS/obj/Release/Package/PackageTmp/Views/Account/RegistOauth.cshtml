@@ -1,0 +1,104 @@
+﻿@model AmazonBBS.Model.UserBase
+@{
+    ViewBag.Title = "注册邮箱帐号并绑定";
+}
+<script src="/Content/citypicker.js"></script>
+<script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+@using (Html.BeginForm("RegistOauth", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "nmform" }))
+{
+    @Html.AntiForgeryToken()
+    <h4>
+        欢迎您 @ViewBag.UserName ！
+        <br />
+        想要绑定帐号却没有会员？现在就来注册一个吧。
+        <br />
+        <span style="color:red;font-size:12px;">新注册的邮箱数据以当前登录的帐号的数据为准！</span>
+    </h4>
+    <hr />
+    @Html.ValidationSummary(string.Empty, new { @class = "text-danger" })
+    <div class="form-group">
+        @Html.LabelFor(m => m.Account, "用户名", new { @class = "col-md-2 control-label" })
+        <div class="col-md-8">
+            @Html.TextBoxFor(m => m.Account, new { @class = "form-control", placeholder = "邮箱注册，请填写正确邮箱" })
+        </div>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-default" id="SendEmailCode">获取邮箱验证码</button>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.ValidateCode, "验证码", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.ValidateCode, new { @class = "form-control", placeholder = "请输入您邮箱中的验证码" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Password, "密码", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "密码6-18位" })
+        </div>
+    </div>
+    @*<div class="form-group">
+        @Html.LabelFor(m => m.UserName, "昵称", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", placeholder = "您在本站的显示昵称", value = @ViewBag.UserName })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gender, "性别", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.Gender, new List<SelectListItem>() {
+new SelectListItem() { Text = "请选择", Value = "" },
+new SelectListItem() { Text = "男", Value = "1" },
+new SelectListItem() { Text = "女", Value = "2" } },
+                          new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="form-group" data-toggle="distpicker">
+        @Html.Label("所在地", new { @class = "col-md-2 control-label" })
+        <div class="col-md-4">
+            <select name="Province" id="Province" data-province="--选择省--" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <select name="City" id="City" data-city="--选择市--" class="form-control"></select>
+        </div>
+        <div class="col-md-3">
+            <select name="County" id="County" data-district="--选择区/县/市--" class="form-control"></select>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Birth, "出生年月", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Birth, new { @class = "form-control", placeholder = "请输入出生年月" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Work, "岗位", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Work, new { @class = "form-control", placeholder = "请输入岗位" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.JingYing, "经营类目", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.JingYing, new { @class = "form-control", placeholder = "请输入经营类目" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.WorkYear, "工作年限", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.WorkYear, new { @class = "form-control", placeholder = "请输入工作年限" })
+        </div>
+    </div>*@
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a id="btn_register" class="btn btn-primary">注册并绑定</a>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    Leo.init("account", "register");
+</script>

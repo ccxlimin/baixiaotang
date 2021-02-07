@@ -1,0 +1,14 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model StudyClass
+@{
+    ViewBag.Title = "课程学习内容";
+}
+
+<div class="Lmgt20">
+    <h3>@Model.Name</h3>
+    <div>
+        @Html.Raw(Model.Content)
+    </div>
+</div>

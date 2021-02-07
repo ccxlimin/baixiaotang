@@ -1,0 +1,40 @@
+﻿@using AmazonBBS.Model
+@model List<SignUserStudyInfo>
+@{
+    bool more = ViewBag.More;
+    var studies = Model;
+    long uid = ViewBag.Uid;
+}
+@foreach (SignUserStudyInfo study in studies)
+{
+    <div class="clearfix">
+        <div class="col-md-2 col-xs-2 sign-vip-today-link-column">@study.UserName</div>
+        <div class="col-md-2 col-xs-2 sign-vip-today-link-column">@study.SignCountMonth</div>
+        <div class="col-md-2 col-xs-2 sign-vip-today-link-column">@study.SignCountTotal</div>
+        @if (study.CurrentStudyInfo == null)
+        {
+            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">暂无学习计划</div>
+        }
+        else
+        {
+            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">@study.CurrentStudyClassInfo.Name</div>
+        }
+        <div class="col-md-2 col-xs-2 sign-vip-today-link-column">
+            @study.StudyRate
+            @if (uid == study.Uid)
+            {
+                <img src="~/Content/img/study1.png" onmouseover="this.src='/Content/img/study2.png'" onmouseout="this.src='/Content/img/study1.png'" title="前往学习" class="btn-study-share" onclick="window.open('/study')" />
+                if (study.CurrentStudyInfo != null)
+                {
+                    <img src="~/Content/img/share1.png" onmouseover="this.src='/Content/img/share2.png'" onmouseout="this.src='/Content/img/share1.png'" title="分享" class="btn-study-share" onclick="window.open('/study/share/@study.Uid?cid=@study.CurrentStudyInfo.StudyClassId')" />
+                }
+            }
+        </div>
+    </div>
+}
+@if (!more && studies.Count == 6)
+{
+    <div class="clearfix Ltac">
+        <a class="studyinfoMore">加载更多</a>
+    </div>
+}

@@ -1,0 +1,30 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyNotice
+@{
+    ViewBag.Title = "系统通知 - 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                @if (Model.NoticeList.Count > 0)
+                {
+                    <div class="mod-body aw-feed-list aw-feed-list-big noticeList">
+                        @Html.Partial("_RenderNotice", Model)
+                    </div>
+                }
+                else
+                {
+                    <div class="well">
+                        暂时没有收到系统通知！
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "notice");
+</script>

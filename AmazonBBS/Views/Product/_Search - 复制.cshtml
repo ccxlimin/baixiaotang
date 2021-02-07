@@ -1,0 +1,192 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ProductViewModel
+@{
+    string defaultLogo = "/Content/img/head_default.gif";
+    Paging page = Model.ProductPage;
+    List<_Product> list = Model.ProductList;
+    bool isroot = UserBaseBLL.Instance.IsRoot;
+}
+@if (page.RecordCount > 0)
+{
+    <div class="aw-common-list">
+        @foreach (_Product item in list)
+        {
+            <div class="big-aw-item aw-item">
+                <a class="aw-user-name" href="/Product/Detail/@item.ProductID" rel="nofollow">
+                    <img src="@item.PLogo??@defaultLogo" onerror="javascript:this.src='/Content/img/head_default.gif'">
+                    @*<div style="max-width:40px;overflow:hidden;height:20px;line-height:20px;" title="@item.CompanyName">@item.CompanyName</div>*@
+                </a>
+                <div class="aw-question-content">
+                    <h4>
+                        <a target="_blank" href="/Product/Detail/@item.ProductID">
+                            <span>
+                                @if (item.IsTop == 1)
+                                {
+                                    <span style="border:orange 1px solid;color:orange;padding:0 5px;font-size:12px;">置顶</span>
+                                }
+                                @if (item.IsJinghua == 1)
+                                {
+                                    <img height="24" data-toggle="tooltip" title="精华贴" src="/Content/U/Site/jinghuatie.png" />
+                                }
+                                @if (item.IsRemen == 1)
+                                {
+                                    <img height="24" data-toggle="tooltip" title="热门贴" src="/Content/U/Site/rementie.png" />
+                                }
+                                <span class="aw-title-desc">
+                                    @item.PTitle |
+                                    @item.PLocation |
+                                    @{
+                                        int length = item.PDesc.Length;
+                                        if (length > 10)
+                                        {
+                                            <span>@item.PDesc.Substring(0, 10)</span>
+                                        }
+                                        else
+                                        {
+                                            <span>@item.PDesc</span>
+                                        }
+                                    } |
+                                    @item.PFunction |
+                                    @item.PPrice |
+                                    @item.PSize
+                                </span>
+                                @{
+                                    ViewBag.VIP = item.VIP;
+                                    ViewBag.Time = item.VIPExpiryTime;
+                                    var htm = Html.Partial("_VIP");
+                                    @Html.Raw(htm)
+                                }
+                                @{
+                                    //ViewBag.UserV = ;
+                                    @Html.Partial("_UserV", item.UserV)
+                                }
+                            </span>
+                        </a>
+                    </h4>
+                    <span>
+                        <span class="pageviews-pv">@(item.PVCount)次浏览</span> •
+                        @Html.Partial("_TimeLine", item.CreateTime)
+                        @if (isroot)
+                        {
+                            <span data-mid="@item.ProductID">
+                                <span class="editPV btn btn-primary btn-xs">修改浏览量</span>
+                                <button class="editContent btn btn-primary btn-xs">编辑</button>
+                                <button class="deleteProduct btn btn-primary btn-xs">删除</button>
+                                @if (item.IsJinghua == 1)
+                                {
+                                    <button class="cancleJinghua btn btn-default btn-xs">取消精华</button>
+                                }
+                                else
+                                {
+                                    <button class="setjinghua btn btn-primary btn-xs">设精华</button>
+                                }
+                                @if (item.IsRemen == 1)
+                                {
+                                    <button class="cancleRemen btn btn-default btn-xs">取消热门</button>
+                                }
+                                else
+                                {
+                                    <button class="setremen btn btn-primary btn-xs">设热门</button>
+                                }
+                                @if (item.IsTop == 1)
+                                {
+                                    <button class="cancleTop btn btn-default btn-xs">取消置顶</button>
+                                }
+                                else
+                                {
+                                    <button class="settop btn btn-primary btn-xs">设置顶</button>
+                                }
+                            </span>
+                        }
+                    </span>
+                    <div class="user-title" oncontextmenu="return !1;">
+                        @{
+                            <span>@item.UserName</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div id="commentpage">
+            @Html.Partial("_PageLink", page)
+        </div>
+    </div>
+}
+else
+{
+    <div class="well">
+        暂时没有产品服务信息
+    </div>
+}
+@if (isroot)
+{
+    @Html.Partial("_LoadEditPVScript")
+    <script>
+        //编辑
+        $(".editContent").click(function () {
+            location.href = "/Product/Edit/" + $(this).parent().data("mid");
+        });
+
+        //删除
+        $(".deleteProduct").click(function () {
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此产品服务吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD();
+                setTimeout(function () {
+                    $.post("/Product/Delete/{0}".Format(me.parent().data("mid")), function (data) {
+                        if (data.Ok) {
+                            MSG("删除成功");
+                            me.parent().parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+
+        //设精华
+        $(".setjinghua").click(function () {
+            SetPropertity(1, 1, $(this));
+        });
+        $(".cancleJinghua").click(function () {
+            SetPropertity(2, 1, $(this));
+        });
+        //设热门
+        $(".setremen").click(function () {
+            SetPropertity(1, 2, $(this));
+        });
+        $(".cancleRemen").click(function () {
+            SetPropertity(2, 2, $(this));
+        });
+        //设置顶
+        $(".settop").click(function () {
+            SetPropertity(1, 3, $(this));
+        });
+        $(".cancleTop").click(function () {
+            SetPropertity(2, 3, $(this));
+        });
+        function SetPropertity(action, type, me) {
+            var _type = type == 1 ? "精华" : type == 2 ? "热门" : "置顶";
+            var _action = action == 1 ? "设为" : "取消";
+            var _index = AlertConfirm("确认将此帖{0}{1}吗？".Format(_action, _type), "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD();
+                setTimeout(function () {
+                    $.post("/ZHAOPIN/SETPROPERTITY/{0}".Format(me.parent().data("mid")), { type: type, action: action, enumPageType: "product" }, function (data) {
+                        if (data.Ok) {
+                            CLOSE(loadIndex);
+                            MSG("设置{0}成功".Format(_type), function () { location.reload(!0); });
+                        } else {
+                            MSG(data.Msg || "设置失败");
+                        }
+                        CLOSE(_index);
+                    });
+                }, 1000);
+            }, function () { });
+        }
+    </script>
+}

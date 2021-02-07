@@ -1,0 +1,19 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ShareLink
+@{
+    ViewBag.Title = "分享链接";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                <div class="well-lg" style="background:#fff;">
+                    请复制您的分享链接给他人:
+                    <h5>@Model.ShareAddress</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

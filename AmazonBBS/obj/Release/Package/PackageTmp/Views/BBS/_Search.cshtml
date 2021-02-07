@@ -1,0 +1,281 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model BBSListViewModel
+@{
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool hastopicmaster = (bool)ViewBag.HasTopicMaster;
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    int higescore = Convert.ToInt32(ConfigHelper.AppSettings("HigeScoreFlag"));
+    //string defaultdesc = "点击查看正文内容";
+    //获取积分等级表
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+
+    long userid = UserBaseBLL.Instance.UserID;
+    bool needEditScript = false;
+    bool isother = ViewBag.IsOther == null ? false : ViewBag.IsOther;//是否 其他 版块
+                                                                     //bool isVip = UserBaseBLL.Instance.IsVIP(userid);//当前用户是否VIP用户
+                                                                     //bool hideForNoVipUser = isother && !isVip;//在其他版块并且当前用户不是VIP
+    int normalUserSee_Score = ConfigHelper.AppSettings("normalUserSee_Score").ToInt32();//普通用户查看 other 版块 所需积分
+}
+<style>
+</style>
+@foreach (_QuestionInfo question in Model.QuestionList)
+{
+    bool isshow = !question.IsAnonymous || ismaster || userid == question.UserID;
+    <div class="aw-item">
+        @if (isshow)
+        {
+            <a class="aw-user-name" href="/user/detail/@question.UserName" rel="nofollow">
+                <img src="@(question.HeadUrl ?? defaultheadurl)" onerror="javascript:this.src='/Content/img/head_default.gif'" alt="@question.UserName">
+            </a>
+        }
+        else
+        {
+            <a class="aw-user-name">
+                <img src="~/Content/img/anonymous.png" alt="匿名用户" />
+            </a>
+        }
+        <div class="aw-question-content">
+            <h4 oncontextmenu="return !1;" style="user-select:none;">
+                @if (question.CoinType != 0)
+                {
+                    <span style="border:red 1px solid;color:red;padding:0 5px;font-size:12px;">悬赏@(question.Coin)</span>
+                    if (question.Coin >= higescore)
+                    {
+                        <span style="border:#162ff6 1px solid;color:#162ff6;padding:0 5px;font-size:12px;">高分贴</span>
+                    }
+                }
+                @if (question.IsTop == 1)
+                {
+                    <span style="border:orange 1px solid;color:orange;padding:0 5px;font-size:12px;">置顶</span>
+                }
+                @if (question.IsJinghua == 1)
+                {
+                    <img height="24" data-toggle="tooltip" title="精华贴" src="/Content/U/Site/jinghuatie.png" />
+                }
+                @if (question.IsRemen == 1)
+                {
+                    <img height="24" data-toggle="tooltip" title="热门贴" src="/Content/U/Site/rementie.png" />
+                }
+                <a target="_blank" href="/bbs/detail/@question.QuestionId">
+                    @question.Title
+                </a>
+            </h4>
+            @{
+                if (!question.HideForNoVipUserOrNotBuy)
+                {
+                    string body = HtmlRegexHelper.ToText(question.Body);
+                    var length = body.Length;
+                    if (length > 0)
+                    {
+                        if (length > 39)
+                        {
+                            body = body.Substring(0, 39);
+                        }
+                        <div class="Lfs12">@(body)...</div>
+                    }
+                }
+                else
+                {
+                    <div class="Lfs12 Lcr">本条<a class="btn-buyOtherItem" data-id="@question.QuestionId" data-c="@normalUserSee_Score">查看</a>需要 @(normalUserSee_Score) 积分，<a href="/user/scoreexchange#scoreexchange" target="_self">会员</a>可享受免费查看</div>
+                }
+            }
+            <div class="user-title" oncontextmenu="return !1;">
+                @{
+                    if (isshow)
+                    {
+                        ViewBag.VIP = question.VIP;
+                        ViewBag.Time = question.VIPExpiryTime;
+                        var htm = Html.Partial("_VIP");
+                        @Html.Partial("_UserV", question.UserV)
+                        <span style="vertical-align:middle;">
+                            @question.UserName • @Html.Raw(htm)
+                        </span>
+                        //管理员
+                        if (question.IsMaster)
+                        {
+                            <span data-toggle="tooltip" title="管理员">
+                                <img width="20" height="20" src="/Content/U/Site/master.png" />
+                            </span>
+                        }
+                        //积分等级
+                        var item = ScoreLevelList.Where(a => a.SortIndex <= question.TotalScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                        if (item != null)
+                        {
+                            <span data-toggle="tooltip" title="@item.EnumDesc">
+                                <img width="20" height="20" src="/Content/img/LevelLogo/scorelevelname_@(item.EnumDesc).png" />
+                            </span>
+                        }
+                        //头衔或专属头衔
+                        if (question.HeadNameShowType == 1)
+                        {
+                            if (!string.IsNullOrEmpty(question.LevelName))
+                            {
+                                <span data-toggle="tooltip" title="@question.LevelName">
+                                    <img width="20" height="20" src="/Content/img/LevelLogo/levelname_@(question.LevelName).png" />
+                                </span>
+                            }
+                        }
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(question.OnlyLevelName))
+                            {
+                                <span data-toggle="tooltip" title="@question.OnlyLevelName">
+                                    <img width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(question.OnlyLevelName).png" />
+                                </span>
+                            }
+                        }
+                    }
+                    else
+                    {
+                        <span style="vertical-align:middle;">匿名用户</span>
+                    }
+                    <span class="itemdata">
+                        @(question.PriseCount)赞 •
+                        @(question.LikeCount)人关注 •
+                        @(question.CommentCount) 条评论 •
+                        <span class="pageviews-pv">@(question.PVCount)次浏览</span> •
+                        <span data-toggle="tooltip" title="发布时间">@Html.Partial("_TimeLine", question.CreateTime)</span>
+                        @if (question.UpdateTime != question.CreateTime)
+                        {
+                            <span data-toggle="tooltip" title="更新时间"> • @Html.Partial("_TimeLine", question.UpdateTime)</span>
+                        }
+                        @if (question.LastCommentTime.HasValue)
+                        {
+                            <span data-toggle="tooltip" title="最后回复时间">
+                                • @Html.Partial("_TimeLine", question.LastCommentTime)
+                            </span>
+                        }
+                        @if (hastopicmaster)
+                        {
+                            <span class="btnActionsNoPosition Ldn" data-mid="@question.QuestionId">
+                                <button class="editPV btn btn-primary btn-xs">修改浏览量</button>
+                                <button class="editContent btn btn-primary btn-xs">编辑</button>
+                                <button class="deleteQuestion btn btn-danger btn-xs">删除</button>
+                                @if (question.IsJinghua == 1)
+                                {
+                                    <button class="cancleJinghua btn btn-default btn-xs">取消精华</button>
+                                }
+                                else
+                                {
+                                    <button class="setjinghua btn btn-primary btn-xs">设精华</button>
+                                }
+                                @if (question.IsRemen == 1)
+                                {
+                                    <button class="cancleRemen btn btn-default btn-xs">取消热门</button>
+                                }
+                                else
+                                {
+                                    <button class="setremen btn btn-primary btn-xs">设热门</button>
+                                }
+                                @if (question.IsTop == 1)
+                                {
+                                    <button class="cancleTop btn btn-default btn-xs">取消置顶</button>
+                                }
+                                else
+                                {
+                                    <button class="settop btn btn-primary btn-xs">设置顶</button>
+                                }
+                            </span>
+                        }
+                        else if (question.UserID == userid && question.EditCount < 3)
+                        {
+                            needEditScript = true;
+                            <span class="btnActionsNoPosition" data-mid="@question.QuestionId">
+                                <button class="editContent btn btn-primary btn-xs">编辑</button>
+                            </span>
+                        }
+                        @*</p>*@
+                    </span>
+                }
+            </div>
+        </div>
+    </div>
+}
+<div id="bbs_page_wrap">
+    @Html.Partial("_Page", Model.QuestionPage)
+</div>
+@if (ismaster)
+{
+    @Html.Partial("_LoadEditPVScript")
+}
+@if (hastopicmaster || needEditScript)
+{
+    <script>
+        //编辑
+        $(".editContent").click(function () {
+            location.href = "/bbs/edit/" + $(this).parent().data("mid");
+        });
+    </script>
+}
+@if (hastopicmaster)
+{
+    <script>
+        $(".aw-item").mouseover(function () {
+            $(this).find(".btnActionsNoPosition").removeClass("Ldn")
+        }).mouseleave(function () {
+            $(this).find(".btnActionsNoPosition").addClass("Ldn")
+        });
+        //删除问题
+        $(".deleteQuestion").click(function () {
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此帖子吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD();
+                setTimeout(function () {
+                    $.post("/bbs/deleteq/{0}".Format(me.parent().data("mid")), function (data) {
+                        if (data.Ok) {
+                            MSG("删除成功");
+                            me.parent().parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+
+        //设精华
+        $(".setjinghua").click(function () {
+            SetPropertity(1, 1, $(this));
+        });
+        $(".cancleJinghua").click(function () {
+            SetPropertity(2, 1, $(this));
+        });
+        //设热门
+        $(".setremen").click(function () {
+            SetPropertity(1, 2, $(this));
+        });
+        $(".cancleRemen").click(function () {
+            SetPropertity(2, 2, $(this));
+        });
+        //设置顶
+        $(".settop").click(function () {
+            SetPropertity(1, 3, $(this));
+        });
+        $(".cancleTop").click(function () {
+            SetPropertity(2, 3, $(this));
+        });
+        function SetPropertity(action, type, me) {
+            var _type = type == 1 ? "精华" : type == 2 ? "热门" : "置顶";
+            var _action = action == 1 ? "设为" : "取消";
+            var _index = AlertConfirm("确认将此帖{0}{1}吗？".Format(_action, _type), "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD();
+                setTimeout(function () {
+                    $.post("/bbs/setpropertity/{0}".Format(me.parent().data("mid")), { type: type, action: action }, function (data) {
+                        if (data.Ok) {
+                            CLOSE(loadIndex);
+                            MSG("设置{0}成功".Format(_type), function () { location.reload(!0); });
+                        } else {
+                            MSG(data.Msg || "设置失败");
+                        }
+                        CLOSE(_index);
+                    });
+                }, 1000);
+            }, function () { });
+        }
+    </script>
+}

@@ -1,0 +1,11 @@
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\bin\Debug\AliPay.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\bin\Debug\AliPay.pdb
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Debug\AliPay.csprojAssemblyReference.cache
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Debug\AliPay.csproj.CoreCompileInputs.cache
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Debug\AliPay.dll
+E:\网站\MEPROJECT\外包\AmazonBBS\AmazonBBS\AliPay\obj\Debug\AliPay.pdb
+D:\李敏项目\百晓堂\源码\AmazonBBS\AliPay\bin\Debug\AliPay.dll
+D:\李敏项目\百晓堂\源码\AmazonBBS\AliPay\bin\Debug\AliPay.pdb
+D:\李敏项目\百晓堂\源码\AmazonBBS\AliPay\obj\Debug\AliPay.csproj.CoreCompileInputs.cache
+D:\李敏项目\百晓堂\源码\AmazonBBS\AliPay\obj\Debug\AliPay.dll
+D:\李敏项目\百晓堂\源码\AmazonBBS\AliPay\obj\Debug\AliPay.pdb

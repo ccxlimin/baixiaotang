@@ -1,0 +1,157 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    ViewBag.Title = "用户头衔授予";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    List<BBSEnum> list = BBSEnumBLL.Instance.Query(BBSEnumType.LevelName.GetHashCode(), true);
+    List<BBSEnum> onlyList = BBSEnumBLL.Instance.Query(BBSEnumType.OnlyLevelName.GetHashCode(), true);
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div class="well">
+            <h1>用户头衔授予</h1>
+            @if (list.Count > 0)
+            {
+                <div class="well">
+                    <div class="form-group-sm clearfix">
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="searchUser" placeholder="查找用户" />
+                        </div>
+                        <a id="btn_search" class="btn btn-primary">开始查找</a>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-3">
+                            <select id="giveLevelName" class="form-control">
+                                <option value="">请选择头衔</option>
+                                @foreach (BBSEnum item in list)
+                                {
+                                    <option value="@item.BBSEnumId">@item.EnumDesc</option>
+                                }
+                            </select>
+                        </div>
+                        <a id="btn_give" class="btn btn-primary">确认授予</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="well">
+                    暂无用户头衔可选，请先去 <a href="EditLevelName">[用户头衔维护] </a> 设置吧
+                </div>
+            }
+        </div>
+        <div class="well">
+            <h1>用户专属头衔授予</h1>
+            @if (onlyList.Count > 0)
+            {
+                <div class="well">
+                    <div class="form-group-sm clearfix">
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="searchUser2" placeholder="查找用户" />
+                        </div>
+                        <a id="btn_search2" class="btn btn-primary">开始查找</a>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-3">
+                            <select id="giveLevelName2" class="form-control">
+                                <option value="">请选择专属头衔</option>
+                                @foreach (BBSEnum item in onlyList)
+                                {
+                                    <option value="@item.BBSEnumId">@item.EnumDesc</option>
+                                }
+                            </select>
+                        </div>
+                        <a id="btn_give2" class="btn btn-primary">确认授予</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="well">
+                    暂无用户专属头衔可选，请先去 <a href="EditLevelName">[用户头衔维护] </a> 设置吧
+                </div>
+            }
+        </div>
+    </div>
+</div>
+<script>
+    $("#btn_search").unbind("click").click(function () {
+        if ($("#searchUser").val() == "") {
+            $("#searchUser").focus();
+            layer.msg("请输入用户名称进行查找", function () { $('.errorMsg1').addClass("Ldn") });
+            return !1;
+        } else {
+            $.post("/Console/CheckUser/{1}?t={0}".Format(Leo.getPK(), $.trim($("#searchUser").val()))
+                , function (data) {
+                    if (data.Ok) {
+                        $("#searchUser").attr("disabled", !0);
+                        layer.msg("匹配成功!可以进行头衔授予!");
+                        $("#btn_search").addClass("disabled").unbind("click");
+                        $("#btn_give").unbind("click").click(function () {
+                            if ($("#giveLevelName").val() == "") {
+                                layer.msg("请选择头衔");
+                                return !1;
+                            } else {
+                                $.post("/Console/GiveName?t={0}".Format(Leo.getPK()),
+                                    { only: !1, levelName: $("#giveLevelName").val(), username: $.trim($("#searchUser").val()) },
+                                    function (data) {
+                                        if (data.Ok) {
+                                            layer.msg(data.Msg);
+                                            setTimeout(function () {
+                                                location.reload(!0);
+                                            }, 500)
+                                        } else {
+                                            layer.msg(data.Msg);
+                                        }
+                                    })
+                            }
+                        });
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+    });
+    $("#btn_search2").unbind("click").click(function () {
+        if ($("#searchUser2").val() == "") {
+            $("#searchUser2").focus();
+            layer.msg("请输入用户名称进行查找", function () { $('.errorMsg1').addClass("Ldn") });
+            return !1;
+        } else {
+            $.post("/Console/CheckUser/{1}?t={0}".Format(Leo.getPK(), $.trim($("#searchUser2").val()))
+                , function (data) {
+                    if (data.Ok) {
+                        $("#searchUser2").attr("disabled", !0);
+                        layer.msg("匹配成功!可以进行专属头衔授予!");
+                        $("#btn_search2").addClass("disabled").unbind("click");
+                        $("#btn_give2").unbind("click").click(function () {
+                            if ($("#giveLevelName2").val() == "") {
+                                layer.msg("请选择专属头衔");
+                                return !1;
+                            } else {
+                                $.post("/Console/GiveName?t={0}".Format(Leo.getPK()),
+                                    { only: !0, levelName: $("#giveLevelName2").val(), username: $.trim($("#searchUser2").val()) },
+                                    function (data) {
+                                        if (data.Ok) {
+                                            layer.msg(data.Msg);
+                                            setTimeout(function () {
+                                                location.reload(!0);
+                                            }, 500)
+                                        } else {
+                                            layer.msg(data.Msg);
+                                        }
+                                    })
+                            }
+                        });
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+    });
+</script>

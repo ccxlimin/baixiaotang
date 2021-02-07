@@ -1,0 +1,302 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model UserViewModel
+@{
+    string descUrl = ConfigHelper.AppSettings("scoreName_levelName_desc_url");
+    UserViewModel user = Model;
+    ViewBag.Title = user.UserName + "的个人中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //string userbg = "/Content/U/Center/111.jpg";
+    string defaultheadurl = "/Content/img/head_default.gif";
+    bool isLogin = UserBaseBLL.Instance.IsLogin;
+    ViewBag.Skin = UserBaseBLL.Instance.GetUserSkin(user.UserID);
+
+    UserSet userSet = (UserSet)ViewBag.UserSet;
+}
+
+<div class="row Lmgt20">
+    <div class="col-md-8 col-md-offset-2 clearfix" style="background-color:rgba(255,255,255,.7);">
+        <div class="col-xs-3 col-md-3">
+            <img src="@(user.HeadUrl ?? defaultheadurl)" onerror="this.src='/Content/img/head_default.gif'" style="width:80%;height:80%;margin:10%;" />
+        </div>
+        <div class="col-xs-5 col-md-5">
+            <div>
+                <h2 class="Lmgb0">@user.UserName</h2>
+                <input value="@user.UserID" hidden="hidden" id="hiduid" />
+                <div class="UserTabs">
+                    <h5>
+                        <span class="col-md-3 Lpd0i Lfwb">个性签名：</span>
+                        <span class="col-md-9 Lpd0i">
+                            @(user.Sign ?? "该用户很懒，懒的什么都没有留下")
+                        </span>
+                    </h5>
+                    <h5>
+                        <span class="col-md-3 Lpd0i Lfwb Lusn" data-toggle="tooltip" title="签到、提问、点赞和回答问题可以获取积分，详情可双击查看" ondblclick="window.open('@descUrl')">积分等级：</span>
+                        @{
+                            <span class="col-md-9 Lpd0i">
+                                @{List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+                                    int userScore = user.TotalScore;
+                                    var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                                    if (item != null)
+                                    {
+                                        var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                                        string title = nextItem == null ? "，全站最高等级啦！恭喜！" : "，下一级还需" + (nextItem.SortIndex - userScore) + "积分升级到:" + nextItem.EnumDesc;
+                                        //循环计算等级称号
+                                        int loopCount = scoreLevelList.Count;
+                                        for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                                        {
+                                            var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                            if (findItem != null)
+                                            {
+                                                <img width="22" height="22" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" data-toggle="tooltip" title="当前等级:@item.EnumDesc@title" />
+                                                if (userScore > 0 && findItem.SortIndex > 0)
+                                                {
+                                                    userScore -= findItem.SortIndex.Value;
+                                                }
+                                                else
+                                                {
+                                                    break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="Lvam">暂未达到最低等级</span>
+                                    }
+                                }
+                            </span>
+                        }
+                    </h5>
+                    @if (user.HeadNameShowType == 1)
+                    {
+                        <h5>
+                            <span class="col-md-3 Lpd0i Lfwb Lusn" data-toggle="tooltip" title="签到次数越多则头衔越高，详情可双击查看" ondblclick="window.open('@descUrl')">头衔：</span>
+                            <span class="col-md-9 Lpd0i">
+                                @if (string.IsNullOrEmpty(user.LevelName))
+                                {
+                                    <span>暂未获得</span>
+                                }
+                                else
+                                {
+                                    string levelNameUrls = Model.LevelNameUrls;
+                                    string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                                    if (imgs != null)
+                                    {
+                                        foreach (string imgSrc in imgs)
+                                        {
+                                            <img data-toggle="tooltip" title="@user.LevelName" width="22" height="22" src="@imgSrc" />
+                                        }
+                                    }
+                                }
+                            </span>
+                        </h5>
+                    }
+                    else if (user.HeadNameShowType == 2)
+                    {
+                        <h5>
+                            <span class="col-md-3 Lpd0i Lfwb Lusn" data-toggle="tooltip" title="专属头衔由管理员赠送，详情可双击查看" ondblclick="window.open('@descUrl')">专属头衔：</span>
+                            <span class="col-md-9 Lpd0i">
+                                @if (string.IsNullOrEmpty(user.OnlyLevelName))
+                                {
+                                    <span>暂未获得</span>
+                                }
+                                else
+                                {
+                                    <img data-toggle="tooltip" title="@user.OnlyLevelName" width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(user.OnlyLevelName).png" />
+                                }
+                            </span>
+                        </h5>
+                    }
+                    @if (userSet.ShowOrHideBaseInfo)
+                    {
+                        <h5>
+                            <span class="col-md-3 Lpd0i Lfwb">性别：</span>
+                            <span class="col-md-3 Lpd0i">
+                                @(user.Gender == 1 ? "男" : "女")
+                            </span>
+                            <span class="col-md-3 Lpd0i Lfwb">年龄：</span>
+                            <span class="col-md-3 Lpd0i">
+                                @{
+                                    DateTime time;
+                                    if (DateTime.TryParse(user.Birth, out time))
+                                    {
+                                        <span>@(DateTime.Now.Year - time.Year)</span>
+                                    }
+                                    else
+                                    {
+                                        <span>未知</span>
+                                    }
+                                }
+                            </span>
+                        </h5>
+                        <h5>
+                            <span class="col-md-3 Lpd0i Lfwb">地区：</span>
+                            <span class="col-md-9 Lpd0i">
+                                @(user.Province)
+                            </span>
+                        </h5>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-4 col-md-4 Ltac" style="padding:0;margin:23px 0;">
+            <div class="row col-md-12" style="padding:0;">
+                <div class="col-xs-4 col-md-4" style="border-right:1px solid #e5e5e5;padding:0;">
+                    <a class="tip_question" href="#question" data-toggle="tab" data-reactid="1">@user.QuestionCount</a>
+                    <br />问题
+                </div>
+                <div class="col-xs-4 col-md-4" style="border-right:1px solid #e5e5e5;padding:0;">
+                    <a class="tip_article" href="#article" data-toggle="tab" data-reactid="3">@user.ArticltCount</a>
+                    <br />文章
+                </div>
+                <div class="col-xs-4 col-md-4" style="padding:0;">
+                    <a class="likecount" data-uid="@user.UserID">@user.LikeCount</a><br />粉丝
+                </div>
+            </div>
+            <div class="row col-md-12" style="padding:0;">
+                <div class="col-xs-3 col-md-3" style="border-right:1px solid #e5e5e5;padding:0;">
+                    <span class="">@user.TotalScore</span><br />积分
+                </div>
+                <div class="col-xs-3 col-md-3" style="border-right:1px solid #e5e5e5;padding:0;">
+                    <span class="">@user.TotalCoin</span><br />VIP分
+                </div>
+                <div class="col-xs-3 col-md-3" style="border-right:1px solid #e5e5e5;padding:0;">
+                    <a class="tip_bestAnswer" href="#bestAnswer" data-toggle="tab" data-reactid="4">@user.BsetAnswerCount</a>
+                    <br />最佳解答
+                </div>
+                <div class="col-xs-3 col-md-3" style="padding:0;">
+                    <a class="tip_niceAnswer" href="#niceAnswer" data-toggle="tab" data-reactid="5">@user.NiceAnswerCount</a>
+                    <br />优秀解答
+                </div>
+            </div>
+            <div class="row col-md-12 Lmgt10">
+                <div class="col-xs-6 col-md-6">
+                    @if (user.IsLiked)
+                    {
+                        <a class="btn btn-primary btn_unlike" data-id="@user.UserID">已关注</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary @(isLogin?"btn_like":"btn_login")" data-id="@user.UserID">关注</a>
+                    }
+                </div>
+                <div class="col-xs-6 col-md-6">
+                    <a class="btn btn-primary @(isLogin?"btn_sendMsg":"btn_login")" data-id="@user.UserID" data-name="@user.UserName">私信</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <style>
+        #userTabContent {
+            border-width: 0 1px 1px;
+            border-color: #dddddd;
+            border-style: solid;
+            padding: 15px;
+            min-height: 180px;
+            overflow: hidden;
+            position: relative;
+        }
+
+            #userTabContent #default {
+                font-size: 16px;
+                color: #000;
+                font-weight: 600;
+                line-height: 150px;
+                text-align: center;
+            }
+    </style>
+    <div class="col-md-8 col-md-offset-2 Lmgt10 clearfix" style="background-color:rgba(255,255,255,.7);">
+        <div class="Lpd10">
+            <ul id="userTabs" class="nav nav-tabs" data-uid="@user.UserID">
+                <li class="active disabled"><a href="#default">他的-></a></li>
+                <li><a class="tabs_question" href="#question" data-toggle="tab" data-reactid="1">问题</a></li>
+                <li><a class="tabs_answer" href="#answer" data-toggle="tab" data-reactid="2">回答</a></li>
+                <li><a class="tabs_article" href="#article" data-toggle="tab" data-reactid="3">文章</a></li>
+                <li><a class="tabs_bestAnswer" href="#bestAnswer" data-toggle="tab" data-reactid="4">最佳解答</a></li>
+                <li><a class="tabs_niceAnswer" href="#niceAnswer" data-toggle="tab" data-reactid="5">优秀解答</a></li>
+            </ul>
+            <div id="userTabContent" class="tab-content" oncontextmenu="return !1;" onselect="return !1;">
+                <div class="tab-pane fade in active" id="default">
+                    查看他的【问题】【回答】【文章】【最佳解答】【优秀解答】...
+                </div>
+                <div class="tab-pane fade" id="question">
+                </div>
+                <div class="tab-pane fade" id="answer">
+                </div>
+                <div class="tab-pane fade" id="article">
+                </div>
+                <div class="tab-pane fade" id="bestAnswer">
+                </div>
+                <div class="tab-pane fade" id="niceAnswer">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "detail")
+</script>
+<style>
+    body .container.body-content {
+        max-width: 100% !important;
+        margin-top: 0 !important;
+    }
+
+    .mycenterRight {
+        background-color: #fff;
+    }
+
+    .side-nav {
+        background: #fff;
+    }
+
+    .side-nav-item {
+        display: block;
+        padding: 10px 15px 10px 15px;
+        background-color: #FFFFFF;
+        cursor: pointer;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+        -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    }
+
+    .item-title {
+        background-color: #F5F5F5;
+        border-top-left-radius: 3px;
+        border-top-right-radius: 3px;
+        border-bottom: 1px solid #DDDDDD;
+    }
+
+    .panel-heading {
+        /*margin-top: 5px;*/
+        padding: 0;
+        border-radius: 3px;
+        border: 1px solid transparent;
+        border-color: #DDDDDD;
+    }
+
+    .item-body {
+        padding: 10px 15px 5px 15px;
+        border-bottom: 1px solid #DDDDDD;
+    }
+
+    .item-second {
+        /*margin-top: 5px;*/
+        cursor: pointer;
+    }
+
+        .item-second a {
+            display: block;
+            height: 100%;
+            width: 100%;
+        }
+</style>
+
+

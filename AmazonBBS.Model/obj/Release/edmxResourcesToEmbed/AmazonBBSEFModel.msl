@@ -1,0 +1,1241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AmazonBBSModelStoreContainer" CdmEntityContainer="AmazonBBSDBContext">
+    <EntitySetMapping Name="About">
+      <EntityTypeMapping TypeName="AmazonBBSModel.About">
+        <MappingFragment StoreEntitySet="About">
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Desc" ColumnName="Desc" />
+          <ScalarProperty Name="AboutID" ColumnName="AboutID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Activity">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Activity">
+        <MappingFragment StoreEntitySet="Activity">
+          <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="ActivityCreateTIme" ColumnName="ActivityCreateTIme" />
+          <ScalarProperty Name="JoinEndTime" ColumnName="JoinEndTime" />
+          <ScalarProperty Name="JoinBeginTime" ColumnName="JoinBeginTime" />
+          <ScalarProperty Name="CanJoinOnBegin" ColumnName="CanJoinOnBegin" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="BeginTime" ColumnName="BeginTime" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="ActivityType" ColumnName="ActivityType" />
+          <ScalarProperty Name="ActivityIMG" ColumnName="ActivityIMG" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActivityFee">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ActivityFee">
+        <MappingFragment StoreEntitySet="ActivityFee">
+          <ScalarProperty Name="FeeName" ColumnName="FeeName" />
+          <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+          <ScalarProperty Name="FeeCount" ColumnName="FeeCount" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="ActivityFeeId" ColumnName="ActivityFeeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ActivityJoin">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ActivityJoin">
+        <MappingFragment StoreEntitySet="ActivityJoin">
+          <ScalarProperty Name="RealPayFee" ColumnName="RealPayFee" />
+          <ScalarProperty Name="ActivityFeeId" ColumnName="ActivityFeeId" />
+          <ScalarProperty Name="LinkTel" ColumnName="LinkTel" />
+          <ScalarProperty Name="LinkMan" ColumnName="LinkMan" />
+          <ScalarProperty Name="JoinCount" ColumnName="JoinCount" />
+          <ScalarProperty Name="JoinTime" ColumnName="JoinTime" />
+          <ScalarProperty Name="IsFeed" ColumnName="IsFeed" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="JoinUserName" ColumnName="JoinUserName" />
+          <ScalarProperty Name="JoinUserID" ColumnName="JoinUserID" />
+          <ScalarProperty Name="ActivityId" ColumnName="ActivityId" />
+          <ScalarProperty Name="ActivityJoinId" ColumnName="ActivityJoinId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AD">
+      <EntityTypeMapping TypeName="AmazonBBSModel.AD">
+        <MappingFragment StoreEntitySet="AD">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ADViewCount" ColumnName="ADViewCount" />
+          <ScalarProperty Name="ADWeChat" ColumnName="ADWeChat" />
+          <ScalarProperty Name="ADContact" ColumnName="ADContact" />
+          <ScalarProperty Name="ADMsg" ColumnName="ADMsg" />
+          <ScalarProperty Name="ADTitle" ColumnName="ADTitle" />
+          <ScalarProperty Name="ADIMG" ColumnName="ADIMG" />
+          <ScalarProperty Name="ADID" ColumnName="ADID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Against">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Against">
+        <MappingFragment StoreEntitySet="Against">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="AgainstTime" ColumnName="AgainstTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="TargetID" ColumnName="TargetID" />
+          <ScalarProperty Name="AgainstId" ColumnName="AgainstId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Answer">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Answer">
+        <MappingFragment StoreEntitySet="Answer">
+          <ScalarProperty Name="ReplyToAnswerID" ColumnName="ReplyToAnswerID" />
+          <ScalarProperty Name="ReplyToUserID" ColumnName="ReplyToUserID" />
+          <ScalarProperty Name="ReplyTopAnswerId" ColumnName="ReplyTopAnswerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="AType" ColumnName="AType" />
+          <ScalarProperty Name="NeedCoin" ColumnName="NeedCoin" />
+          <ScalarProperty Name="CoinType" ColumnName="CoinType" />
+          <ScalarProperty Name="IsCanSee" ColumnName="IsCanSee" />
+          <ScalarProperty Name="AnswerContent" ColumnName="AnswerContent" />
+          <ScalarProperty Name="AnswerUserId" ColumnName="AnswerUserId" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+          <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Article">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Article">
+        <MappingFragment StoreEntitySet="Article">
+          <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+          <ScalarProperty Name="ContentFee" ColumnName="ContentFee" />
+          <ScalarProperty Name="ContentFeeType" ColumnName="ContentFeeType" />
+          <ScalarProperty Name="ContentNeedPay" ColumnName="ContentNeedPay" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="EditCount" ColumnName="EditCount" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ArticleId" ColumnName="ArticleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AttachMent">
+      <EntityTypeMapping TypeName="AmazonBBSModel.AttachMent">
+        <MappingFragment StoreEntitySet="AttachMent">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="IsFee" ColumnName="IsFee" />
+          <ScalarProperty Name="DownCount" ColumnName="DownCount" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="FileName" ColumnName="FileName" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainId" ColumnName="MainId" />
+          <ScalarProperty Name="AttachMentId" ColumnName="AttachMentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AttachMentBuyLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.AttachMentBuyLog">
+        <MappingFragment StoreEntitySet="AttachMentBuyLog">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="BuyerId" ColumnName="BuyerId" />
+          <ScalarProperty Name="AttachMentId" ColumnName="AttachMentId" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="AttachMentBuyLogId" ColumnName="AttachMentBuyLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AutoReply">
+      <EntityTypeMapping TypeName="AmazonBBSModel.AutoReply">
+        <MappingFragment StoreEntitySet="AutoReply">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+          <ScalarProperty Name="AutoReplyId" ColumnName="AutoReplyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AutoReplyItem">
+      <EntityTypeMapping TypeName="AmazonBBSModel.AutoReplyItem">
+        <MappingFragment StoreEntitySet="AutoReplyItem">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsUsed" ColumnName="IsUsed" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="ReplaceValue" ColumnName="ReplaceValue" />
+          <ScalarProperty Name="ReplaceKey" ColumnName="ReplaceKey" />
+          <ScalarProperty Name="AutoReplyId" ColumnName="AutoReplyId" />
+          <ScalarProperty Name="AutoReplyItemId" ColumnName="AutoReplyItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BBSEnum">
+      <EntityTypeMapping TypeName="AmazonBBSModel.BBSEnum">
+        <MappingFragment StoreEntitySet="BBSEnum">
+          <ScalarProperty Name="GroupBy" ColumnName="GroupBy" />
+          <ScalarProperty Name="PageBGColor" ColumnName="PageBGColor" />
+          <ScalarProperty Name="FontBGColor" ColumnName="FontBGColor" />
+          <ScalarProperty Name="FontColor" ColumnName="FontColor" />
+          <ScalarProperty Name="CanArticle" ColumnName="CanArticle" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="SortIndex" ColumnName="SortIndex" />
+          <ScalarProperty Name="IsBBS" ColumnName="IsBBS" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="EnumCode" ColumnName="EnumCode" />
+          <ScalarProperty Name="EnumDesc" ColumnName="EnumDesc" />
+          <ScalarProperty Name="EnumType" ColumnName="EnumType" />
+          <ScalarProperty Name="BBSEnumId" ColumnName="BBSEnumId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BuyOtherLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.BuyOtherLog">
+        <MappingFragment StoreEntitySet="BuyOtherLog">
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="BuyOtherLogId" ColumnName="BuyOtherLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BXTOrder">
+      <EntityTypeMapping TypeName="AmazonBBSModel.BXTOrder">
+        <MappingFragment StoreEntitySet="BXTOrder">
+          <ScalarProperty Name="BuyCount" ColumnName="BuyCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="OrerDesc" ColumnName="OrerDesc" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="ItemID" ColumnName="ItemID" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+          <ScalarProperty Name="PayOrderID" ColumnName="PayOrderID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Chat">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Chat">
+        <MappingFragment StoreEntitySet="Chat">
+          <ScalarProperty Name="Batch" ColumnName="Batch" />
+          <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+          <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+          <ScalarProperty Name="Message" ColumnName="Message" />
+          <ScalarProperty Name="ToUserName" ColumnName="ToUserName" />
+          <ScalarProperty Name="ToID" ColumnName="ToID" />
+          <ScalarProperty Name="FromUserName" ColumnName="FromUserName" />
+          <ScalarProperty Name="FromID" ColumnName="FromID" />
+          <ScalarProperty Name="ChatID" ColumnName="ChatID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ClickMsg">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ClickMsg">
+        <MappingFragment StoreEntitySet="ClickMsg">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Color" ColumnName="Color" />
+          <ScalarProperty Name="Msg_en" ColumnName="Msg_en" />
+          <ScalarProperty Name="Msg" ColumnName="Msg" />
+          <ScalarProperty Name="ClickMsgId" ColumnName="ClickMsgId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Comment">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Comment">
+        <MappingFragment StoreEntitySet="Comment">
+          <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ReplyToCommentID" ColumnName="ReplyToCommentID" />
+          <ScalarProperty Name="ReplyToUserID" ColumnName="ReplyToUserID" />
+          <ScalarProperty Name="ReplyTopCommentId" ColumnName="ReplyTopCommentId" />
+          <ScalarProperty Name="CommentOrReplyType" ColumnName="CommentOrReplyType" />
+          <ScalarProperty Name="NeedCoin" ColumnName="NeedCoin" />
+          <ScalarProperty Name="FeeCoinType" ColumnName="FeeCoinType" />
+          <ScalarProperty Name="IsHideOrFeeToSee" ColumnName="IsHideOrFeeToSee" />
+          <ScalarProperty Name="CommentContent" ColumnName="CommentContent" />
+          <ScalarProperty Name="CommentUserID" ColumnName="CommentUserID" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="CommentId" ColumnName="CommentId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ContentBuyLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ContentBuyLog">
+        <MappingFragment StoreEntitySet="ContentBuyLog">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="BuyerId" ColumnName="BuyerId" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="ContentBuyLogId" ColumnName="ContentBuyLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Customer">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Customer">
+        <MappingFragment StoreEntitySet="Customer">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdadteTime" ColumnName="UpdadteTime" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="QQ" ColumnName="QQ" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Img" ColumnName="Img" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EditLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.EditLog">
+        <MappingFragment StoreEntitySet="EditLog">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+          <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="EditLogId" ColumnName="EditLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="EmailNotice">
+      <EntityTypeMapping TypeName="AmazonBBSModel.EmailNotice">
+        <MappingFragment StoreEntitySet="EmailNotice">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="MD5Sign" ColumnName="MD5Sign" />
+          <ScalarProperty Name="MD5Key" ColumnName="MD5Key" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="AuthorID" ColumnName="AuthorID" />
+          <ScalarProperty Name="EmailNoticeAuthor" ColumnName="EmailNoticeAuthor" />
+          <ScalarProperty Name="EmailNoticeId" ColumnName="EmailNoticeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ErrorLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ErrorLog">
+        <MappingFragment StoreEntitySet="ErrorLog">
+          <ScalarProperty Name="ErrorTime" ColumnName="ErrorTime" />
+          <ScalarProperty Name="ErrorMsg" ColumnName="ErrorMsg" />
+          <ScalarProperty Name="ErrorLogID" ColumnName="ErrorLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Express">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Express">
+        <MappingFragment StoreEntitySet="Express">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ExpressType" ColumnName="ExpressType" />
+          <ScalarProperty Name="ExpressName" ColumnName="ExpressName" />
+          <ScalarProperty Name="ExpressNo" ColumnName="ExpressNo" />
+          <ScalarProperty Name="UserGiftId" ColumnName="UserGiftId" />
+          <ScalarProperty Name="ExpressId" ColumnName="ExpressId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FeeAnswerLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.FeeAnswerLog">
+        <MappingFragment StoreEntitySet="FeeAnswerLog">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="FeeTime" ColumnName="FeeTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="AnswerId" ColumnName="AnswerId" />
+          <ScalarProperty Name="FeeAnswerLogId" ColumnName="FeeAnswerLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="FeeHR">
+      <EntityTypeMapping TypeName="AmazonBBSModel.FeeHR">
+        <MappingFragment StoreEntitySet="FeeHR">
+          <ScalarProperty Name="FeeCoinType" ColumnName="FeeCoinType" />
+          <ScalarProperty Name="FeeCoin" ColumnName="FeeCoin" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="FeeTime" ColumnName="FeeTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="FeeHRID" ColumnName="FeeHRID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Gift">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Gift">
+        <MappingFragment StoreEntitySet="Gift">
+          <ScalarProperty Name="OpenJoinItem" ColumnName="OpenJoinItem" />
+          <ScalarProperty Name="GType" ColumnName="GType" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="GiftCreateUserID" ColumnName="GiftCreateUserID" />
+          <ScalarProperty Name="GiftCreateTime" ColumnName="GiftCreateTime" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="GiftImgs" ColumnName="GiftImgs" />
+          <ScalarProperty Name="GiftCount" ColumnName="GiftCount" />
+          <ScalarProperty Name="GiftInfo" ColumnName="GiftInfo" />
+          <ScalarProperty Name="GiftDesc" ColumnName="GiftDesc" />
+          <ScalarProperty Name="GiftPriseType" ColumnName="GiftPriseType" />
+          <ScalarProperty Name="GiftPrise" ColumnName="GiftPrise" />
+          <ScalarProperty Name="GiftName" ColumnName="GiftName" />
+          <ScalarProperty Name="GiftID" ColumnName="GiftID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GiftFee">
+      <EntityTypeMapping TypeName="AmazonBBSModel.GiftFee">
+        <MappingFragment StoreEntitySet="GiftFee">
+          <ScalarProperty Name="FeeCount" ColumnName="FeeCount" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="FeeName" ColumnName="FeeName" />
+          <ScalarProperty Name="GiftID" ColumnName="GiftID" />
+          <ScalarProperty Name="GiftFeeId" ColumnName="GiftFeeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="InviteInterview">
+      <EntityTypeMapping TypeName="AmazonBBSModel.InviteInterview">
+        <MappingFragment StoreEntitySet="InviteInterview">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="QiuZhiPublisher" ColumnName="QiuZhiPublisher" />
+          <ScalarProperty Name="QiuZhiID" ColumnName="QiuZhiID" />
+          <ScalarProperty Name="ViewAddress" ColumnName="ViewAddress" />
+          <ScalarProperty Name="InviteTime" ColumnName="InviteTime" />
+          <ScalarProperty Name="ZhaoPinID" ColumnName="ZhaoPinID" />
+          <ScalarProperty Name="InviteInterviewId" ColumnName="InviteInterviewId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Job">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Job">
+        <MappingFragment StoreEntitySet="Job">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateType" ColumnName="CreateType" />
+          <ScalarProperty Name="IsJob" ColumnName="IsJob" />
+          <ScalarProperty Name="IsJobType" ColumnName="IsJobType" />
+          <ScalarProperty Name="ParentJobId" ColumnName="ParentJobId" />
+          <ScalarProperty Name="JobName" ColumnName="JobName" />
+          <ScalarProperty Name="JobType" ColumnName="JobType" />
+          <ScalarProperty Name="JobId" ColumnName="JobId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobComment">
+      <EntityTypeMapping TypeName="AmazonBBSModel.JobComment">
+        <MappingFragment StoreEntitySet="JobComment">
+          <ScalarProperty Name="CommentType" ColumnName="CommentType" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateNickName" ColumnName="CreateNickName" />
+          <ScalarProperty Name="CreateHeadUrl" ColumnName="CreateHeadUrl" />
+          <ScalarProperty Name="Comment" ColumnName="Comment" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="JobCommentID" ColumnName="JobCommentID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JobTrade">
+      <EntityTypeMapping TypeName="AmazonBBSModel.JobTrade">
+        <MappingFragment StoreEntitySet="JobTrade">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateType" ColumnName="CreateType" />
+          <ScalarProperty Name="JobTradeName" ColumnName="JobTradeName" />
+          <ScalarProperty Name="JobTradeId" ColumnName="JobTradeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JoinItemAnswerExt">
+      <EntityTypeMapping TypeName="AmazonBBSModel.JoinItemAnswerExt">
+        <MappingFragment StoreEntitySet="JoinItemAnswerExt">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ItemAnswer" ColumnName="ItemAnswer" />
+          <ScalarProperty Name="BuyerID" ColumnName="BuyerID" />
+          <ScalarProperty Name="JoinType" ColumnName="JoinType" />
+          <ScalarProperty Name="JoinMainID" ColumnName="JoinMainID" />
+          <ScalarProperty Name="JoinItemQuestionExtId" ColumnName="JoinItemQuestionExtId" />
+          <ScalarProperty Name="JoinItemAnswerExtId" ColumnName="JoinItemAnswerExtId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="JoinItemQuestionExt">
+      <EntityTypeMapping TypeName="AmazonBBSModel.JoinItemQuestionExt">
+        <MappingFragment StoreEntitySet="JoinItemQuestionExt">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsMustWrite" ColumnName="IsMustWrite" />
+          <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="JoinItemQuestionExtId" ColumnName="JoinItemQuestionExtId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="LeaveWord">
+      <EntityTypeMapping TypeName="AmazonBBSModel.LeaveWord">
+        <MappingFragment StoreEntitySet="LeaveWord">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="DIY3" ColumnName="DIY3" />
+          <ScalarProperty Name="DIY2" ColumnName="DIY2" />
+          <ScalarProperty Name="DIY1" ColumnName="DIY1" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+          <ScalarProperty Name="LeaveWordId" ColumnName="LeaveWordId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Master">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Master">
+        <MappingFragment StoreEntitySet="Master">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsRoot" ColumnName="IsRoot" />
+          <ScalarProperty Name="BBSMenuId" ColumnName="BBSMenuId" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="MasterId" ColumnName="MasterId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MenuBelongTag">
+      <EntityTypeMapping TypeName="AmazonBBSModel.MenuBelongTag">
+        <MappingFragment StoreEntitySet="MenuBelongTag">
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainId" ColumnName="MainId" />
+          <ScalarProperty Name="MenuBelongTagId" ColumnName="MenuBelongTagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="News">
+      <EntityTypeMapping TypeName="AmazonBBSModel.News">
+        <MappingFragment StoreEntitySet="News">
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="NBody" ColumnName="NBody" />
+          <ScalarProperty Name="NTitle" ColumnName="NTitle" />
+          <ScalarProperty Name="NewsID" ColumnName="NewsID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notice">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Notice">
+        <MappingFragment StoreEntitySet="Notice">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+          <ScalarProperty Name="ToUserID" ColumnName="ToUserID" />
+          <ScalarProperty Name="NoticeType" ColumnName="NoticeType" />
+          <ScalarProperty Name="NoticeContent" ColumnName="NoticeContent" />
+          <ScalarProperty Name="NoticeTitle" ColumnName="NoticeTitle" />
+          <ScalarProperty Name="NoticeId" ColumnName="NoticeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OAuth">
+      <EntityTypeMapping TypeName="AmazonBBSModel.OAuth">
+        <MappingFragment StoreEntitySet="OAuth">
+          <ScalarProperty Name="IsBind" ColumnName="IsBind" />
+          <ScalarProperty Name="HeadUrl" ColumnName="HeadUrl" />
+          <ScalarProperty Name="NickName" ColumnName="NickName" />
+          <ScalarProperty Name="OpenId" ColumnName="OpenId" />
+          <ScalarProperty Name="OAuthType" ColumnName="OAuthType" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="OAuthID" ColumnName="OAuthID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Order">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Order">
+        <MappingFragment StoreEntitySet="Order">
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="OrerDesc" ColumnName="OrerDesc" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+          <ScalarProperty Name="PayOrderID" ColumnName="PayOrderID" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderCheck">
+      <EntityTypeMapping TypeName="AmazonBBSModel.OrderCheck">
+        <MappingFragment StoreEntitySet="OrderCheck">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CheckStatus" ColumnName="CheckStatus" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="UserGiftId" ColumnName="UserGiftId" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="OrderCheckId" ColumnName="OrderCheckId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrderSend">
+      <EntityTypeMapping TypeName="AmazonBBSModel.OrderSend">
+        <MappingFragment StoreEntitySet="OrderSend">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainID" ColumnName="MainID" />
+          <ScalarProperty Name="UserGiftId" ColumnName="UserGiftId" />
+          <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+          <ScalarProperty Name="OrderSendId" ColumnName="OrderSendId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PayCBLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.PayCBLog">
+        <MappingFragment StoreEntitySet="PayCBLog">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Memo" ColumnName="Memo" />
+          <ScalarProperty Name="TradeStatus" ColumnName="TradeStatus" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="TradeNo" ColumnName="TradeNo" />
+          <ScalarProperty Name="CallBackTime" ColumnName="CallBackTime" />
+          <ScalarProperty Name="PayCBLogID" ColumnName="PayCBLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Prise">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Prise">
+        <MappingFragment StoreEntitySet="Prise">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="PriseTime" ColumnName="PriseTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="TargetID" ColumnName="TargetID" />
+          <ScalarProperty Name="PriseId" ColumnName="PriseId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PrivateKey">
+      <EntityTypeMapping TypeName="AmazonBBSModel.PrivateKey">
+        <MappingFragment StoreEntitySet="PrivateKey">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="userID" ColumnName="userID" />
+          <ScalarProperty Name="timespan" ColumnName="timespan" />
+          <ScalarProperty Name="ProtectKey" ColumnName="ProtectKey" />
+          <ScalarProperty Name="PrivateKeyId" ColumnName="PrivateKeyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Product">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Product">
+        <MappingFragment StoreEntitySet="Product">
+          <ScalarProperty Name="ValidTime" ColumnName="ValidTime" />
+          <ScalarProperty Name="PUnit" ColumnName="PUnit" />
+          <ScalarProperty Name="PWeight" ColumnName="PWeight" />
+          <ScalarProperty Name="SendDay" ColumnName="SendDay" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+          <ScalarProperty Name="IsRemen" ColumnName="IsRemen" />
+          <ScalarProperty Name="IsJinghua" ColumnName="IsJinghua" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+          <ScalarProperty Name="ProductPic" ColumnName="ProductPic" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="PSize" ColumnName="PSize" />
+          <ScalarProperty Name="PPrice" ColumnName="PPrice" />
+          <ScalarProperty Name="PFunction" ColumnName="PFunction" />
+          <ScalarProperty Name="PDesc" ColumnName="PDesc" />
+          <ScalarProperty Name="PLocation" ColumnName="PLocation" />
+          <ScalarProperty Name="PTitle" ColumnName="PTitle" />
+          <ScalarProperty Name="PLogo" ColumnName="PLogo" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ProductBuy">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ProductBuy">
+        <MappingFragment StoreEntitySet="ProductBuy">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="LinkTel" ColumnName="LinkTel" />
+          <ScalarProperty Name="LinkName" ColumnName="LinkName" />
+          <ScalarProperty Name="BuyUserID" ColumnName="BuyUserID" />
+          <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+          <ScalarProperty Name="ProductBuyId" ColumnName="ProductBuyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="QiuZhi">
+      <EntityTypeMapping TypeName="AmazonBBSModel.QiuZhi">
+        <MappingFragment StoreEntitySet="QiuZhi">
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="ValidTime" ColumnName="ValidTime" />
+          <ScalarProperty Name="IWantPlace" ColumnName="IWantPlace" />
+          <ScalarProperty Name="BelongJob" ColumnName="BelongJob" />
+          <ScalarProperty Name="BelongJobTrade" ColumnName="BelongJobTrade" />
+          <ScalarProperty Name="WorkTime" ColumnName="WorkTime" />
+          <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+          <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+          <ScalarProperty Name="IsRemen" ColumnName="IsRemen" />
+          <ScalarProperty Name="IsJinghua" ColumnName="IsJinghua" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="PayType" ColumnName="PayType" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="JianLiWord" ColumnName="JianLiWord" />
+          <ScalarProperty Name="JianLiPic" ColumnName="JianLiPic" />
+          <ScalarProperty Name="SelfAssessment" ColumnName="SelfAssessment" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+          <ScalarProperty Name="MyDesc" ColumnName="MyDesc" />
+          <ScalarProperty Name="WorkYear" ColumnName="WorkYear" />
+          <ScalarProperty Name="Study" ColumnName="Study" />
+          <ScalarProperty Name="WorkStatus" ColumnName="WorkStatus" />
+          <ScalarProperty Name="NowWork" ColumnName="NowWork" />
+          <ScalarProperty Name="Money" ColumnName="Money" />
+          <ScalarProperty Name="IWant" ColumnName="IWant" />
+          <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+          <ScalarProperty Name="QiuZhiID" ColumnName="QiuZhiID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Question">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Question">
+        <MappingFragment StoreEntitySet="Question">
+          <ScalarProperty Name="IsAnonymous" ColumnName="IsAnonymous" />
+          <ScalarProperty Name="ContentFee" ColumnName="ContentFee" />
+          <ScalarProperty Name="ContentFeeType" ColumnName="ContentFeeType" />
+          <ScalarProperty Name="ContentNeedPay" ColumnName="ContentNeedPay" />
+          <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+          <ScalarProperty Name="EditCount" ColumnName="EditCount" />
+          <ScalarProperty Name="NiceAnswerId" ColumnName="NiceAnswerId" />
+          <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+          <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+          <ScalarProperty Name="IsRemen" ColumnName="IsRemen" />
+          <ScalarProperty Name="IsJinghua" ColumnName="IsJinghua" />
+          <ScalarProperty Name="BestAnswerId" ColumnName="BestAnswerId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="CoinType" ColumnName="CoinType" />
+          <ScalarProperty Name="Coin" ColumnName="Coin" />
+          <ScalarProperty Name="TopicID" ColumnName="TopicID" />
+          <ScalarProperty Name="Body" ColumnName="Body" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Report">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Report">
+        <MappingFragment StoreEntitySet="Report">
+          <ScalarProperty Name="IsHandle" ColumnName="IsHandle" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Desc" ColumnName="Desc" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainId" ColumnName="MainId" />
+          <ScalarProperty Name="ReportId" ColumnName="ReportId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScoreBeloneItem">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ScoreBeloneItem">
+        <MappingFragment StoreEntitySet="ScoreBeloneItem">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="MainType" ColumnName="MainType" />
+          <ScalarProperty Name="MainId" ColumnName="MainId" />
+          <ScalarProperty Name="ScoreCoinLogId" ColumnName="ScoreCoinLogId" />
+          <ScalarProperty Name="ScoreBeloneItemId" ColumnName="ScoreBeloneItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ScoreCoinLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ScoreCoinLog">
+        <MappingFragment StoreEntitySet="ScoreCoinLog">
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CoinTime" ColumnName="CoinTime" />
+          <ScalarProperty Name="CoinSource" ColumnName="CoinSource" />
+          <ScalarProperty Name="Coin" ColumnName="Coin" />
+          <ScalarProperty Name="CoinType" ColumnName="CoinType" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ScoreCoinLogId" ColumnName="ScoreCoinLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SendCV">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SendCV">
+        <MappingFragment StoreEntitySet="SendCV">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ReadTime" ColumnName="ReadTime" />
+          <ScalarProperty Name="IsRead" ColumnName="IsRead" />
+          <ScalarProperty Name="SendTime" ColumnName="SendTime" />
+          <ScalarProperty Name="CVPath" ColumnName="CVPath" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="ZhaoPinID" ColumnName="ZhaoPinID" />
+          <ScalarProperty Name="ZhaoPinPublisher" ColumnName="ZhaoPinPublisher" />
+          <ScalarProperty Name="SendCVId" ColumnName="SendCVId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShareLink">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ShareLink">
+        <MappingFragment StoreEntitySet="ShareLink">
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="ShareAddress" ColumnName="ShareAddress" />
+          <ScalarProperty Name="ShareMd5Key" ColumnName="ShareMd5Key" />
+          <ScalarProperty Name="ShareToken" ColumnName="ShareToken" />
+          <ScalarProperty Name="ShareOpenId" ColumnName="ShareOpenId" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ShareLinkID" ColumnName="ShareLinkID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShareRegistLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ShareRegistLog">
+        <MappingFragment StoreEntitySet="ShareRegistLog">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ShareUserName" ColumnName="ShareUserName" />
+          <ScalarProperty Name="ShareUserID" ColumnName="ShareUserID" />
+          <ScalarProperty Name="ShareRegistLogID" ColumnName="ShareRegistLogID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ShipAddress">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ShipAddress">
+        <MappingFragment StoreEntitySet="ShipAddress">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+          <ScalarProperty Name="Tel" ColumnName="Tel" />
+          <ScalarProperty Name="ReceiveAddress" ColumnName="ReceiveAddress" />
+          <ScalarProperty Name="WeChatNo" ColumnName="WeChatNo" />
+          <ScalarProperty Name="ReceiveName" ColumnName="ReceiveName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="ShipAddressId" ColumnName="ShipAddressId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SiteHead">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SiteHead">
+        <MappingFragment StoreEntitySet="SiteHead">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+          <ScalarProperty Name="HeadImg" ColumnName="HeadImg" />
+          <ScalarProperty Name="SiteHeadId" ColumnName="SiteHeadId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SiteNotice">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SiteNotice">
+        <MappingFragment StoreEntitySet="SiteNotice">
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="TitleFontColor" ColumnName="TitleFontColor" />
+          <ScalarProperty Name="TitleBGColor" ColumnName="TitleBGColor" />
+          <ScalarProperty Name="ShortTitleFontColor" ColumnName="ShortTitleFontColor" />
+          <ScalarProperty Name="ShortTitleBGColor" ColumnName="ShortTitleBGColor" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ShortTitle" ColumnName="ShortTitle" />
+          <ScalarProperty Name="NoticeType" ColumnName="NoticeType" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Slide">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Slide">
+        <MappingFragment StoreEntitySet="Slide">
+          <ScalarProperty Name="SlideType" ColumnName="SlideType" />
+          <ScalarProperty Name="FontColor" ColumnName="FontColor" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="EndTime" ColumnName="EndTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="Img" ColumnName="Img" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="SlideId" ColumnName="SlideId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SoftLink">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SoftLink">
+        <MappingFragment StoreEntitySet="SoftLink">
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="LinkMemo" ColumnName="LinkMemo" />
+          <ScalarProperty Name="LinkAddress" ColumnName="LinkAddress" />
+          <ScalarProperty Name="LinkName" ColumnName="LinkName" />
+          <ScalarProperty Name="SoftLinkType" ColumnName="SoftLinkType" />
+          <ScalarProperty Name="SoftLinkID" ColumnName="SoftLinkID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SoftLinkType">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SoftLinkType">
+        <MappingFragment StoreEntitySet="SoftLinkType">
+          <ScalarProperty Name="SoftLinkLogo" ColumnName="SoftLinkLogo" />
+          <ScalarProperty Name="SoftLinkColor" ColumnName="SoftLinkColor" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="SoftLinkTypeName" ColumnName="SoftLinkTypeName" />
+          <ScalarProperty Name="SoftLinkTypeID" ColumnName="SoftLinkTypeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudyClass">
+      <EntityTypeMapping TypeName="AmazonBBSModel.StudyClass">
+        <MappingFragment StoreEntitySet="StudyClass">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="Content" ColumnName="Content" />
+          <ScalarProperty Name="SortIndex" ColumnName="SortIndex" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="StudyUnitId" ColumnName="StudyUnitId" />
+          <ScalarProperty Name="StudyClassId" ColumnName="StudyClassId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudyShareImgSet">
+      <EntityTypeMapping TypeName="AmazonBBSModel.StudyShareImgSet">
+        <MappingFragment StoreEntitySet="StudyShareImgSet">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsUse" ColumnName="IsUse" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="StudyShareImgSetId" ColumnName="StudyShareImgSetId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="StudyUnit">
+      <EntityTypeMapping TypeName="AmazonBBSModel.StudyUnit">
+        <MappingFragment StoreEntitySet="StudyUnit">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="SortIndex" ColumnName="SortIndex" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="StudyUnitId" ColumnName="StudyUnitId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SuggestSite">
+      <EntityTypeMapping TypeName="AmazonBBSModel.SuggestSite">
+        <MappingFragment StoreEntitySet="SuggestSite">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="SiteAddress" ColumnName="SiteAddress" />
+          <ScalarProperty Name="SiteName" ColumnName="SiteName" />
+          <ScalarProperty Name="SuggestSiteId" ColumnName="SuggestSiteId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tag">
+      <EntityTypeMapping TypeName="AmazonBBSModel.Tag">
+        <MappingFragment StoreEntitySet="Tag">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="TagBelongId" ColumnName="TagBelongId" />
+          <ScalarProperty Name="TagCreateType" ColumnName="TagCreateType" />
+          <ScalarProperty Name="TagName" ColumnName="TagName" />
+          <ScalarProperty Name="TagId" ColumnName="TagId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserBase">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserBase">
+        <MappingFragment StoreEntitySet="UserBase">
+          <ScalarProperty Name="OpenId" ColumnName="OpenId" />
+          <ScalarProperty Name="LoginIP" ColumnName="LoginIP" />
+          <ScalarProperty Name="LoginTime" ColumnName="LoginTime" />
+          <ScalarProperty Name="WorkYear" ColumnName="WorkYear" />
+          <ScalarProperty Name="JingYing" ColumnName="JingYing" />
+          <ScalarProperty Name="Work" ColumnName="Work" />
+          <ScalarProperty Name="Birth" ColumnName="Birth" />
+          <ScalarProperty Name="County" ColumnName="County" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="Province" ColumnName="Province" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="HeadUrl" ColumnName="HeadUrl" />
+          <ScalarProperty Name="Sign" ColumnName="Sign" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="Account" ColumnName="Account" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserDisabledLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserDisabledLog">
+        <MappingFragment StoreEntitySet="UserDisabledLog">
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ExpriseTime" ColumnName="ExpriseTime" />
+          <ScalarProperty Name="ActionUserId" ColumnName="ActionUserId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserExt">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserExt">
+        <MappingFragment StoreEntitySet="UserExt">
+          <ScalarProperty Name="UserSignTime" ColumnName="UserSignTime" />
+          <ScalarProperty Name="UserMonthSignContinueCount" ColumnName="UserMonthSignContinueCount" />
+          <ScalarProperty Name="UserSignContinueCount" ColumnName="UserSignContinueCount" />
+          <ScalarProperty Name="UserSignTotalCount" ColumnName="UserSignTotalCount" />
+          <ScalarProperty Name="UserCenterSkin" ColumnName="UserCenterSkin" />
+          <ScalarProperty Name="CheckBBS" ColumnName="CheckBBS" />
+          <ScalarProperty Name="HeadNameShowType" ColumnName="HeadNameShowType" />
+          <ScalarProperty Name="VIPExpiryTime" ColumnName="VIPExpiryTime" />
+          <ScalarProperty Name="VIP" ColumnName="VIP" />
+          <ScalarProperty Name="CompanyTel" ColumnName="CompanyTel" />
+          <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+          <ScalarProperty Name="FaRenPic" ColumnName="FaRenPic" />
+          <ScalarProperty Name="CardPic" ColumnName="CardPic" />
+          <ScalarProperty Name="CardID" ColumnName="CardID" />
+          <ScalarProperty Name="RealName" ColumnName="RealName" />
+          <ScalarProperty Name="UserV" ColumnName="UserV" />
+          <ScalarProperty Name="CloseTime" ColumnName="CloseTime" />
+          <ScalarProperty Name="OnlyLevelName" ColumnName="OnlyLevelName" />
+          <ScalarProperty Name="LevelName" ColumnName="LevelName" />
+          <ScalarProperty Name="TotalCoin" ColumnName="TotalCoin" />
+          <ScalarProperty Name="TotalScore" ColumnName="TotalScore" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserExtId" ColumnName="UserExtId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserGift">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserGift">
+        <MappingFragment StoreEntitySet="UserGift">
+          <ScalarProperty Name="LinkTel" ColumnName="LinkTel" />
+          <ScalarProperty Name="LinkMan" ColumnName="LinkMan" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="FeeType" ColumnName="FeeType" />
+          <ScalarProperty Name="Fee" ColumnName="Fee" />
+          <ScalarProperty Name="GiftFeeId" ColumnName="GiftFeeId" />
+          <ScalarProperty Name="GType" ColumnName="GType" />
+          <ScalarProperty Name="BuyCount" ColumnName="BuyCount" />
+          <ScalarProperty Name="BuyTime" ColumnName="BuyTime" />
+          <ScalarProperty Name="BuyUserID" ColumnName="BuyUserID" />
+          <ScalarProperty Name="GiftID" ColumnName="GiftID" />
+          <ScalarProperty Name="UserGiftId" ColumnName="UserGiftId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserLike">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserLike">
+        <MappingFragment StoreEntitySet="UserLike">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="LikeTime" ColumnName="LikeTime" />
+          <ScalarProperty Name="LikeType" ColumnName="LikeType" />
+          <ScalarProperty Name="LikeTargetID" ColumnName="LikeTargetID" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserLikeId" ColumnName="UserLikeId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserLoginLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserLoginLog">
+        <MappingFragment StoreEntitySet="UserLoginLog">
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserScore">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserScore">
+        <MappingFragment StoreEntitySet="UserScore">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="UpdateTIme" ColumnName="UpdateTIme" />
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="CreateUser" ColumnName="CreateUser" />
+          <ScalarProperty Name="ScoreType" ColumnName="ScoreType" />
+          <ScalarProperty Name="Score" ColumnName="Score" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserScoreId" ColumnName="UserScoreId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserSet">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserSet">
+        <MappingFragment StoreEntitySet="UserSet">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="ShowOrHideBaseInfo" ColumnName="ShowOrHideBaseInfo" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserSetId" ColumnName="UserSetId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserShareLog">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserShareLog">
+        <MappingFragment StoreEntitySet="UserShareLog">
+          <ScalarProperty Name="UseImage" ColumnName="UseImage" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="ClassId" ColumnName="ClassId" />
+          <ScalarProperty Name="ShareTime" ColumnName="ShareTime" />
+          <ScalarProperty Name="UserShareLogId" ColumnName="UserShareLogId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserStudy">
+      <EntityTypeMapping TypeName="AmazonBBSModel.UserStudy">
+        <MappingFragment StoreEntitySet="UserStudy">
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="IsStudyed" ColumnName="IsStudyed" />
+          <ScalarProperty Name="StudyClassId" ColumnName="StudyClassId" />
+          <ScalarProperty Name="StudyUnitId" ColumnName="StudyUnitId" />
+          <ScalarProperty Name="UserStudyId" ColumnName="UserStudyId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="VIPHead">
+      <EntityTypeMapping TypeName="AmazonBBSModel.VIPHead">
+        <MappingFragment StoreEntitySet="VIPHead">
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsChecked" ColumnName="IsChecked" />
+          <ScalarProperty Name="HeadUrl" ColumnName="HeadUrl" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="VIPHeadId" ColumnName="VIPHeadId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ZhaoPin">
+      <EntityTypeMapping TypeName="AmazonBBSModel.ZhaoPin">
+        <MappingFragment StoreEntitySet="ZhaoPin">
+          <ScalarProperty Name="UpdateUser" ColumnName="UpdateUser" />
+          <ScalarProperty Name="UpdateTime" ColumnName="UpdateTime" />
+          <ScalarProperty Name="ValidTime" ColumnName="ValidTime" />
+          <ScalarProperty Name="NeedCount" ColumnName="NeedCount" />
+          <ScalarProperty Name="JobFuLi" ColumnName="JobFuLi" />
+          <ScalarProperty Name="BelongJob" ColumnName="BelongJob" />
+          <ScalarProperty Name="BelongJobTrade" ColumnName="BelongJobTrade" />
+          <ScalarProperty Name="WorkTime" ColumnName="WorkTime" />
+          <ScalarProperty Name="WorkeType" ColumnName="WorkeType" />
+          <ScalarProperty Name="IsTop" ColumnName="IsTop" />
+          <ScalarProperty Name="IsRemen" ColumnName="IsRemen" />
+          <ScalarProperty Name="IsJinghua" ColumnName="IsJinghua" />
+          <ScalarProperty Name="JobRequire" ColumnName="JobRequire" />
+          <ScalarProperty Name="PVCount" ColumnName="PVCount" />
+          <ScalarProperty Name="IsDelete" ColumnName="IsDelete" />
+          <ScalarProperty Name="CreateTime" ColumnName="CreateTime" />
+          <ScalarProperty Name="IsPay" ColumnName="IsPay" />
+          <ScalarProperty Name="PayType" ColumnName="PayType" />
+          <ScalarProperty Name="Contact" ColumnName="Contact" />
+          <ScalarProperty Name="JobWord" ColumnName="JobWord" />
+          <ScalarProperty Name="JobPic" ColumnName="JobPic" />
+          <ScalarProperty Name="CDesc" ColumnName="CDesc" />
+          <ScalarProperty Name="CVip" ColumnName="CVip" />
+          <ScalarProperty Name="CPeople" ColumnName="CPeople" />
+          <ScalarProperty Name="CLogo" ColumnName="CLogo" />
+          <ScalarProperty Name="CName" ColumnName="CName" />
+          <ScalarProperty Name="WorkPlace" ColumnName="WorkPlace" />
+          <ScalarProperty Name="WorkHistory" ColumnName="WorkHistory" />
+          <ScalarProperty Name="Study" ColumnName="Study" />
+          <ScalarProperty Name="Money" ColumnName="Money" />
+          <ScalarProperty Name="Gangwei" ColumnName="Gangwei" />
+          <ScalarProperty Name="Publisher" ColumnName="Publisher" />
+          <ScalarProperty Name="ZhaoPinID" ColumnName="ZhaoPinID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

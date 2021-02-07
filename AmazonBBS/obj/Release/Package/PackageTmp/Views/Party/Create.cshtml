@@ -1,0 +1,161 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@model PartyCreateViewModel
+@{
+    ViewBag.Title = "创建活动";
+}
+<script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+@using (Html.BeginForm("Create", "Party", FormMethod.Post, new { @class = "form-horizontal Lmgt20", role = "form", id = "nmform" }))
+{
+    @*活动主题*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.Title, "活动主题", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Party.Title, new { @class = "form-control", placeholder = "请输入活动主题" })
+        </div>
+    </div>
+    @*活动海报*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.ActivityIMG, "活动海报", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 ">
+            @Html.HiddenFor(m => m.Party.ActivityIMG)
+            <img class="showactiveimg" width="210" height="123" src="~/Content/img/party/icon/posterImg.png" />
+            <a id="btn_addActiveImg" class="btn btn-primary">添加海报</a>
+            <a id="btn_addDIYActiveImg" class="btn btn-primary" data-toggle="tooltip" title="建议海报尺寸为：210*123，或者等比放大的亦可(保证高度不能太高，不然压缩的太难看)">上传海报</a>
+            <input class="Ldni" type="file" id="addDIYActiveImg_VALUE" />
+        </div>
+    </div>
+    @*活动时间*@
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="SelectBeginTime">活动开始时间</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-md-6">
+                @Html.HiddenFor(m => m.Party.BeginTime)
+                @Html.HiddenFor(m => m.Party.EndTime)
+                <input id="SelectBeginTime" class="form-control" placeholder="活动开始时间" readonly="readonly" />
+            </div>
+        </div>
+    </div>
+    @*活动报名截止时间*@
+    <div class="form-group">
+        <label class="col-md-2 control-label" for="Party_CanJoinOnBeginCHeck">活动报名时间</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-md-6 Ldn setJoinTime">
+                <input id="SelectJoinTime" class="form-control" placeholder="活动报名时间" readonly="readonly"/>
+            </div>
+            <div class="col-sm-4">
+                <div class="checkbox">
+                    <label>
+                        @Html.HiddenFor(m => m.Party.CanJoinOnBegin)
+                        @Html.HiddenFor(m => m.Party.JoinBeginTime)
+                        @Html.HiddenFor(m => m.Party.JoinEndTime)
+                        <input id="Party_CanJoinOnBeginCHeck" checked="checked" type="checkbox">活动开始前均可报名
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*活动地址*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.Address, "活动地址", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Party.Address, new { @class = "form-control", placeholder = "请输入活动地址" })
+        </div>
+    </div>
+    @*活动详情*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Party.Body, "活动详情", new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.HiddenFor(m => m.Party.Body)
+            <div id="summernote"></div>
+        </div>
+    </div>
+    @*报名费用*@
+    <div class="form-group feetypeList">
+        <label class="col-md-2 control-label">票种类型</label>
+        <div class="feeitemwrap feeitemwrap-0 col-md-10 Lpdl0">
+            <div class="col-md-9">
+                <div class="col-md-3 col-sm-3 Lpdl0i">
+                    @Html.HiddenFor(m => m.PartyFee[0].FeeType)
+                    <select id="pickupFee0" class="form-control">
+                        <option value="">费用类型</option>
+                        <option value="0">免费</option>
+                        <option value="10">积分支付</option>
+                        <option value="20">VIP分支付</option>
+                        <option value="30">支付宝支付</option>
+                    </select>
+                </div>
+                <div class="col-md-3 col-sm-3 Lpdl0i">
+                    @Html.TextBoxFor(m => m.PartyFee[0].FeeName, new { @class = "form-control", placeholder = "票种名称" })
+                </div>
+                <div class="col-md-3 col-sm-3 Lpdl0i">
+                    @Html.TextBoxFor(m => m.PartyFee[0].Fee, new { @class = "form-control", placeholder = "报名费", type = "number", min = 0 })
+                </div>
+                <div class="col-md-3 col-sm-3 Lpdl0i">
+                    @Html.TextBoxFor(m => m.PartyFee[0].FeeCount, new { @class = "form-control", placeholder = "活动名额", type = "number", min = 1 })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <a class="btn btn-success btn-addFeetype" data-i="0">+添加票种</a>
+            </div>
+        </div>
+    </div>
+    //报名需提交资料
+    <div class="form-group joinBaseInfos">
+        <label class="col-md-2 control-label">报名填写项</label>
+        <div class="col-md-10 Lpdl0">
+            <div class="col-md-3">
+                <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="姓名" />
+            </div>
+        </div>
+        <div class="col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+            <div class="col-md-3">
+                <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="手机" />
+            </div>
+            <div class="col-md-9">
+                <a class="btn btn-success btn-addJoinInfo" data-i="0">+添加报名填写项</a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a id="btn_addParty" class="btn btn-primary">创建活动</a>
+        </div>
+    </div>
+}
+<div id="ActivityIMGS" class="Ldn">
+    <style>
+        .leo {
+            float: left;
+            padding: 20px;
+            user-select: none;
+        }
+
+            .leo .leotitle {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .leo .imgwrap {
+                padding: 3px;
+            }
+
+            .leo .thumbnail {
+                padding: 0;
+            }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: rgba(0,0,0,.2);
+        }
+    </style>
+    <div class="leo">
+        <div class="leotitle">单击图片直接选择海报</div>
+    </div>
+</div>
+<script>
+    Leo.init("party", "publish");
+</script>

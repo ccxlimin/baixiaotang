@@ -1,0 +1,22 @@
+﻿
+@{
+    Layout = null;
+    string form = ViewBag.form;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>支付中</title>
+</head>
+<body>
+    <div>
+        <h3>正在跳转支付，请不要关闭页面！</h3>
+    </div>
+    <div>
+        @Html.Raw(form)
+    </div>
+</body>
+</html>

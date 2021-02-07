@@ -1,0 +1,119 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model List<ToSendOrder>
+@{
+    ViewBag.Title = "已发货订单";
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        @if (Model.Count > 0)
+        {
+            <table class="table table-bordered  table-hover">
+                <tr>
+                    <th>商品</th>
+                    <th>用户</th>
+                    <th>下单时间</th>
+                    <th>付款方式</th>
+                    <th>付款金额</th>
+                    <th>付款否</th>
+                    <th>数量</th>
+                    <th>物流名称</th>
+                    <th>物流编号</th>
+                </tr>
+                @foreach (ToSendOrder item in Model)
+                {
+                    <tr>
+                        <td><a href="/gift/detail/@item.GiftInfo.GiftID" target="_blank">@item.GiftInfo.GiftName</a></td>
+                        <td><a href="/user/detail/@item.BuyerInfo.UserID" target="_blank">@item.BuyerInfo.UserName</a></td>
+                        <td>@item.UserGiftInfo.BuyTime.Value.ToString(1)</td>
+                        @{
+                            if (item.UserGiftInfo.FeeType == 10)
+                            {
+                                <td>积分</td>
+                            }
+                            else if (item.UserGiftInfo.FeeType == 20)
+                            {
+                                <td>VIP分</td>
+                            }
+                            else if (item.UserGiftInfo.FeeType == 30)
+                            {
+                                <td>现金</td>
+                            }
+                            else
+                            {
+                                <td>免费</td>
+                            }
+                        }
+                        <td>@item.UserGiftInfo.Fee</td>
+                        <td>@(item.UserGiftInfo.IsPay == 1 ? "已付款" : "未付款")</td>
+                        <td>@item.UserGiftInfo.BuyCount</td>
+                        <td>@(item.IsAutoSend ? "系统自动发货" : item.Express?.ExpressName)</td>
+                        <td>@(item.IsAutoSend ? "系统自动发货" : item.Express?.ExpressNo)</td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <div class="well">
+                暂无已发货订单
+            </div>
+        }
+    </div>
+</div>
+<div id="orderSendWrap" class="Ldn">
+    <table class="table table-hover table-bordered Ltac">
+        <tr>
+            <td>物流名称</td>
+            <td>
+                <input class="form-control" id="expressName" placeholder="请填写物流名称" />
+            </td>
+        </tr>
+        <tr>
+            <td>物流名称</td>
+            <td>
+                <input class="form-control" id="expressNo" placeholder="请填写物流单号" />
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <a class="btn btn-sm btn-primary btn_send_submit">确认发货</a>
+            </td>
+        </tr>
+    </table>
+</div>
+<script>
+    function send(target, orderSendId, buyerId) {
+        var layerindex = AlertDivNoTitle("#orderSendWrap", "300px", "180px", null, function () {
+            $("#expressNo").val("");
+            $("#expressName").val("");
+            $(".btn_send_submit").unbind("click");
+        });
+        $(".btn_send_submit").click(function () {
+            if (Leo.tools.CheckFormNotEmpty("#expressName", "物流名称")) {
+                if (Leo.tools.CheckFormNotEmpty("#expressNo", "物流单号")) {
+                    $.post("/console/saveexpress", {
+                        no: $("#expressNo").val(),
+                        name: $("#expressName").val(),
+                        orderSendId: orderSendId,
+                        buyerId: buyerId
+                    }, function (data) {
+                        if (data.Ok) {
+                            Leo.msgsuccess(data.Msg || "保存成功");
+                            $(target).parent().parent().remove();
+                            $("#expressNo").val("");
+                            $("#expressName").val("");
+                        } else {
+                            Leo.msgfail(data.Msg || "保存失败");
+                        }
+                        CLOSE(layerindex);
+                    })
+                }
+            }
+        });
+    }
+</script>

@@ -1,0 +1,30 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model SearchResultViewModel
+@{
+    var list = Model.SList;
+    var page = Model.SearchPage;
+    string url_bbs = "/bbs/detail/{0}";
+    string url_article = "/article/detail/{0}";
+    string url_user = "/user/detail/{0}";
+    foreach (S item in list)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="site-search-result-type-tag Lusn">@(item.type == 1 ? "贴子" : item.type == 2 ? "文章" : "用户")</span>
+                <a href="@((item.type==1 ? url_bbs : item.type==2 ? url_article : url_user).FormatWith(item.Id))" target="_blank">
+                    @item.Title
+                </a>
+            </div>
+            @if (item.Desc.IsNotNullOrEmpty())
+            {
+                <div class="panel-body">
+                    @Html.Raw(item.Desc)
+                </div>
+            }
+        </div>
+    }
+    <div id="search_Page">
+        @Html.Partial("_PageLoadMore", page)
+    </div>
+}

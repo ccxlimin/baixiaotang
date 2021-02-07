@@ -1,0 +1,163 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model  List<SuggestSite>
+@{
+    ViewBag.Title = "设置推荐网站";
+    List<SuggestSite> list = Model;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <h1>推荐网站新增</h1>
+                    <div class="well">
+                        @*<h6 class="Lpdl15">新增推荐网站</h6>*@
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="addsuggestName" placeholder="推荐网站名" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <input type="text" class="form-control" id="addsuggestAddress" placeholder="网站地址" />
+                            </div>
+                            <a onclick="addNew()" id="btn_addsuggestSite" class="btn btn-primary">确认新增</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (list != null && list.Count > 0)
+    {
+        <div class="col-md-10">
+            <table class="table table-bordered table-hover">
+                <caption>推荐网站管理</caption>
+                <thead>
+                    <tr>
+                        <th width="30%">推荐网站名</th>
+                        <th width="30%">网站地址</th>
+                        <th width="40%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (SuggestSite item in list)
+                        {
+                            long sid = item.SuggestSiteId;
+                            string sname = item.SiteName;
+                            string saddress = item.SiteAddress;
+                            <tr>
+                                <td>@sname</td>
+                                <td>@saddress</td>
+                                <td>
+                                    <a onclick="Edit(this,@sid)" class="btn-sm btn-primary">编辑</a>
+                                    <a onclick="Delete(this,@sid)" class="btn-sm btn-danger">删除</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<div class="EditSuggestSite Ldn">
+    <div class="form-group Lmgt10">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_suggestName" name="edit_suggestName" placeholder="推荐网站名" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" id="edit_suggestAddress" name="edit_suggestAddress" placeholder="网站地址" />
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    function addNew() {
+        var addsuggestName = $("#addsuggestName"),
+            addsuggestAddress = $("#addsuggestAddress");
+        if (CHECKNOTEMPTY(addsuggestName, "推荐网站名")) {
+            if (CHECKNOTEMPTY(addsuggestAddress, "网站地址")) {
+                $.post("/Console/AddSuggestSite", {
+                    name: addsuggestName.val(), address: addsuggestAddress.val()
+                }).success(function (data) {
+                    if (data.Ok) {
+                        layer.msg("新增成功", { time: 500, end: function () { location.reload(); } });
+                        addsuggestName.val("");
+                        addsuggestAddress.val("");
+                    } else {
+                        layer.msg(data.Msg || "失败");
+                    }
+                });
+            }
+        }
+    }
+
+
+    //删除
+    function Delete(me, id) {
+        AlertConfirm("确定要删除此推荐网站吗？", "确认删除", '我点错了', function () {
+            $.post("/Console/DeleteSuggestSite/{0}".Format(id), function (data) {
+                if (data.Ok) {
+                    layer.msg("删除成功");
+                    $(me).parent().parent().remove();
+                } else {
+                    layer.msg(data.Msg);
+                }
+            });
+        });
+    }
+    //编辑
+    function Edit(me, id) {
+        var layerindex;
+        var parent = $(me).parent().parent();
+        var edit_suggestName = $("#edit_suggestName"),
+            edit_suggestAddress = $("#edit_suggestAddress");
+        edit_suggestName.val(parent.children().eq(0).text());
+        edit_suggestAddress.val(parent.children().eq(1).text());
+        layerindex = AlertActionAreaWithConfirmWithSize($(".EditSuggestSite"), "编辑推荐网站", "330px", null, "确认编辑", null, function () {
+            if (CHECKNOTEMPTY(edit_suggestName, "推荐网站名")) {
+                if (CHECKNOTEMPTY(edit_suggestAddress, "网站地址")) {
+                    var lindex = LOAD("提交中");
+                    $.post("/Console/SuggestEdit/{0}".Format(id), { name: edit_suggestName.val(), address: edit_suggestAddress.val() }, function (data) {
+                        if (data.Ok) {
+                            layer.close(layerindex);
+                            layer.close(lindex);
+                            $("#edit_suggestName").val("");
+                            $("#edit_suggestAddress").val("");
+                            layer.msg("编辑成功", {
+                                time: 500, end: function () {
+                                    location.reload(!0);
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        }, function () {
+            $("#edit_suggestName").val("");
+            $("#edit_suggestAddress").val("");
+        });
+    }
+
+    function CHECKNOTEMPTY(item, msg) {
+        var i = $.trim(item.val());
+        var ok = !0;
+        if (i == null || i == undefined | i == "") {
+            ok = !1;
+            layer.msg(msg + "不能为空");
+            item.focus();
+        }
+        return ok;
+    }
+</script>

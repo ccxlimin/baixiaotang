@@ -1,0 +1,137 @@
+﻿@{
+    ViewBag.Title = "发表新贴";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var selectList = (List<SelectListItem>)ViewBag.selectList;
+    var selectList2 = (List<SelectListItem>)ViewBag.selectList2;
+    var menuselectlist = (List<SelectListItem>)ViewBag.EnumType;
+    bool islogin = (bool)ViewBag.IsLogin;
+}
+
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <div class="col-md-8 col-sm-8 col-sm-offset-2">
+            <h3>新贴发布</h3>
+            @if (!islogin)
+            {
+                <h6 style="color:red;">
+                    你没有登录，录入的内容会丢失哦，请先<a href="/account/login?returnurl=@Request.Url">登录</a>后再发贴
+                </h6>
+            }
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="Lpdl0 col-sm-offset-2 col-md-8 col-sm-8 ">
+            <div class="col-md-4">
+                <div class="checkbox">
+                    <label data-toggle='tooltip' title="选中此项，则管理员之外的用户看不到发贴人">
+                        <input id="add_anonymous" type="checkbox" />匿名发布
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8">
+            <input type="text" class="form-control" id="qtitle"
+                   placeholder="请输入标题">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8">
+            <div class="input-group col-md-3 col-sm-3 Lpd0">
+                @Html.DropDownList("menuType", menuselectlist, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8">
+            <span class="TagListWrap"></span>
+            <a id="btn-addtag" class="btn btn-default">添加标签</a>
+            <span>添加标签能够快速帮您定位问题！</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8">
+            <div id="summernote"></div>
+        </div>
+    </div>
+    @*内容付费*@
+    <div class="form-group">
+        <div class="Lpdl0 col-sm-offset-2 col-md-8 col-sm-8 ">
+            <div class="col-md-2">
+                <div class="checkbox">
+                    <label>
+                        <input id="questionContentCoinStatus" type="checkbox" />内容付费
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <select id="bbscontentFeeType" class="form-control" disabled>
+                    <option value="">费用类型</option>
+                    <option value="10">积分支付</option>
+                    <option value="20">VIP分支付</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <input class="form-control " disabled id="questionContentFee" min="0" name="" placeholder="内容查看费用" type="number" value="">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="Lpdl0 col-sm-offset-2 col-md-8 col-sm-8">
+            <div class="col-lg-2">
+                <div class="checkbox">
+                    <label>
+                        <input id="questionCoin" type="checkbox" />答题悬赏
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-10">
+                <div class="input-group col-lg-4 Lpdl0">
+                    @Html.DropDownList("payCoin", selectList, new { @class = "form-control", disabled = "disabled" })
+                </div>
+                <div class="col-lg-8" style="line-height:34px;">
+                    <span class="input-group">积分不够？前往<a href="/user/scoreexchange" target="_blank">充值兑换中心</a>进行兑换充值吧！</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*添加附件*@
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8 attachmentwrappers">
+            <div class="attachmentwrapper_1 col-md-8 Lpdl0 Ldn">
+                <input hidden="hidden" style="display:none !important;" type="file" id="addFile_1" />
+                <div class="col-md-4 Lpdl0i">
+                    <input type="text" id="fileShowArea_1" class="form-control" placeholder="添加附件" />
+                </div>
+                <div class="col-md-4">
+                    <select id="filefeetype_1" class="form-control">
+                        <option value="">费用类型</option>
+                        <option value="0">免费</option>
+                        <option value="10">积分支付</option>
+                        <option value="20">VIP分支付</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input class="form-control" id="FileFee_1" min="0" name="" placeholder="附件费用" type="number" value="">
+                </div>
+            </div>
+            <div class="attachmentaction_1 col-md-3 Lpdl0i">
+                <a id="btn-removeFile_1" class="btn btn-warning Ldn">-删除附件</a>
+                <a id="btn-addFile_1" class="btn btn-warning">+添加附件(可选)</a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-md-8 col-sm-8">
+            <a id="btn_ask" class="btn btn-primary">发布新贴</a>
+        </div>
+    </div>
+</form>
+<div id="addTagWrapper" class="Ldn">
+    @Html.Partial("_AddTag")
+</div>
+<script>
+    Leo.init("bbs", "add");
+</script>

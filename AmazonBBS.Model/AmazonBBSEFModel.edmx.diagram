@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="21ee00711c3147f8a0f671fdec0cd04d" Name="Diagram1">
+        <EntityTypeShape EntityType="AmazonBBSModel.About" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Activity" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ActivityFee" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ActivityJoin" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.AD" Width="1.5" PointX="0.75" PointY="5.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Against" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Answer" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Article" Width="1.5" PointX="2.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.AttachMent" Width="1.5" PointX="8.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.AttachMentBuyLog" Width="1.5" PointX="4.75" PointY="8.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.AutoReply" Width="1.5" PointX="8.75" PointY="5.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.AutoReplyItem" Width="1.5" PointX="6.75" PointY="9.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.BBSEnum" Width="1.5" PointX="8.75" PointY="9.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.BuyOtherLog" Width="1.5" PointX="10.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.BXTOrder" Width="1.5" PointX="10.75" PointY="3.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Chat" Width="1.5" PointX="10.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ClickMsg" Width="1.5" PointX="10.75" PointY="11.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Comment" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ContentBuyLog" Width="1.5" PointX="0.75" PointY="12.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Customer" Width="1.5" PointX="2.75" PointY="12.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.EditLog" Width="1.5" PointX="12.75" PointY="6.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.EmailNotice" Width="1.5" PointX="12.75" PointY="9.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ErrorLog" Width="1.5" PointX="4.75" PointY="13.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Express" Width="1.5" PointX="12.75" PointY="13.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.FeeAnswerLog" Width="1.5" PointX="14.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.FeeHR" Width="1.5" PointX="14.75" PointY="3.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Gift" Width="1.5" PointX="6.75" PointY="14.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.GiftFee" Width="1.5" PointX="14.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.InviteInterview" Width="1.5" PointX="14.75" PointY="10.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Job" Width="1.5" PointX="14.75" PointY="14.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.JobComment" Width="1.5" PointX="8.75" PointY="15.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.JobTrade" Width="1.5" PointX="16.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.JoinItemAnswerExt" Width="1.5" PointX="0.75" PointY="16.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.JoinItemQuestionExt" Width="1.5" PointX="2.75" PointY="16.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.LeaveWord" Width="1.5" PointX="16.75" PointY="3.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Master" Width="1.5" PointX="16.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.MenuBelongTag" Width="1.5" PointX="16.75" PointY="10.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.News" Width="1.5" PointX="16.75" PointY="13.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Notice" Width="1.5" PointX="10.75" PointY="17.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.OAuth" Width="1.5" PointX="16.75" PointY="17.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Order" Width="1.5" PointX="18.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.OrderCheck" Width="1.5" PointX="18.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.OrderSend" Width="1.5" PointX="18.75" PointY="8.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.PayCBLog" Width="1.5" PointX="18.75" PointY="12.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Prise" Width="1.5" PointX="12.75" PointY="18.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.PrivateKey" Width="1.5" PointX="18.75" PointY="16.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Product" Width="1.5" PointX="4.75" PointY="19.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ProductBuy" Width="1.5" PointX="6.75" PointY="19.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.QiuZhi" Width="1.5" PointX="18.75" PointY="19.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Question" Width="1.5" PointX="20.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Report" Width="1.5" PointX="0.75" PointY="20.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ScoreBeloneItem" Width="1.5" PointX="20.75" PointY="7.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ScoreCoinLog" Width="1.5" PointX="20.75" PointY="10.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SendCV" Width="1.5" PointX="20.75" PointY="14.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ShareLink" Width="1.5" PointX="20.75" PointY="18.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ShareRegistLog" Width="1.5" PointX="8.75" PointY="21.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ShipAddress" Width="1.5" PointX="10.75" PointY="21.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SiteHead" Width="1.5" PointX="12.75" PointY="21.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SiteNotice" Width="1.5" PointX="14.75" PointY="21.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Slide" Width="1.5" PointX="22.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SoftLink" Width="1.5" PointX="22.75" PointY="4.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SoftLinkType" Width="1.5" PointX="22.75" PointY="8.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.StudyClass" Width="1.5" PointX="22.75" PointY="12.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.StudyShareImgSet" Width="1.5" PointX="22.75" PointY="16.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.StudyUnit" Width="1.5" PointX="22.75" PointY="19.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.SuggestSite" Width="1.5" PointX="20.75" PointY="22.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.Tag" Width="1.5" PointX="22.75" PointY="22.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserBase" Width="1.5" PointX="24.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserDisabledLog" Width="1.5" PointX="0.75" PointY="24.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserExt" Width="1.5" PointX="24.75" PointY="6.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserGift" Width="1.5" PointX="6.75" PointY="24.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserLike" Width="1.5" PointX="24.75" PointY="12.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserLoginLog" Width="1.5" PointX="24.75" PointY="15.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserScore" Width="1.5" PointX="24.75" PointY="18.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserSet" Width="1.5" PointX="24.75" PointY="22.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserShareLog" Width="1.5" PointX="8.75" PointY="25.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.UserStudy" Width="1.5" PointX="10.75" PointY="25.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.VIPHead" Width="1.5" PointX="24.75" PointY="25.75" />
+        <EntityTypeShape EntityType="AmazonBBSModel.ZhaoPin" Width="1.5" PointX="26.75" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

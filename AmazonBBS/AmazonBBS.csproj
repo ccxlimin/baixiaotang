@@ -1,0 +1,1032 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D8D9B392-ABA5-446E-A701-1ABE63375C10}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>AmazonBBS</RootNamespace>
+    <AssemblyName>AmazonBBS</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Autofac, Version=4.8.1.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.8.1\lib\net45\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Integration.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.6.1.0.168\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="JiebaNet.Analyser, Version=0.39.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jieba.NET.0.39.1\lib\net45\JiebaNet.Analyser.dll</HintPath>
+    </Reference>
+    <Reference Include="JiebaNet.Segmenter, Version=0.39.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jieba.NET.0.39.1\lib\net45\JiebaNet.Segmenter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\netstandard1.0\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\AutofacConfig.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Controllers\AboutController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ADController.cs" />
+    <Compile Include="Controllers\ArticleController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\BBSController.cs" />
+    <Compile Include="Controllers\CController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
+    <Compile Include="Controllers\CommonController.cs" />
+    <Compile Include="Controllers\ConsoleController.cs" />
+    <Compile Include="Controllers\DataAnalysisController.cs" />
+    <Compile Include="Controllers\BuyController.cs" />
+    <Compile Include="Controllers\GiftController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\KeChengController.cs" />
+    <Compile Include="Controllers\NewsController.cs" />
+    <Compile Include="Controllers\NoticeController.cs" />
+    <Compile Include="Controllers\OAuthController.cs" />
+    <Compile Include="Controllers\PartyController.cs" />
+    <Compile Include="Controllers\PayController.cs" />
+    <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\PVController.cs" />
+    <Compile Include="Controllers\QiuZhiController.cs" />
+    <Compile Include="Controllers\DownController.cs" />
+    <Compile Include="Controllers\SController.cs" />
+    <Compile Include="Controllers\ShareController.cs" />
+    <Compile Include="Controllers\SoftLinkController.cs" />
+    <Compile Include="Controllers\StudyController.cs" />
+    <Compile Include="Controllers\TagController.cs" />
+    <Compile Include="Controllers\ToolController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\ZhaoPinController.cs" />
+    <Compile Include="Filters\CanPublishArticle.cs" />
+    <Compile Include="Filters\IsRootAttribute.cs" />
+    <Compile Include="Filters\IsNormalMasterAttribute.cs" />
+    <Compile Include="Filters\IsMasterAttribute.cs" />
+    <Compile Include="Filters\LOGINAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bbscss\discuz.common.css" />
+    <Content Include="Content\bbscss\discuz.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bs\css\bootstrap-theme.css" />
+    <Content Include="Content\bs\css\bootstrap-theme.min.css" />
+    <Content Include="Content\bs\css\bootstrap.css" />
+    <Content Include="Content\bs\css\bootstrap.min.css" />
+    <Content Include="Content\bs\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Content\bs\js\bootstrap.js" />
+    <Content Include="Content\bs\js\bootstrap.min.js" />
+    <Content Include="Content\bs\js\npm.js" />
+    <Content Include="Content\citypicker.js" />
+    <Content Include="Content\fileicon\exe.png" />
+    <Content Include="Content\fileicon\other.png" />
+    <Content Include="Content\fileicon\pdf.png" />
+    <Content Include="Content\fileicon\photo.png" />
+    <Content Include="Content\fileicon\ppt.png" />
+    <Content Include="Content\fileicon\rar.png" />
+    <Content Include="Content\fileicon\txt.png" />
+    <Content Include="Content\fileicon\doc.png" />
+    <Content Include="Content\fileicon\xls.png" />
+    <Content Include="Content\huodong.css" />
+    <Content Include="Content\img\anonymous.png" />
+    <Content Include="Content\img\article.png" />
+    <Content Include="Content\img\block_layer_big.jpg" />
+    <Content Include="Content\img\body_bg.png" />
+    <Content Include="Content\img\Connect_logo_7.png" />
+    <Content Include="Content\img\default_img.png" />
+    <Content Include="Content\img\detail_pc_read.png" />
+    <Content Include="Content\img\head_default.gif" />
+    <Content Include="Content\img\huangguan.png" />
+    <Content Include="Content\img\icon24_wx_button.png" />
+    <Content Include="Content\img\icon\comment.svg" />
+    <Content Include="Content\img\icon\page_first.svg" />
+    <Content Include="Content\img\icon\page_first2.svg" />
+    <Content Include="Content\img\icon\page_last.svg" />
+    <Content Include="Content\img\icon\page_last2.svg" />
+    <Content Include="Content\img\icon\page_next.svg" />
+    <Content Include="Content\img\icon\page_next2.svg" />
+    <Content Include="Content\img\icon\page_prev.svg" />
+    <Content Include="Content\img\icon\page_prev2.svg" />
+    <Content Include="Content\img\icon\prise.svg" />
+    <Content Include="Content\img\icon\prised.svg" />
+    <Content Include="Content\img\index\default_index.jpg" />
+    <Content Include="Content\img\kechengguid\invitehead.jpg" />
+    <Content Include="Content\img\man.png" />
+    <Content Include="Content\img\newDetaillessaddIcons.png" />
+    <Content Include="Content\img\notrace-bg_08f84c5.png" />
+    <Content Include="Content\img\open_im.png" />
+    <Content Include="Content\img\party.png" />
+    <Content Include="Content\img\partyicon.png" />
+    <Content Include="Content\img\party\icon\icon_changci.png" />
+    <Content Include="Content\img\party\icon\posterImg.png" />
+    <Content Include="Content\img\party\posterImg.png" />
+    <Content Include="Content\img\party\poster_image_juhui_1.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_10.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_11.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_12.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_2.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_3.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_4.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_5.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_6.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_7.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_8.jpg" />
+    <Content Include="Content\img\party\poster_image_juhui_9.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_1.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_10.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_11.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_12.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_2.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_3.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_4.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_5.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_6.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_7.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_8.jpg" />
+    <Content Include="Content\img\party\poster_image_lvyou_9.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_1.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_10.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_11.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_12.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_2.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_3.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_4.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_5.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_6.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_7.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_8.jpg" />
+    <Content Include="Content\img\party\poster_image_qinzi_9.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_1.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_10.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_11.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_12.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_2.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_3.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_4.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_5.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_6.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_7.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_8.jpg" />
+    <Content Include="Content\img\party\poster_image_shangwu_9.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_1.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_10.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_11.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_12.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_2.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_3.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_4.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_5.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_6.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_7.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_8.jpg" />
+    <Content Include="Content\img\party\poster_image_wenhua_9.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_1.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_10.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_11.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_12.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_2.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_3.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_4.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_5.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_6.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_7.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_8.jpg" />
+    <Content Include="Content\img\party\poster_image_yanchu_9.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_1.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_10.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_11.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_12.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_2.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_3.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_4.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_5.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_6.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_7.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_8.jpg" />
+    <Content Include="Content\img\party\poster_image_yundong_9.jpg" />
+    <Content Include="Content\img\pattern1.png" />
+    <Content Include="Content\img\post.png" />
+    <Content Include="Content\img\qq.png" />
+    <Content Include="Content\img\qqtalk.png" />
+    <Content Include="Content\img\qrcode.png" />
+    <Content Include="Content\img\question.png" />
+    <Content Include="Content\img\scoreCoin.png" />
+    <Content Include="Content\img\search-1.png" />
+    <Content Include="Content\img\search.png" />
+    <Content Include="Content\img\share1.png" />
+    <Content Include="Content\img\share2.png" />
+    <Content Include="Content\img\sign.png" />
+    <Content Include="Content\img\skin-btn.png" />
+    <Content Include="Content\img\skin\1.jpg" />
+    <Content Include="Content\img\skin\100.jpg" />
+    <Content Include="Content\img\skin\101.jpg" />
+    <Content Include="Content\img\skin\102.jpg" />
+    <Content Include="Content\img\skin\103.jpg" />
+    <Content Include="Content\img\skin\104.jpg" />
+    <Content Include="Content\img\skin\105.jpg" />
+    <Content Include="Content\img\skin\106.jpg" />
+    <Content Include="Content\img\skin\107.jpg" />
+    <Content Include="Content\img\skin\108.jpg" />
+    <Content Include="Content\img\skin\109.jpg" />
+    <Content Include="Content\img\skin\110.jpg" />
+    <Content Include="Content\img\skin\111.jpg" />
+    <Content Include="Content\img\skin\112.jpg" />
+    <Content Include="Content\img\skin\113.jpg" />
+    <Content Include="Content\img\skin\114.jpg" />
+    <Content Include="Content\img\skin\115.jpg" />
+    <Content Include="Content\img\skin\116.jpg" />
+    <Content Include="Content\img\skin\117.jpg" />
+    <Content Include="Content\img\skin\118.jpg" />
+    <Content Include="Content\img\skin\119.jpg" />
+    <Content Include="Content\img\skin\13.jpg" />
+    <Content Include="Content\img\skin\14.jpg" />
+    <Content Include="Content\img\skin\15.jpg" />
+    <Content Include="Content\img\skin\16.jpg" />
+    <Content Include="Content\img\skin\18.jpg" />
+    <Content Include="Content\img\skin\19.jpg" />
+    <Content Include="Content\img\skin\20.jpg" />
+    <Content Include="Content\img\skin\21.jpg" />
+    <Content Include="Content\img\skin\22.jpg" />
+    <Content Include="Content\img\skin\23.jpg" />
+    <Content Include="Content\img\skin\24.jpg" />
+    <Content Include="Content\img\skin\25.jpg" />
+    <Content Include="Content\img\skin\26.jpg" />
+    <Content Include="Content\img\skin\27.jpg" />
+    <Content Include="Content\img\skin\28.jpg" />
+    <Content Include="Content\img\skin\29.jpg" />
+    <Content Include="Content\img\skin\30.jpg" />
+    <Content Include="Content\img\skin\31.jpg" />
+    <Content Include="Content\img\skin\32.jpg" />
+    <Content Include="Content\img\skin\33.jpg" />
+    <Content Include="Content\img\skin\34.jpg" />
+    <Content Include="Content\img\skin\35.jpg" />
+    <Content Include="Content\img\skin\36.jpg" />
+    <Content Include="Content\img\skin\37.jpg" />
+    <Content Include="Content\img\skin\38.jpg" />
+    <Content Include="Content\img\skin\39.jpg" />
+    <Content Include="Content\img\skin\4.jpg" />
+    <Content Include="Content\img\skin\40.jpg" />
+    <Content Include="Content\img\skin\41.jpg" />
+    <Content Include="Content\img\skin\43.jpg" />
+    <Content Include="Content\img\skin\44.jpg" />
+    <Content Include="Content\img\skin\45.jpg" />
+    <Content Include="Content\img\skin\46.jpg" />
+    <Content Include="Content\img\skin\47.jpg" />
+    <Content Include="Content\img\skin\48.jpg" />
+    <Content Include="Content\img\skin\49.jpg" />
+    <Content Include="Content\img\skin\5.jpg" />
+    <Content Include="Content\img\skin\50.jpg" />
+    <Content Include="Content\img\skin\51.jpg" />
+    <Content Include="Content\img\skin\52.jpg" />
+    <Content Include="Content\img\skin\53.jpg" />
+    <Content Include="Content\img\skin\54.jpg" />
+    <Content Include="Content\img\skin\55.jpg" />
+    <Content Include="Content\img\skin\56.jpg" />
+    <Content Include="Content\img\skin\57.jpg" />
+    <Content Include="Content\img\skin\58.jpg" />
+    <Content Include="Content\img\skin\59.jpg" />
+    <Content Include="Content\img\skin\6.jpg" />
+    <Content Include="Content\img\skin\60.jpg" />
+    <Content Include="Content\img\skin\61.jpg" />
+    <Content Include="Content\img\skin\62.jpg" />
+    <Content Include="Content\img\skin\63.jpg" />
+    <Content Include="Content\img\skin\64.jpg" />
+    <Content Include="Content\img\skin\65.jpg" />
+    <Content Include="Content\img\skin\66.jpg" />
+    <Content Include="Content\img\skin\67.jpg" />
+    <Content Include="Content\img\skin\68.jpg" />
+    <Content Include="Content\img\skin\69.jpg" />
+    <Content Include="Content\img\skin\70.jpg" />
+    <Content Include="Content\img\skin\71.jpg" />
+    <Content Include="Content\img\skin\72.jpg" />
+    <Content Include="Content\img\skin\73.jpg" />
+    <Content Include="Content\img\skin\74.jpg" />
+    <Content Include="Content\img\skin\75.jpg" />
+    <Content Include="Content\img\skin\77.jpg" />
+    <Content Include="Content\img\skin\8.jpg" />
+    <Content Include="Content\img\skin\82.jpg" />
+    <Content Include="Content\img\skin\83.jpg" />
+    <Content Include="Content\img\skin\84.jpg" />
+    <Content Include="Content\img\skin\85.jpg" />
+    <Content Include="Content\img\skin\86.jpg" />
+    <Content Include="Content\img\skin\87.jpg" />
+    <Content Include="Content\img\skin\88.jpg" />
+    <Content Include="Content\img\skin\89.jpg" />
+    <Content Include="Content\img\skin\9.jpg" />
+    <Content Include="Content\img\skin\90.jpg" />
+    <Content Include="Content\img\skin\91.jpg" />
+    <Content Include="Content\img\skin\92.jpg" />
+    <Content Include="Content\img\skin\93.jpg" />
+    <Content Include="Content\img\skin\94.jpg" />
+    <Content Include="Content\img\skin\95.jpg" />
+    <Content Include="Content\img\skin\96.jpg" />
+    <Content Include="Content\img\skin\97.jpg" />
+    <Content Include="Content\img\skin\98.jpg" />
+    <Content Include="Content\img\skin\99.jpg" />
+    <Content Include="Content\img\skin\thumb\1.jpg" />
+    <Content Include="Content\img\skin\thumb\100.jpg" />
+    <Content Include="Content\img\skin\thumb\101.jpg" />
+    <Content Include="Content\img\skin\thumb\102.jpg" />
+    <Content Include="Content\img\skin\thumb\103.jpg" />
+    <Content Include="Content\img\skin\thumb\104.jpg" />
+    <Content Include="Content\img\skin\thumb\105.jpg" />
+    <Content Include="Content\img\skin\thumb\106.jpg" />
+    <Content Include="Content\img\skin\thumb\107.jpg" />
+    <Content Include="Content\img\skin\thumb\108.jpg" />
+    <Content Include="Content\img\skin\thumb\109.jpg" />
+    <Content Include="Content\img\skin\thumb\110.jpg" />
+    <Content Include="Content\img\skin\thumb\111.jpg" />
+    <Content Include="Content\img\skin\thumb\112.jpg" />
+    <Content Include="Content\img\skin\thumb\113.jpg" />
+    <Content Include="Content\img\skin\thumb\114.jpg" />
+    <Content Include="Content\img\skin\thumb\115.jpg" />
+    <Content Include="Content\img\skin\thumb\116.jpg" />
+    <Content Include="Content\img\skin\thumb\117.jpg" />
+    <Content Include="Content\img\skin\thumb\118.jpg" />
+    <Content Include="Content\img\skin\thumb\119.jpg" />
+    <Content Include="Content\img\skin\thumb\13.jpg" />
+    <Content Include="Content\img\skin\thumb\14.jpg" />
+    <Content Include="Content\img\skin\thumb\15.jpg" />
+    <Content Include="Content\img\skin\thumb\16.jpg" />
+    <Content Include="Content\img\skin\thumb\18.jpg" />
+    <Content Include="Content\img\skin\thumb\19.jpg" />
+    <Content Include="Content\img\skin\thumb\20.jpg" />
+    <Content Include="Content\img\skin\thumb\21.jpg" />
+    <Content Include="Content\img\skin\thumb\22.jpg" />
+    <Content Include="Content\img\skin\thumb\23.jpg" />
+    <Content Include="Content\img\skin\thumb\24.jpg" />
+    <Content Include="Content\img\skin\thumb\25.jpg" />
+    <Content Include="Content\img\skin\thumb\26.jpg" />
+    <Content Include="Content\img\skin\thumb\27.jpg" />
+    <Content Include="Content\img\skin\thumb\28.jpg" />
+    <Content Include="Content\img\skin\thumb\29.jpg" />
+    <Content Include="Content\img\skin\thumb\30.jpg" />
+    <Content Include="Content\img\skin\thumb\31.jpg" />
+    <Content Include="Content\img\skin\thumb\32.jpg" />
+    <Content Include="Content\img\skin\thumb\33.jpg" />
+    <Content Include="Content\img\skin\thumb\34.jpg" />
+    <Content Include="Content\img\skin\thumb\35.jpg" />
+    <Content Include="Content\img\skin\thumb\36.jpg" />
+    <Content Include="Content\img\skin\thumb\37.jpg" />
+    <Content Include="Content\img\skin\thumb\38.jpg" />
+    <Content Include="Content\img\skin\thumb\39.jpg" />
+    <Content Include="Content\img\skin\thumb\4.jpg" />
+    <Content Include="Content\img\skin\thumb\40.jpg" />
+    <Content Include="Content\img\skin\thumb\41.jpg" />
+    <Content Include="Content\img\skin\thumb\43.jpg" />
+    <Content Include="Content\img\skin\thumb\44.jpg" />
+    <Content Include="Content\img\skin\thumb\45.jpg" />
+    <Content Include="Content\img\skin\thumb\46.jpg" />
+    <Content Include="Content\img\skin\thumb\47.jpg" />
+    <Content Include="Content\img\skin\thumb\48.jpg" />
+    <Content Include="Content\img\skin\thumb\49.jpg" />
+    <Content Include="Content\img\skin\thumb\5.jpg" />
+    <Content Include="Content\img\skin\thumb\50.jpg" />
+    <Content Include="Content\img\skin\thumb\51.jpg" />
+    <Content Include="Content\img\skin\thumb\52.jpg" />
+    <Content Include="Content\img\skin\thumb\53.jpg" />
+    <Content Include="Content\img\skin\thumb\54.jpg" />
+    <Content Include="Content\img\skin\thumb\55.jpg" />
+    <Content Include="Content\img\skin\thumb\56.jpg" />
+    <Content Include="Content\img\skin\thumb\57.jpg" />
+    <Content Include="Content\img\skin\thumb\58.jpg" />
+    <Content Include="Content\img\skin\thumb\59.jpg" />
+    <Content Include="Content\img\skin\thumb\6.jpg" />
+    <Content Include="Content\img\skin\thumb\60.jpg" />
+    <Content Include="Content\img\skin\thumb\61.jpg" />
+    <Content Include="Content\img\skin\thumb\62.jpg" />
+    <Content Include="Content\img\skin\thumb\63.jpg" />
+    <Content Include="Content\img\skin\thumb\64.jpg" />
+    <Content Include="Content\img\skin\thumb\65.jpg" />
+    <Content Include="Content\img\skin\thumb\66.jpg" />
+    <Content Include="Content\img\skin\thumb\67.jpg" />
+    <Content Include="Content\img\skin\thumb\68.jpg" />
+    <Content Include="Content\img\skin\thumb\69.jpg" />
+    <Content Include="Content\img\skin\thumb\70.jpg" />
+    <Content Include="Content\img\skin\thumb\71.jpg" />
+    <Content Include="Content\img\skin\thumb\72.jpg" />
+    <Content Include="Content\img\skin\thumb\73.jpg" />
+    <Content Include="Content\img\skin\thumb\74.jpg" />
+    <Content Include="Content\img\skin\thumb\75.jpg" />
+    <Content Include="Content\img\skin\thumb\77.jpg" />
+    <Content Include="Content\img\skin\thumb\8.jpg" />
+    <Content Include="Content\img\skin\thumb\82.jpg" />
+    <Content Include="Content\img\skin\thumb\83.jpg" />
+    <Content Include="Content\img\skin\thumb\84.jpg" />
+    <Content Include="Content\img\skin\thumb\85.jpg" />
+    <Content Include="Content\img\skin\thumb\86.jpg" />
+    <Content Include="Content\img\skin\thumb\87.jpg" />
+    <Content Include="Content\img\skin\thumb\88.jpg" />
+    <Content Include="Content\img\skin\thumb\89.jpg" />
+    <Content Include="Content\img\skin\thumb\9.jpg" />
+    <Content Include="Content\img\skin\thumb\90.jpg" />
+    <Content Include="Content\img\skin\thumb\91.jpg" />
+    <Content Include="Content\img\skin\thumb\92.jpg" />
+    <Content Include="Content\img\skin\thumb\93.jpg" />
+    <Content Include="Content\img\skin\thumb\94.jpg" />
+    <Content Include="Content\img\skin\thumb\95.jpg" />
+    <Content Include="Content\img\skin\thumb\96.jpg" />
+    <Content Include="Content\img\skin\thumb\97.jpg" />
+    <Content Include="Content\img\skin\thumb\98.jpg" />
+    <Content Include="Content\img\skin\thumb\99.jpg" />
+    <Content Include="Content\img\sort.png" />
+    <Content Include="Content\img\study1.png" />
+    <Content Include="Content\img\study2.png" />
+    <Content Include="Content\img\System_Read.png" />
+    <Content Include="Content\img\System_UnRead.png" />
+    <Content Include="Content\img\woman.png" />
+    <Content Include="Content\layim\layim.css" />
+    <Content Include="Content\layim\layim.js" />
+    <Content Include="Content\layim\layui.css" />
+    <Content Include="Content\mp3\message.mp3" />
+    <Content Include="Content\share\dist\css\share.min.css" />
+    <Content Include="Content\share\dist\fonts\iconfont.svg" />
+    <Content Include="Content\share\dist\js\jquery.share.min.js" />
+    <Content Include="Content\share\dist\js\social-share.min.js" />
+    <Content Include="Content\site.js" />
+    <Content Include="Content\SoftLogo\201805271602169249_10006.png" />
+    <Content Include="Content\SoftLogo\201805271605058021_10006.png" />
+    <Content Include="Content\SoftLogo\201808112319070086_10006.png" />
+    <Content Include="Content\SoftLogo\201808112319162216_10006.png" />
+    <Content Include="Content\SoftLogo\201808112319232658_10006.png" />
+    <Content Include="Content\SoftLogo\201808112319583566_10006.png" />
+    <Content Include="Content\SoftLogo\201808112321344142_10006.png" />
+    <Content Include="Content\SoftLogo\201808112324465072_10006.png" />
+    <Content Include="Content\SoftLogo\201808112325101805_10006.png" />
+    <Content Include="Content\summernote\dist\font\face.svg" />
+    <Content Include="Content\summernote\dist\lang\summernote-ar-AR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-bg-BG.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ca-ES.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-cs-CZ.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-da-DK.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-de-DE.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-el-GR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-es-ES.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-es-EU.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-fa-IR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-fi-FI.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-fr-FR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-gl-ES.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-he-IL.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-hr-HR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-hu-HU.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-id-ID.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-it-IT.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ja-JP.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ko-KR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-lt-LT.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-lt-LV.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-mn-MN.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-nb-NO.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-nl-NL.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-pl-PL.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-pt-BR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-pt-PT.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ro-RO.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ru-RU.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-sk-SK.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-sl-SI.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-sr-RS-Latin.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-sr-RS.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-sv-SE.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-ta-IN.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-th-TH.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-tr-TR.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-uk-UA.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-vi-VN.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-zh-CN.js" />
+    <Content Include="Content\summernote\dist\lang\summernote-zh-TW.js" />
+    <Content Include="Content\summernote\dist\plugin\databasic\summernote-ext-databasic.css" />
+    <Content Include="Content\summernote\dist\plugin\databasic\summernote-ext-databasic.js" />
+    <Content Include="Content\summernote\dist\plugin\hello\summernote-ext-hello.js" />
+    <Content Include="Content\summernote\dist\plugin\specialchars\summernote-ext-specialchars.js" />
+    <Content Include="Content\summernote\dist\summernote-bs4.css" />
+    <Content Include="Content\summernote\dist\summernote-bs4.js" />
+    <Content Include="Content\summernote\dist\summernote-bs4.min.js" />
+    <Content Include="Content\summernote\dist\summernote-lite.css" />
+    <Content Include="Content\summernote\dist\summernote-lite.js" />
+    <Content Include="Content\summernote\dist\summernote.css" />
+    <Content Include="Content\summernote\dist\summernote.js" />
+    <Content Include="Content\U\Center\default-bg.jpg" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="FULLSQL.html" />
+    <Content Include="Scripts\BootStrap-autocompleter\bootstrap.autocomplete.js" />
+    <Content Include="Scripts\bootstrap-switch.min.css" />
+    <Content Include="Scripts\bootstrap-switch.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Content\summernote\dist\font\summernote.eot" />
+    <Content Include="Content\summernote\dist\font\summernote.ttf" />
+    <Content Include="Content\summernote\dist\font\summernote.woff" />
+    <Content Include="Content\bs\css\bootstrap-theme.css.map" />
+    <Content Include="Content\bs\css\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bs\css\bootstrap.css.map" />
+    <Content Include="Content\bs\css\bootstrap.min.css.map" />
+    <Content Include="Content\bs\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Content\bs\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="Content\bs\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="Content\bs\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="Content\share\dist\fonts\iconfont.eot" />
+    <Content Include="Content\share\dist\fonts\iconfont.ttf" />
+    <Content Include="Content\share\dist\fonts\iconfont.woff" />
+    <None Include="Properties\PublishProfiles\47.dev.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <None Include="Properties\PublishProfiles\locall.pubxml" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\clipboard.min.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jQuery-autocompleter\jquery.autocompleter.css" />
+    <Content Include="Scripts\jQuery-autocompleter\jquery.autocompleter.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\layer-1.8.5\CommonLayer.js" />
+    <Content Include="Scripts\layer-1.8.5\laydate\laydate.js" />
+    <Content Include="Scripts\layer-1.8.5\laydate\theme\default\font\iconfont.svg" />
+    <Content Include="Scripts\layer-1.8.5\laydate\theme\default\laydate.css" />
+    <Content Include="Scripts\layer-1.8.5\layer.min.js" />
+    <Content Include="Scripts\layer-1.8.5\mobile\layer.js" />
+    <Content Include="Scripts\layer-1.8.5\mobile\need\layer.css" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\icon-ext.png" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\icon.png" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\layer.css" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\loading-0.gif" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\loading-1.gif" />
+    <Content Include="Scripts\layer-1.8.5\skin\default\loading-2.gif" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="SQL.txt" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_Login.cshtml" />
+    <Content Include="Views\BBS\Add.cshtml" />
+    <Content Include="Views\BBS\Topic.cshtml" />
+    <Content Include="Views\Shared\_Page.cshtml" />
+    <Content Include="Views\Shared\_TimeLine.cshtml" />
+    <Content Include="Views\Shared\_PageLink.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\_UserMenu.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\MyQuestions.cshtml" />
+    <Content Include="Views\User\MyAnswers.cshtml" />
+    <Content Include="Views\User\MyLike.cshtml" />
+    <Content Include="Views\Console\Index.cshtml" />
+    <Content Include="Views\Console\_ConsoleMenu.cshtml" />
+    <Content Include="Views\Console\EditMenu.cshtml" />
+    <Content Include="Views\Console\Master.cshtml" />
+    <Content Include="Views\Console\Gift.cshtml" />
+    <Content Include="Views\Console\Activity.cshtml" />
+    <Content Include="Views\Console\EditLevelName.cshtml" />
+    <Content Include="Views\Console\EditScoreLevel.cshtml" />
+    <Content Include="Views\Party\Create.cshtml" />
+    <Content Include="Scripts\layer-1.8.5\laydate\theme\default\font\iconfont.eot" />
+    <Content Include="Scripts\layer-1.8.5\laydate\theme\default\font\iconfont.ttf" />
+    <Content Include="Scripts\layer-1.8.5\laydate\theme\default\font\iconfont.woff" />
+    <Content Include="Views\Party\Detail.cshtml" />
+    <Content Include="Views\Party\Index.cshtml" />
+    <Content Include="Views\Gift\Create.cshtml" />
+    <Content Include="Views\Gift\Index.cshtml" />
+    <Content Include="Views\Gift\Detail.cshtml" />
+    <Content Include="Views\Article\Publish.cshtml" />
+    <Content Include="Views\Article\Detail.cshtml" />
+    <Content Include="Views\Article\Index.cshtml" />
+    <Content Include="Views\User\Detail.cshtml" />
+    <Content Include="Views\User\MyArticle.cshtml" />
+    <Content Include="Views\User\Answer.cshtml" />
+    <Content Include="Views\User\Question.cshtml" />
+    <Content Include="Views\User\Article.cshtml" />
+    <Content Include="ZConfig\system.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Console\BaseConfig.cshtml" />
+    <Content Include="Views\Console\SoftLink.cshtml" />
+    <Content Include="Views\SoftLink\Index.cshtml" />
+    <Content Include="Views\Console\AccountManage.cshtml" />
+    <Content Include="Views\ZhaoPin\Publish.cshtml" />
+    <Content Include="Views\ZhaoPin\Detail.cshtml" />
+    <Content Include="Views\ZhaoPin\Index.cshtml" />
+    <Content Include="Views\ZhaoPin\_XueLi.cshtml" />
+    <Content Include="Views\ZhaoPin\_GongZuoJingYan.cshtml" />
+    <Content Include="Views\QiuZhi\Index.cshtml" />
+    <Content Include="Views\QiuZhi\Publish.cshtml" />
+    <Content Include="Views\QiuZhi\Detail.cshtml" />
+    <Content Include="Views\QiuZhi\_LiZhiStatus.cshtml" />
+    <Content Include="Views\Product\Index.cshtml" />
+    <Content Include="Views\Product\Publish.cshtml" />
+    <Content Include="Views\Product\Detail.cshtml" />
+    <Content Include="Views\About\Index.cshtml" />
+    <Content Include="Views\News\Detail.cshtml" />
+    <Content Include="Views\News\Publish.cshtml" />
+    <Content Include="Views\Console\CheckNote.cshtml" />
+    <Content Include="Views\BBS\Check.cshtml" />
+    <Content Include="Views\AD\Index.cshtml" />
+    <Content Include="Views\Console\UserV.cshtml" />
+    <Content Include="Views\Pay\Index.cshtml" />
+    <Content Include="Views\Pay\PayRedirect.cshtml" />
+    <Content Include="Views\BBS\Edit.cshtml" />
+    <Content Include="Views\Article\Edit.cshtml" />
+    <Content Include="Views\User\ScoreExchange.cshtml" />
+    <Content Include="Views\User\ReChargeVIPScore.cshtml" />
+    <Content Include="Views\Console\CheckUserAuth.cshtml" />
+    <Content Include="Views\Party\Edit.cshtml" />
+    <Content Include="Views\Gift\Edit.cshtml" />
+    <Content Include="Views\Product\Edit.cshtml" />
+    <Content Include="Views\QiuZhi\Edit.cshtml" />
+    <Content Include="Views\ZhaoPin\Edit.cshtml" />
+    <Content Include="Views\Shared\_CustomService.cshtml" />
+    <Content Include="Views\Shared\_DOComment.cshtml" />
+    <Content Include="Views\Shared\_CommentList.cshtml" />
+    <Content Include="Views\Console\SuggestSite.cshtml" />
+    <Content Include="Views\User\BestAnswer.cshtml" />
+    <Content Include="Views\User\NiceAnswer.cshtml" />
+    <Content Include="Views\News\Edit.cshtml" />
+    <Content Include="Views\Account\Forget.cshtml" />
+    <Content Include="Views\Account\ExChange.cshtml" />
+    <Content Include="Views\User\UserAuth.cshtml" />
+    <Content Include="Views\Shared\_QQTalk.cshtml" />
+    <Content Include="Views\BBS\_Search.cshtml" />
+    <Content Include="Views\Shared\_LoadEditPVScript.cshtml" />
+    <Content Include="Views\Article\_Search.cshtml" />
+    <Content Include="Views\Party\_Search.cshtml" />
+    <Content Include="Views\Gift\_Search.cshtml" />
+    <Content Include="Views\QiuZhi\_Search.cshtml" />
+    <Content Include="Views\Product\_Search.cshtml" />
+    <Content Include="Views\Shared\_VIP.cshtml" />
+    <Content Include="Views\BBS\Detail.cshtml" />
+    <Content Include="Views\Home\_UserWall.cshtml" />
+    <Content Include="Views\ZhaoPin\_XinChou.cshtml" />
+    <Content Include="Views\ZhaoPin\_CompanyPeople.cshtml" />
+    <Content Include="Views\Account\Auth2.cshtml" />
+    <Content Include="Views\Shared\_UserV.cshtml" />
+    <Content Include="Views\Account\LoginOauth.cshtml" />
+    <Content Include="Views\User\BindOauth.cshtml" />
+    <Content Include="Views\User\Share.cshtml" />
+    <Content Include="Views\Console\Head.cshtml" />
+    <Content Include="Views\Shared\_Logon.cshtml" />
+    <Content Include="Views\Account\RegistOauth.cshtml" />
+    <Content Include="Views\Console\_UserInfoList.cshtml" />
+    <Content Include="Views\Share\Index.cshtml" />
+    <Content Include="Views\User\MyShare.cshtml" />
+    <Content Include="Views\Console\EditShareCoin.cshtml" />
+    <Content Include="Views\User\MyFans.cshtml" />
+    <Content Include="Views\User\InBox.cshtml" />
+    <Content Include="Views\User\Dialog.cshtml" />
+    <Content Include="Views\User\_Dialogs.cshtml" />
+    <Content Include="Views\Shared\_PageLoadMore.cshtml" />
+    <Content Include="Views\User\Notice.cshtml" />
+    <Content Include="Views\User\_RenderNotice.cshtml" />
+    <Content Include="Views\Console\Slider.cshtml" />
+    <Content Include="Views\S\Index.cshtml" />
+    <Content Include="Views\S\_LoadSearchData.cshtml" />
+    <Content Include="Views\BBS\_LoadForHome.cshtml" />
+    <Content Include="Views\Console\TagManage.cshtml" />
+    <Content Include="Views\Console\_LoadTagsList.cshtml" />
+    <Content Include="Views\BBS\_AddTag.cshtml" />
+    <Content Include="Views\Tag\B.cshtml" />
+    <Content Include="Views\Tag\Index.cshtml" />
+    <Content Include="Views\Tag\_LoadTagList.cshtml" />
+    <Content Include="Views\ZhaoPin\_Search.cshtml" />
+    <Content Include="Views\ZhaoPin\_WorkType.cshtml" />
+    <Content Include="Views\ZhaoPin\_Jinghua.cshtml" />
+    <Content Include="Views\ZhaoPin\_Remen.cshtml" />
+    <Content Include="Views\ZhaoPin\_Top.cshtml" />
+    <Content Include="Views\Console\JobManage.cshtml" />
+    <Content Include="Views\Console\_LoadJobTradeData.cshtml" />
+    <Content Include="Views\Console\_LoadJobData.cshtml" />
+    <Content Include="Views\ZhaoPin\_JianZhiTime.cshtml" />
+    <Content Include="Views\ZhaoPin\_LoadJianZhiHtml.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_XueLiOption.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_Money.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_Money_QiuZhi.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_XueLiOption_QiuZhi.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_GongZuoJingYan.cshtml" />
+    <Content Include="Views\ZhaoPin\Option\_GongZuoJingYan_QiuZhi.cshtml" />
+    <Content Include="Views\Tag\A.cshtml" />
+    <Content Include="Views\Shared\_LoadMenuDisplay.cshtml" />
+    <Content Include="Views\Party\JoinManage.cshtml" />
+    <Content Include="Views\Console\CheckVIPHead.cshtml" />
+    <Content Include="Views\Console\SignRandom.cshtml" />
+    <Content Include="Views\User\MyQiuZhi.cshtml" />
+    <Content Include="Views\User\MyZhaoPin.cshtml" />
+    <Content Include="Views\Gift\BuyerManage.cshtml" />
+    <Content Include="Views\Console\LeaveWord.cshtml" />
+    <Content Include="Views\Console\HomeSortConfig.cshtml" />
+    <Content Include="Views\News\List.cshtml" />
+    <Content Include="Views\News\_LoadNews.cshtml" />
+    <Content Include="Views\User\MyProduct.cshtml" />
+    <Content Include="Views\User\_LoadMyAnswerList.cshtml" />
+    <Content Include="Views\User\_LoadMyQuestionList.cshtml" />
+    <Content Include="Views\User\_LoadMyZhaoPinList.cshtml" />
+    <Content Include="Views\User\_LoadMyQiuZhiList.cshtml" />
+    <Content Include="Views\User\_LoadMyProductList.cshtml" />
+    <Content Include="Views\User\_LoadMyArticleList.cshtml" />
+    <Content Include="Views\User\_LoadMyLikeList.cshtml" />
+    <Content Include="Views\Tag\Category.cshtml" />
+    <Content Include="Views\Tag\_BBS_Search.cshtml" />
+    <Content Include="Views\Tag\_Article_Search.cshtml" />
+    <Content Include="Views\Tag\_LoadCategorys.cshtml" />
+    <Content Include="Views\Console\TapShowInfo.cshtml" />
+    <Content Include="Views\Console\AddStudyChapter.cshtml" />
+    <Content Include="Views\Console\_LoadStudyUnitData.cshtml" />
+    <Content Include="Views\Console\_LoadStudyClassData.cshtml" />
+    <Content Include="Views\Shared\_CommentList_New.cshtml" />
+    <Content Include="Views\Shared\_DiscuzLeftUserInfo.cshtml" />
+    <Content Include="Views\Article\_LoadForHome.cshtml" />
+    <Content Include="Views\Console\BatchTag.cshtml" />
+    <Content Include="Views\User\Order.cshtml" />
+    <Content Include="Views\Console\AutoReply.cshtml" />
+    <Content Include="Views\Console\ToSend.cshtml" />
+    <Content Include="Views\Console\ToSended.cshtml" />
+    <Content Include="Views\Console\GiftSortConfig.cshtml" />
+    <Content Include="Views\Console\AD.cshtml" />
+    <Content Include="Views\Study\Index.cshtml" />
+    <Content Include="Views\Study\Detail.cshtml" />
+    <Content Include="Views\Study\Share.cshtml" />
+    <Content Include="Views\Home\_UserStudy.cshtml" />
+    <Content Include="Views\User\_InBoxs.cshtml" />
+    <Content Include="Views\Console\ScrollNotice.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="Content\U\Site\" />
+    <Folder Include="Views\Comment\" />
+    <Folder Include="Views\Common\" />
+    <Folder Include="Views\KeCheng\" />
+    <Folder Include="Views\LeaveWord\" />
+    <Folder Include="Views\Notice\" />
+    <Folder Include="Views\OAuth\" />
+    <Folder Include="Views\PV\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\AliPay\AliPay.csproj">
+      <Project>{618e9c51-f9b3-4564-8ea0-999dc524d5a1}</Project>
+      <Name>AliPay</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.BLL\AmazonBBS.BLL.csproj">
+      <Project>{2678ae66-ba2d-420f-b1ce-a57243bc710e}</Project>
+      <Name>AmazonBBS.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.Common\AmazonBBS.Common.csproj">
+      <Project>{46c5ef58-c92e-4d95-852c-62f0ec8edb58}</Project>
+      <Name>AmazonBBS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AmazonBBS.Model\AmazonBBS.Model.csproj">
+      <Project>{bcd6d0e5-27bb-4f7b-a510-32d5a643c287}</Project>
+      <Name>AmazonBBS.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>4144</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:4144/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>http://staton.free.ngrok.cc/</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>这台计算机上缺少此项目引用的 NuGet 程序包。使用“NuGet 程序包还原”可下载这些程序包。有关更多信息，请参见 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

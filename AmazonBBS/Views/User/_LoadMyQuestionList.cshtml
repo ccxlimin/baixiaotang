@@ -1,0 +1,45 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model BBSListViewModel
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    string headurl = user.HeadUrl ?? "/Content/img/head_default.gif";
+}
+
+@if (Model.QuestionList != null)
+{
+    <div class="aw-common-list">
+        @foreach (_QuestionInfo question in Model.QuestionList)
+        {
+            <div class="aw-item">
+                <a class="aw-user-name hidden-xs" data-toggle="popover" data-placement="bottom">
+                    <img src="@(headurl)" alt="">
+                </a>
+                <div class="aw-question-content">
+                    <h4>
+                        <a target="_blank" href="/bbs/detail/@question.QuestionId">
+                            @question.Title
+                        </a>
+                    </h4>
+                    <p>
+                        <span class="text-color-999">
+                            @question.LikeCount 人关注 •
+                            @question.CommentCount 条评论 •
+                            @question.PVCount 次浏览 •
+                            @Html.Partial("_TimeLine", question.CreateTime)
+                        </span>
+                    </p>
+                </div>
+            </div>
+        }
+        <div class="myquestion_page_wrap">
+            @Html.Partial("_Page", Model.QuestionPage)
+        </div>
+    </div>
+}
+else
+{
+    <div class="well">
+        你尚未提问过！
+    </div>
+}

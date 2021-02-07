@@ -1,0 +1,27 @@
+﻿@using AmazonBBS.Common
+@model DateTime
+@{
+    var display = string.Empty;
+    var creattime = Convert.ToDateTime(Model);
+    var sec = (DateTime.Now - creattime).TotalSeconds;
+    if (sec > 60)
+    {
+        if (sec > 3600 * 24)
+        {
+            display = "{0}天前".FormatWith((int)sec / (3600 * 24));//天
+        }
+        else if (sec > 3600)
+        {
+            display = "{0}时前".FormatWith((int)sec / 3600);//时
+        }
+        else
+        {
+            display = "{0}分钟前".FormatWith((int)sec / 60);//分
+        }
+    }
+    else
+    {
+        display = "{0}秒前".FormatWith((int)sec);//秒
+    }
+    @display;
+}

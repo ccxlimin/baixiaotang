@@ -1,0 +1,119 @@
+﻿@model AmazonBBS.Areas.Auto.Models.AutoUI
+@{
+    ViewBag.Title = "一键生成";
+
+
+    System.Data.DataTable tab = ViewBag.dt as System.Data.DataTable;
+}
+
+<style>
+    .spanright {
+        padding-right: 20px;
+    }
+
+    label {
+        cursor: pointer;
+    }
+
+        label:hover {
+            color: #999;
+        }
+</style>
+<h1>一键生成</h1>
+<script src="~/Areas/Auto/Js/jquery-1.8.2.min.js"></script>
+@using (Html.BeginForm("Auto", "Auto", FormMethod.Post, new { @id = "webforms" }))
+{
+    <table style="width:1300px;">
+        <tr>
+            <td>数据源：</td>
+            <td style="text-align:left;width:1200px;">
+                @if (tab != null && tab.Rows.Count != 0)
+                {
+                    int count = 1;
+                    foreach (System.Data.DataRow dr in tab.Rows)
+                    {
+
+                        if (count % 5 == 1)
+                        {
+                            @Html.Raw("<div style=\"display:inline\">")
+                        }
+
+                        <div style="float: left;width: 200px;height:30px;">
+                            <input type="checkbox" id="tables_id_@count" name="tables" value="@dr["Name"]" />
+                            <label for="tables_id_@count">@dr["name"]</label>
+                        </div>
+                        if (count % 5 == 0)
+                        {
+                            @Html.Raw(" </div>")
+
+                        }
+                        else if (count == tab.Rows.Count)
+                        {
+                            @Html.Raw(" </div>")
+                        }
+
+                        count++;
+
+
+                    }
+                }
+            </td>
+
+        </tr>
+        <tr>
+            <td></td>
+            <td style="height:25px;">
+                @Html.CheckBoxFor(m => m.IsEntity)
+                @Html.LabelFor(m => m.IsEntity, "实体层", new { @class = "spanright" })
+
+                @Html.CheckBoxFor(m => m.IsBiz)
+                @Html.LabelFor(m => m.IsBiz, "业务层", new { @class = "spanright" })
+
+                @Html.CheckBoxFor(m => m.IsDataAccess)
+                @Html.LabelFor(m => m.IsDataAccess, "数据层", new { @class = "spanright" })
+
+                @*@Html.CheckBoxFor(m => m.IsControl)
+                @Html.LabelFor(m => m.IsControl, "控制器", new { @class = "spanright" })*@
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td style="height:25px;">
+                <input id="Methods1" type="checkbox" name="Methods" value="add" /><label for="Methods1" class="spanright">Add</label>
+                <input id="Methods2" type="checkbox" name="Methods" value="update" /><label for="Methods2" class="spanright">Update</label>
+                <input id="Methods3" type="checkbox" name="Methods" value="delete" /><label for="Methods3" class="spanright">Delete</label>
+                <input id="Methods4" type="checkbox" name="Methods" value="getmodel" /><label for="Methods4" class="spanright">GetModel</label>
+                <input id="Methods5" type="checkbox" name="Methods" value="query" /><label for="Methods5" class="spanright">GetList</label>
+
+            </td>
+        </tr>
+        <tr>
+            <td align="left" colspan="2" style="height:40px;">
+                <input type="button" class="SearchBtn" value=" 生成 " onclick="formsave(this)" style="cursor:pointer;margin-left:100px;" />
+            </td>
+        </tr>
+    </table>
+}
+<script>
+    function formsave(e) {
+
+
+        var form = "webforms";
+
+        var url = $("#" + form).attr("action");
+
+        $(e).attr("disabled", "disabled");
+
+        $.post(url, $('#' + form).serialize(), function (result) {
+
+            $(e).removeAttr("disabled");
+
+
+            alert(result.Msg);
+
+        });
+
+    }
+</script>
+
+

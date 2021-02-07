@@ -1,0 +1,271 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<StudyUnit>
+@{
+    ViewBag.Title = "课时管理";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-4">
+                    <h3>新增学习单元</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="UnitName" placeholder="章节单元名称" />
+                            </div>
+                            <div class="col-sm-12 Lmgt5">
+                                <a onclick="addStudyUnit()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>新增学习单元章节</h3>
+                    <div class="well addclassWrapper">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12">
+                                <select id="select_unit" class="form-control">
+                                    <option value="">选择单元</option>
+                                    @foreach (StudyUnit unit in Model)
+                                    {
+                                        <option value="@unit.StudyUnitId">@unit.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control" id="className" placeholder="章节标题" />
+                            </div>
+                            <div class="Lmgt5 col-sm-12">
+                                <a onclick="addNewClass()" class="btn btn-primary">点击新增章节内容</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h3>设置分享图片</h3>
+                    <div class="well">
+                        <input type="file" id="sharestudyfileinput" />
+                        <a id="btn_sharestudyfileinput" class="Lmgt5 btn btn-primary">设置</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="col-md-10">
+        <ul class="userTabs nav nav-tabs nav-tabs-a-borderColor-top-blue">
+            <li class="active"><a href="#Sort_Trade" data-toggle="tab" data-reactid="Sort_Trade" onclick="loadData(this,'GetUnit')">章节单元</a></li>
+            <li><a href="#Sort_Job" data-toggle="tab" data-reactid="Sort_Job" onclick="loadData(this,'GetUnitClass')">课时</a></li>
+            <li><a href="#Sort_ShareImg" data-toggle="tab" data-reactid="Sort_ShareImg" onclick="loadImg(this)">分享图片</a></li>
+        </ul>
+        <div class="List_RenderData">
+            @Html.Partial("_LoadStudyUnitData", Model)
+        </div>
+    </div>
+</div>
+<div id="EditTradeWrapper">
+
+</div>
+<div id="newClassWrapper" class="Ldn">
+    <div id="summernote"></div>
+</div>
+<div id="newClassBtnWrapper" class="Ldn" style="position:fixed;right:0;bottom:50px;">
+    <button class="btn btn-primary newClassBtn">提交课时(Esc退出)</button>
+</div>
+<script>
+    function addStudyUnit() {
+        if (CHECKNOTEMPTY($("#UnitName"), "章节单元名称")) {
+            if (Leo.tools.CheckLength($("#UnitName").val(), 1, 20, "章节单元名称")) {
+                $.post("/Console/NewUnit", { unitName: $.trim($("#UnitName").val()) }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess(data.Msg || "新增成功", function () { location.reload(!0); });
+                    } else {
+                        Leo.msgfail(data.Msg || "新增失败");
+                    }
+                });
+            }
+        }
+    }
+
+    function addNewClass() {
+        var edit = window.edit || false;
+        var unit = $("#select_unit").val(),
+            className = $("#className").val();
+        if (unit) {
+            if (className) {
+                var callback = function (content) {
+                    var layerIndex = AlertDivNoTitle("#newClassWrapper", "100%", "100%", 0, function () {
+                        CLOSE(layerIndex);
+                        $("#newClassBtnWrapper").addClass("Ldn");
+                        $("#newClassBtn").unbind("click");
+                    });
+                    Leo.RichText("#summernote", "/Tool/UploadStudyImage", "此处填写课时内容", $(window).height() * 0.7, 0, function (data) {
+                        $("#summernote").summernote('insertImage', data.Url);
+                    }, null, null, edit ? content : null);
+                    $("#newClassBtnWrapper").removeClass("Ldn").css("z-index", layer.zIndex + 1);
+                    $(".newClassBtn").bind("click", function () {
+                        var postLayer = LOAD("提交中");
+                        $.post(edit ? "/console/editstudyclass/{0}".Format(window.classid) : "/console/newClass", {
+                            className: $("#className").val(),
+                            unitId: $("#select_unit").val(),
+                            content: encodeURI($('#summernote').summernote("code"))
+                        }, function (res) {
+                            if (res.Ok) {
+                                location.reload(!0);
+                                if (edit) {
+                                    delete window.classid
+                                    delete window.edit
+                                }
+                                CLOSE(postLayer)
+                            }
+                        });
+                    });
+                }
+                if (edit) {
+                    var layerindexx = LOAD("正在获取课程内容");
+                    $.post("/console/classinfo/{0}".Format(window.classid), function (data) {
+                        if (data.Ok) {
+                            callback(data.Data);
+                        }
+                        CLOSE(layerindexx)
+                    });
+                } else {
+                    callback();
+                }
+
+            } else {
+                Leo.msgfail("请输入章节标题");
+                $("#className").focus();
+            }
+        } else {
+            Leo.msgfail("请选择单元");
+            $("#select_unit").focus();
+        }
+    }
+
+    function loadData(target, method) {
+        var index;
+        $(target).parent().hasClass("active") || (
+            index = LOAD("加载数据中..."), Leo.ScrollTop(".userTabs"),
+            setTimeout(function () {
+                $.get("/Console/{0}".Format(method), function (data) {
+                    CLOSE(index);
+                    $(".List_RenderData").empty().append(data);
+                })
+            }, Leo.tools.Random(500, 1000))
+        );
+    }
+
+    function loadImg(target) {
+        //GetStudyShareImg
+        var index;
+        $(target).parent().hasClass("active") || (
+            index = LOAD("加载数据中..."), Leo.ScrollTop(".userTabs"),
+            setTimeout(function () {
+                $.get("/Console/{0}".Format("GetStudyShareImg"), function (data) {
+                    CLOSE(index);
+                    if (data.Ok) {
+                        var imgs = data.Data;
+                        if (imgs.length > 0) {
+                            var table = $("<table>").addClass("table table-bordered table-hover consoleshareimg");
+                            table.append($("<tr>").append(
+                                $("<th>").text("图片"),
+                                $("<th>").text("添加时间"),
+                                $("<th>").text("操作"),
+                            ));
+                            $.each(imgs, function (i, n) {
+                                var tr = $("<tr>");
+                                tr.append($("<td>").addClass("layer-photos-wrap").append($("<img>").attr("src", n["url"])));
+                                tr.append($("<td>").text(n["time"]));
+                                tr.append($("<td>").append(
+                                    $("<a>").addClass("btn {0}".Format(n.isuse ? "btn-primary disabled" : "btn-danger")).text(n["isuse"] ? "启用中" : "启用")
+                                        .click(function () {
+                                            if (n.isuse) {
+                                                Leo.msgfail("已经是使用中，不可禁用")
+                                            } else {
+                                                var lIndex = LOAD("设置中");
+                                                $.post("/console/updatestudyshareimg/" + n.id, function (data) {
+                                                    if (data.Ok) {
+                                                        Leo.msgsuccess("更新成功", function () {
+                                                            //location.reload();
+                                                            location.href = location.href + "#Sort_ShareImg";
+                                                        }, 500)
+                                                    } else {
+                                                        Leo.msgfail(data.Msg || "更新失败");
+                                                    }
+                                                    CLOSE(lIndex);
+                                                });
+                                            }
+                                        })
+                                ));
+                                table.append(tr);
+                            });
+                            $(".List_RenderData").empty().append(table);
+                            Leo.ShowMaxImg();
+                        } else {
+                            $(".List_RenderData").empty().append($("<div>").text("暂时没有设置图片").addClass("Lmgt10 Ltac Lcr"));
+                        }
+                    }
+                })
+            }, Leo.tools.Random(500, 1000))
+        );
+    }
+
+    $(document).keyup(function (e) {
+        if (e.keyCode == 27) {
+            layer.closeAll();
+            $("#newClassBtnWrapper").addClass("Ldn");
+            $("#newClassBtn").unbind("click");
+        }
+    });
+
+
+    //设置分享图片
+    $("#btn_sharestudyfileinput").click(function () {
+        sendFile($("#sharestudyfileinput"), "/tool/studyshare", function (data) {
+            if (data.Ok) {
+                layer.msg("设置成功", function () {
+                    location.reload(!0);
+                }, 500);
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    });
+
+    function sendFile(files, url, callback, args) {
+        var formdata = new FormData();
+        formdata.append("file", files[0].files[0]);
+        formdata.append("IsThumbnail", 1);
+        for (var i in args) {
+            formdata.append(i, args[i]);
+        }
+        var lindex = LOAD("上传图片中");
+        $.ajax({
+            data: formdata,
+            type: "POST",
+            url: url,
+            cache: false,
+            contentType: false,
+            processData: false,
+            accept: {
+                title: 'Images',
+                extensions: 'ico',
+                mimeTypes: 'image/*'
+            },
+            dataType: "json",
+            success: function (data) {
+                callback(data);
+                CLOSE(lindex);
+            },
+            error: function () {
+                alert("上传失败");
+            }
+        });
+    }
+</script>

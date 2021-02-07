@@ -1,0 +1,104 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@{
+    int groupID = Model;
+    var menus = BBSEnumBLL.Instance.Query(BBSEnumType.Menu.GetHashCode(), true).Where(a => { return a.GroupBy == groupID; });
+    var islogin = UserBaseBLL.Instance.IsLogin;
+
+    var isVip = UserBaseBLL.Instance.IsVIP(UserBaseBLL.Instance.UserID);
+
+    Uri uri = Request.Url;
+    string action = uri.AbsolutePath.Split('/')[1];
+    string action_ = action.ToLower();
+    if (action_ == "bbs" || action_ == "product")
+    {
+        action = uri.Segments.Length > 2 ? uri.Segments[3] : action;
+    }
+    else if (action_ == "gift")
+    {
+        if (uri.Segments.Length > 2)
+        {
+            action = uri.Segments[3] == "2" ? "DataAnalysis" : "KeCheng";
+        }
+    }
+}
+<div>
+    <ul class="nav nav-tabs">
+        @foreach (BBSEnum item in menus)
+        {
+            <style>
+                                        .small-menu-@(item.EnumCode)-css{
+                                            color:@item.FontColor !important;
+                                            border-bottom:1px solid #fff;
+
+                                        }
+                                        .small-menu-@(item.EnumCode)-css:hover{
+                                            background-color:@item.FontBGColor !important;
+                                            transform: scale(1.1);
+                                            font-weight:bold;
+                                            border-bottom:1px solid blue !important;
+                                            color:red !important;
+                                            transition:.3s ease-in-out;
+                                        }
+                                        .small-menu-@(item.EnumCode)-css.active{
+                                            font-size:16px;font-weight:bold;border-bottom:1px solid blue;color:red !important;
+                                        }
+            </style>
+            if (item.IsBBS == 1)
+            {
+                <li>
+                    @if (action == item.EnumCode.ToLower())
+                    {
+                        <a class="small-menu-@(item.EnumCode)-css active">@item.EnumDesc.ToLower()</a>
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(item.Url))
+                        {
+                            @*if (item.EnumCode.ToLower() == "other")
+                                {
+                                    if (isVip)
+                                    {
+                                        <a class="small-menu-@(item.EnumCode)-css" href="/bbs/topic/@item.EnumCode.ToLower()">@item.EnumDesc</a>
+                                    }
+                                    else
+                                    {
+                                        <a class="small-menu-@(item.EnumCode)-css @(islogin ? "novip" : "btn_login")">@item.EnumDesc</a>
+                                    }
+                                }
+                                else
+                                {*@
+                            <a class="small-menu-@(item.EnumCode)-css" href="/bbs/topic/@item.EnumCode.ToLower()">@item.EnumDesc</a>
+                            //}
+                        }
+                        else
+                        {
+                            <a class="small-menu-@(item.EnumCode)-css" href="@item.Url.ToLower()" target="_blank">@item.EnumDesc</a>
+                        }
+                    }
+                </li>
+            }
+            else
+            {
+                <li>
+                    @if (action == item.EnumCode.ToLower())
+                    {
+                        <a class="small-menu-@(item.EnumCode)-css active">@item.EnumDesc</a>
+                    }
+                    else
+                    {
+                        if (string.IsNullOrEmpty(item.Url))
+                        {
+                            <a class="small-menu-@(item.EnumCode)-css" href="/@item.EnumCode.ToLower()">@item.EnumDesc</a>
+                        }
+                        else
+                        {
+                            <a class="small-menu-@(item.EnumCode)-css" href="@item.Url.ToLower()" target="_blank">@item.EnumDesc</a>
+                        }
+                    }
+                </li>
+            }
+        }
+    </ul>
+    <ul></ul>
+</div>

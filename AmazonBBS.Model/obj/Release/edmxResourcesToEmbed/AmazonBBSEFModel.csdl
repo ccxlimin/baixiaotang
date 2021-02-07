@@ -1,0 +1,1241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="AmazonBBSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="AmazonBBSDBContext" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="About" EntityType="AmazonBBSModel.About" />
+    <EntitySet Name="Activity" EntityType="AmazonBBSModel.Activity" />
+    <EntitySet Name="ActivityFee" EntityType="AmazonBBSModel.ActivityFee" />
+    <EntitySet Name="ActivityJoin" EntityType="AmazonBBSModel.ActivityJoin" />
+    <EntitySet Name="AD" EntityType="AmazonBBSModel.AD" />
+    <EntitySet Name="Against" EntityType="AmazonBBSModel.Against" />
+    <EntitySet Name="Answer" EntityType="AmazonBBSModel.Answer" />
+    <EntitySet Name="Article" EntityType="AmazonBBSModel.Article" />
+    <EntitySet Name="AttachMent" EntityType="AmazonBBSModel.AttachMent" />
+    <EntitySet Name="AttachMentBuyLog" EntityType="AmazonBBSModel.AttachMentBuyLog" />
+    <EntitySet Name="AutoReply" EntityType="AmazonBBSModel.AutoReply" />
+    <EntitySet Name="AutoReplyItem" EntityType="AmazonBBSModel.AutoReplyItem" />
+    <EntitySet Name="BBSEnum" EntityType="AmazonBBSModel.BBSEnum" />
+    <EntitySet Name="BuyOtherLog" EntityType="AmazonBBSModel.BuyOtherLog" />
+    <EntitySet Name="BXTOrder" EntityType="AmazonBBSModel.BXTOrder" />
+    <EntitySet Name="Chat" EntityType="AmazonBBSModel.Chat" />
+    <EntitySet Name="ClickMsg" EntityType="AmazonBBSModel.ClickMsg" />
+    <EntitySet Name="Comment" EntityType="AmazonBBSModel.Comment" />
+    <EntitySet Name="ContentBuyLog" EntityType="AmazonBBSModel.ContentBuyLog" />
+    <EntitySet Name="Customer" EntityType="AmazonBBSModel.Customer" />
+    <EntitySet Name="EditLog" EntityType="AmazonBBSModel.EditLog" />
+    <EntitySet Name="EmailNotice" EntityType="AmazonBBSModel.EmailNotice" />
+    <EntitySet Name="ErrorLog" EntityType="AmazonBBSModel.ErrorLog" />
+    <EntitySet Name="Express" EntityType="AmazonBBSModel.Express" />
+    <EntitySet Name="FeeAnswerLog" EntityType="AmazonBBSModel.FeeAnswerLog" />
+    <EntitySet Name="FeeHR" EntityType="AmazonBBSModel.FeeHR" />
+    <EntitySet Name="Gift" EntityType="AmazonBBSModel.Gift" />
+    <EntitySet Name="GiftFee" EntityType="AmazonBBSModel.GiftFee" />
+    <EntitySet Name="InviteInterview" EntityType="AmazonBBSModel.InviteInterview" />
+    <EntitySet Name="Job" EntityType="AmazonBBSModel.Job" />
+    <EntitySet Name="JobComment" EntityType="AmazonBBSModel.JobComment" />
+    <EntitySet Name="JobTrade" EntityType="AmazonBBSModel.JobTrade" />
+    <EntitySet Name="JoinItemAnswerExt" EntityType="AmazonBBSModel.JoinItemAnswerExt" />
+    <EntitySet Name="JoinItemQuestionExt" EntityType="AmazonBBSModel.JoinItemQuestionExt" />
+    <EntitySet Name="LeaveWord" EntityType="AmazonBBSModel.LeaveWord" />
+    <EntitySet Name="Master" EntityType="AmazonBBSModel.Master" />
+    <EntitySet Name="MenuBelongTag" EntityType="AmazonBBSModel.MenuBelongTag" />
+    <EntitySet Name="News" EntityType="AmazonBBSModel.News" />
+    <EntitySet Name="Notice" EntityType="AmazonBBSModel.Notice" />
+    <EntitySet Name="OAuth" EntityType="AmazonBBSModel.OAuth" />
+    <EntitySet Name="Order" EntityType="AmazonBBSModel.Order" />
+    <EntitySet Name="OrderCheck" EntityType="AmazonBBSModel.OrderCheck" />
+    <EntitySet Name="OrderSend" EntityType="AmazonBBSModel.OrderSend" />
+    <EntitySet Name="PayCBLog" EntityType="AmazonBBSModel.PayCBLog" />
+    <EntitySet Name="Prise" EntityType="AmazonBBSModel.Prise" />
+    <EntitySet Name="PrivateKey" EntityType="AmazonBBSModel.PrivateKey" />
+    <EntitySet Name="Product" EntityType="AmazonBBSModel.Product" />
+    <EntitySet Name="ProductBuy" EntityType="AmazonBBSModel.ProductBuy" />
+    <EntitySet Name="QiuZhi" EntityType="AmazonBBSModel.QiuZhi" />
+    <EntitySet Name="Question" EntityType="AmazonBBSModel.Question" />
+    <EntitySet Name="Report" EntityType="AmazonBBSModel.Report" />
+    <EntitySet Name="ScoreBeloneItem" EntityType="AmazonBBSModel.ScoreBeloneItem" />
+    <EntitySet Name="ScoreCoinLog" EntityType="AmazonBBSModel.ScoreCoinLog" />
+    <EntitySet Name="SendCV" EntityType="AmazonBBSModel.SendCV" />
+    <EntitySet Name="ShareLink" EntityType="AmazonBBSModel.ShareLink" />
+    <EntitySet Name="ShareRegistLog" EntityType="AmazonBBSModel.ShareRegistLog" />
+    <EntitySet Name="ShipAddress" EntityType="AmazonBBSModel.ShipAddress" />
+    <EntitySet Name="SiteHead" EntityType="AmazonBBSModel.SiteHead" />
+    <EntitySet Name="SiteNotice" EntityType="AmazonBBSModel.SiteNotice" />
+    <EntitySet Name="Slide" EntityType="AmazonBBSModel.Slide" />
+    <EntitySet Name="SoftLink" EntityType="AmazonBBSModel.SoftLink" />
+    <EntitySet Name="SoftLinkType" EntityType="AmazonBBSModel.SoftLinkType" />
+    <EntitySet Name="StudyClass" EntityType="AmazonBBSModel.StudyClass" />
+    <EntitySet Name="StudyShareImgSet" EntityType="AmazonBBSModel.StudyShareImgSet" />
+    <EntitySet Name="StudyUnit" EntityType="AmazonBBSModel.StudyUnit" />
+    <EntitySet Name="SuggestSite" EntityType="AmazonBBSModel.SuggestSite" />
+    <EntitySet Name="Tag" EntityType="AmazonBBSModel.Tag" />
+    <EntitySet Name="UserBase" EntityType="AmazonBBSModel.UserBase" />
+    <EntitySet Name="UserDisabledLog" EntityType="AmazonBBSModel.UserDisabledLog" />
+    <EntitySet Name="UserExt" EntityType="AmazonBBSModel.UserExt" />
+    <EntitySet Name="UserGift" EntityType="AmazonBBSModel.UserGift" />
+    <EntitySet Name="UserLike" EntityType="AmazonBBSModel.UserLike" />
+    <EntitySet Name="UserLoginLog" EntityType="AmazonBBSModel.UserLoginLog" />
+    <EntitySet Name="UserScore" EntityType="AmazonBBSModel.UserScore" />
+    <EntitySet Name="UserSet" EntityType="AmazonBBSModel.UserSet" />
+    <EntitySet Name="UserShareLog" EntityType="AmazonBBSModel.UserShareLog" />
+    <EntitySet Name="UserStudy" EntityType="AmazonBBSModel.UserStudy" />
+    <EntitySet Name="VIPHead" EntityType="AmazonBBSModel.VIPHead" />
+    <EntitySet Name="ZhaoPin" EntityType="AmazonBBSModel.ZhaoPin" />
+  </EntityContainer>
+  <EntityType Name="About">
+    <Key>
+      <PropertyRef Name="AboutID" />
+    </Key>
+    <Property Name="AboutID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Desc" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+  </EntityType>
+  <EntityType Name="Activity">
+    <Key>
+      <PropertyRef Name="ActivityId" />
+    </Key>
+    <Property Name="ActivityId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ActivityIMG" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="ActivityType" Type="Int32" />
+    <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="BeginTime" Type="DateTime" Precision="3" />
+    <Property Name="EndTime" Type="DateTime" Precision="3" />
+    <Property Name="CanJoinOnBegin" Type="Int32" />
+    <Property Name="JoinBeginTime" Type="DateTime" Precision="3" />
+    <Property Name="JoinEndTime" Type="DateTime" Precision="3" />
+    <Property Name="ActivityCreateTIme" Type="DateTime" Precision="3" />
+    <Property Name="PVCount" Type="Int64" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="IsChecked" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ActivityFee">
+    <Key>
+      <PropertyRef Name="ActivityFeeId" />
+    </Key>
+    <Property Name="ActivityFeeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FeeType" Type="Int32" />
+    <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FeeCount" Type="Int32" />
+    <Property Name="ActivityId" Type="Int64" />
+    <Property Name="FeeName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="ActivityJoin">
+    <Key>
+      <PropertyRef Name="ActivityJoinId" />
+    </Key>
+    <Property Name="ActivityJoinId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ActivityId" Type="Int64" />
+    <Property Name="JoinUserID" Type="Int64" />
+    <Property Name="JoinUserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="FeeType" Type="Int32" />
+    <Property Name="IsFeed" Type="Int32" />
+    <Property Name="JoinTime" Type="DateTime" Precision="3" />
+    <Property Name="JoinCount" Type="Int32" />
+    <Property Name="LinkMan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LinkTel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ActivityFeeId" Type="Int64" />
+    <Property Name="RealPayFee" Type="Decimal" Precision="18" Scale="2" />
+  </EntityType>
+  <EntityType Name="AD">
+    <Key>
+      <PropertyRef Name="ADID" />
+    </Key>
+    <Property Name="ADID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ADIMG" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ADTitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ADMsg" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="ADContact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="ADWeChat" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ADViewCount" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Against">
+    <Key>
+      <PropertyRef Name="AgainstId" />
+    </Key>
+    <Property Name="AgainstId" Type="Guid" Nullable="false" />
+    <Property Name="TargetID" Type="Int64" Nullable="false" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="AgainstTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Answer">
+    <Key>
+      <PropertyRef Name="AnswerId" />
+    </Key>
+    <Property Name="AnswerId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="QuestionId" Type="Int64" />
+    <Property Name="AnswerUserId" Type="Int64" />
+    <Property Name="AnswerContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsCanSee" Type="Int32" />
+    <Property Name="CoinType" Type="Int32" />
+    <Property Name="NeedCoin" Type="Int32" />
+    <Property Name="AType" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="ReplyTopAnswerId" Type="Int64" />
+    <Property Name="ReplyToUserID" Type="Int64" />
+    <Property Name="ReplyToAnswerID" Type="Int64" />
+  </EntityType>
+  <EntityType Name="Article">
+    <Key>
+      <PropertyRef Name="ArticleId" />
+    </Key>
+    <Property Name="ArticleId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PVCount" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="IsChecked" Type="Int32" />
+    <Property Name="FilePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="EditCount" Type="Int32" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ContentNeedPay" Type="Boolean" />
+    <Property Name="ContentFeeType" Type="Int32" />
+    <Property Name="ContentFee" Type="Int32" />
+    <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AttachMent">
+    <Key>
+      <PropertyRef Name="AttachMentId" />
+    </Key>
+    <Property Name="AttachMentId" Type="Guid" Nullable="false" />
+    <Property Name="MainId" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int32" Nullable="false" />
+    <Property Name="FileName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FilePath" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="FileSize" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="DownCount" Type="Int32" Nullable="false" />
+    <Property Name="IsFee" Type="Boolean" Nullable="false" />
+    <Property Name="Fee" Type="Int32" Nullable="false" />
+    <Property Name="FeeType" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AttachMentBuyLog">
+    <Key>
+      <PropertyRef Name="AttachMentBuyLogId" />
+    </Key>
+    <Property Name="AttachMentBuyLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainID" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int32" Nullable="false" />
+    <Property Name="AttachMentId" Type="Guid" Nullable="false" />
+    <Property Name="BuyerId" Type="Int64" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="AutoReply">
+    <Key>
+      <PropertyRef Name="AutoReplyId" />
+    </Key>
+    <Property Name="AutoReplyId" Type="Guid" Nullable="false" />
+    <Property Name="OrderType" Type="Int32" Nullable="false" />
+    <Property Name="ItemID" Type="Int64" Nullable="false" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AutoReplyItem">
+    <Key>
+      <PropertyRef Name="AutoReplyItemId" />
+    </Key>
+    <Property Name="AutoReplyItemId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AutoReplyId" Type="Guid" Nullable="false" />
+    <Property Name="ReplaceKey" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ReplaceValue" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GroupId" Type="Int32" Nullable="false" />
+    <Property Name="IsUsed" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BBSEnum">
+    <Key>
+      <PropertyRef Name="BBSEnumId" />
+    </Key>
+    <Property Name="BBSEnumId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EnumType" Type="Int32" />
+    <Property Name="EnumDesc" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="EnumCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Url" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+    <Property Name="IsBBS" Type="Int32" />
+    <Property Name="SortIndex" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="CanArticle" Type="Int32" />
+    <Property Name="FontColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FontBGColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="PageBGColor" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="GroupBy" Type="Int32" />
+  </EntityType>
+  <EntityType Name="BuyOtherLog">
+    <Key>
+      <PropertyRef Name="BuyOtherLogId" />
+    </Key>
+    <Property Name="BuyOtherLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainID" Type="Int64" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="Fee" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BXTOrder">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PayOrderID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderType" Type="Int32" />
+    <Property Name="ItemID" Type="Int64" />
+    <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="OrerDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsPay" Type="Int32" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="BuyCount" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Chat">
+    <Key>
+      <PropertyRef Name="ChatID" />
+    </Key>
+    <Property Name="ChatID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FromID" Type="Int64" />
+    <Property Name="FromUserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ToID" Type="Int64" />
+    <Property Name="ToUserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="SendTime" Type="DateTime" Precision="3" />
+    <Property Name="IsRead" Type="Int32" />
+    <Property Name="ReadTime" Type="DateTime" Precision="3" />
+    <Property Name="Batch" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="ClickMsg">
+    <Key>
+      <PropertyRef Name="ClickMsgId" />
+    </Key>
+    <Property Name="ClickMsgId" Type="Guid" Nullable="false" />
+    <Property Name="Msg" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Msg_en" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+    <Property Name="Color" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Comment">
+    <Key>
+      <PropertyRef Name="CommentId" />
+    </Key>
+    <Property Name="CommentId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainType" Type="Int32" />
+    <Property Name="MainID" Type="Int64" />
+    <Property Name="CommentUserID" Type="Int64" />
+    <Property Name="CommentContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="IsHideOrFeeToSee" Type="Int32" />
+    <Property Name="FeeCoinType" Type="Int32" />
+    <Property Name="NeedCoin" Type="Int32" />
+    <Property Name="CommentOrReplyType" Type="Int32" />
+    <Property Name="ReplyTopCommentId" Type="Int64" />
+    <Property Name="ReplyToUserID" Type="Int64" />
+    <Property Name="ReplyToCommentID" Type="Int64" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ContentBuyLog">
+    <Key>
+      <PropertyRef Name="ContentBuyLogId" />
+    </Key>
+    <Property Name="ContentBuyLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainType" Type="Int32" Nullable="false" />
+    <Property Name="MainID" Type="Int64" Nullable="false" />
+    <Property Name="BuyerId" Type="Int64" Nullable="false" />
+    <Property Name="Fee" Type="Int32" Nullable="false" />
+    <Property Name="FeeType" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Img" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="Int32" Nullable="false" />
+    <Property Name="QQ" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdadteTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EditLog">
+    <Key>
+      <PropertyRef Name="EditLogId" />
+    </Key>
+    <Property Name="EditLogId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="OldValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="NewValue" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="EmailNotice">
+    <Key>
+      <PropertyRef Name="EmailNoticeId" />
+    </Key>
+    <Property Name="EmailNoticeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="EmailNoticeAuthor" Type="Int32" />
+    <Property Name="AuthorID" Type="Int64" />
+    <Property Name="MainID" Type="Int64" />
+    <Property Name="MainType" Type="Int32" />
+    <Property Name="MD5Key" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="MD5Sign" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ErrorLog">
+    <Key>
+      <PropertyRef Name="ErrorLogID" />
+    </Key>
+    <Property Name="ErrorLogID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ErrorMsg" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="ErrorTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="Express">
+    <Key>
+      <PropertyRef Name="ExpressId" />
+    </Key>
+    <Property Name="ExpressId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserGiftId" Type="Int64" Nullable="false" />
+    <Property Name="ExpressNo" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ExpressName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ExpressType" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FeeAnswerLog">
+    <Key>
+      <PropertyRef Name="FeeAnswerLogId" />
+    </Key>
+    <Property Name="FeeAnswerLogId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AnswerId" Type="Int64" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="FeeTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="FeeHR">
+    <Key>
+      <PropertyRef Name="FeeHRID" />
+    </Key>
+    <Property Name="FeeHRID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainID" Type="Int64" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="FeeTime" Type="DateTime" Precision="3" />
+    <Property Name="FeeType" Type="Int32" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="FeeCoin" Type="Int32" />
+    <Property Name="FeeCoinType" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Gift">
+    <Key>
+      <PropertyRef Name="GiftID" />
+    </Key>
+    <Property Name="GiftID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GiftName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GiftPrise" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="GiftPriseType" Type="Int32" />
+    <Property Name="GiftDesc" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="GiftInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="GiftCount" Type="Int32" />
+    <Property Name="GiftImgs" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="PVCount" Type="Int64" />
+    <Property Name="GiftCreateTime" Type="DateTime" Precision="3" />
+    <Property Name="GiftCreateUserID" Type="Int64" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="GType" Type="Int32" />
+    <Property Name="OpenJoinItem" Type="Int32" />
+  </EntityType>
+  <EntityType Name="GiftFee">
+    <Key>
+      <PropertyRef Name="GiftFeeId" />
+    </Key>
+    <Property Name="GiftFeeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GiftID" Type="Int64" />
+    <Property Name="FeeName" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="FeeType" Type="Int32" />
+    <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FeeCount" Type="Int32" />
+  </EntityType>
+  <EntityType Name="InviteInterview">
+    <Key>
+      <PropertyRef Name="InviteInterviewId" />
+    </Key>
+    <Property Name="InviteInterviewId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ZhaoPinID" Type="Int64" />
+    <Property Name="InviteTime" Type="DateTime" Precision="3" />
+    <Property Name="ViewAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="QiuZhiID" Type="Int64" />
+    <Property Name="QiuZhiPublisher" Type="Int64" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Job">
+    <Key>
+      <PropertyRef Name="JobId" />
+    </Key>
+    <Property Name="JobId" Type="Guid" Nullable="false" />
+    <Property Name="JobType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="JobName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="ParentJobId" Type="Guid" />
+    <Property Name="IsJobType" Type="Int32" />
+    <Property Name="IsJob" Type="Int32" />
+    <Property Name="CreateType" Type="Int32" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="JobComment">
+    <Key>
+      <PropertyRef Name="JobCommentID" />
+    </Key>
+    <Property Name="JobCommentID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainID" Type="Int64" />
+    <Property Name="Comment" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateHeadUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="CreateNickName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="CommentType" Type="Int32" />
+  </EntityType>
+  <EntityType Name="JobTrade">
+    <Key>
+      <PropertyRef Name="JobTradeId" />
+    </Key>
+    <Property Name="JobTradeId" Type="Guid" Nullable="false" />
+    <Property Name="JobTradeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateType" Type="Int32" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="JoinItemAnswerExt">
+    <Key>
+      <PropertyRef Name="JoinItemAnswerExtId" />
+    </Key>
+    <Property Name="JoinItemAnswerExtId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="JoinItemQuestionExtId" Type="Int64" />
+    <Property Name="JoinMainID" Type="Int64" />
+    <Property Name="JoinType" Type="Int32" />
+    <Property Name="BuyerID" Type="Int64" />
+    <Property Name="ItemAnswer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="JoinItemQuestionExt">
+    <Key>
+      <PropertyRef Name="JoinItemQuestionExtId" />
+    </Key>
+    <Property Name="JoinItemQuestionExtId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainType" Type="Int32" />
+    <Property Name="MainID" Type="Int64" />
+    <Property Name="ItemName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="IsMustWrite" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="LeaveWord">
+    <Key>
+      <PropertyRef Name="LeaveWordId" />
+    </Key>
+    <Property Name="LeaveWordId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Telephone" Type="String" MaxLength="11" FixedLength="false" Unicode="false" />
+    <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Age" Type="Int32" />
+    <Property Name="DIY1" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DIY2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="DIY3" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Master">
+    <Key>
+      <PropertyRef Name="MasterId" />
+    </Key>
+    <Property Name="MasterId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="BBSMenuId" Type="Int32" />
+    <Property Name="IsRoot" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="MenuBelongTag">
+    <Key>
+      <PropertyRef Name="MenuBelongTagId" />
+    </Key>
+    <Property Name="MenuBelongTagId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MainId" Type="Int64" />
+    <Property Name="MainType" Type="Int32" />
+    <Property Name="TagId" Type="Int64" />
+  </EntityType>
+  <EntityType Name="News">
+    <Key>
+      <PropertyRef Name="NewsID" />
+    </Key>
+    <Property Name="NewsID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="NBody" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsTop" Type="Int32" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+  </EntityType>
+  <EntityType Name="Notice">
+    <Key>
+      <PropertyRef Name="NoticeId" />
+    </Key>
+    <Property Name="NoticeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NoticeTitle" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="NoticeContent" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="NoticeType" Type="Int32" />
+    <Property Name="ToUserID" Type="Int64" />
+    <Property Name="IsRead" Type="Int32" />
+    <Property Name="ReadTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="OAuth">
+    <Key>
+      <PropertyRef Name="OAuthID" />
+    </Key>
+    <Property Name="OAuthID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="OAuthType" Type="Int32" />
+    <Property Name="OpenId" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="NickName" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+    <Property Name="HeadUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="IsBind" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Order">
+    <Key>
+      <PropertyRef Name="OrderID" />
+    </Key>
+    <Property Name="OrderID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PayOrderID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderType" Type="Int32" />
+    <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="OrerDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsPay" Type="Int32" />
+  </EntityType>
+  <EntityType Name="OrderCheck">
+    <Key>
+      <PropertyRef Name="OrderCheckId" />
+    </Key>
+    <Property Name="OrderCheckId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderID" Type="Int64" Nullable="false" />
+    <Property Name="UserGiftId" Type="Int64" Nullable="false" />
+    <Property Name="MainID" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int64" Nullable="false" />
+    <Property Name="CheckStatus" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="OrderSend">
+    <Key>
+      <PropertyRef Name="OrderSendId" />
+    </Key>
+    <Property Name="OrderSendId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="OrderID" Type="Int64" Nullable="false" />
+    <Property Name="UserGiftId" Type="Int64" Nullable="false" />
+    <Property Name="MainID" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int64" Nullable="false" />
+    <Property Name="SendStatus" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="PayCBLog">
+    <Key>
+      <PropertyRef Name="PayCBLogID" />
+    </Key>
+    <Property Name="PayCBLogID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="CallBackTime" Type="DateTime" Precision="3" />
+    <Property Name="TradeNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="IsPay" Type="Int32" />
+    <Property Name="TradeStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Prise">
+    <Key>
+      <PropertyRef Name="PriseId" />
+    </Key>
+    <Property Name="PriseId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TargetID" Type="Int64" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="PriseTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="PrivateKey">
+    <Key>
+      <PropertyRef Name="PrivateKeyId" />
+    </Key>
+    <Property Name="PrivateKeyId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProtectKey" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="timespan" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="userID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="ProductID" />
+    </Key>
+    <Property Name="ProductID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PLogo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PTitle" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PLocation" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="PFunction" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="PPrice" Type="Int32" />
+    <Property Name="PSize" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+    <Property Name="ProductPic" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+    <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsJinghua" Type="Int32" />
+    <Property Name="IsRemen" Type="Int32" />
+    <Property Name="IsTop" Type="Int32" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="SendDay" Type="Int32" />
+    <Property Name="PWeight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="PUnit" Type="Int32" />
+    <Property Name="ValidTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ProductBuy">
+    <Key>
+      <PropertyRef Name="ProductBuyId" />
+    </Key>
+    <Property Name="ProductBuyId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProductID" Type="Int64" />
+    <Property Name="BuyUserID" Type="Int64" />
+    <Property Name="LinkName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LinkTel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="QiuZhi">
+    <Key>
+      <PropertyRef Name="QiuZhiID" />
+    </Key>
+    <Property Name="QiuZhiID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Publisher" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IWant" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Money" Type="Int32" />
+    <Property Name="NowWork" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="WorkStatus" Type="Int32" />
+    <Property Name="Study" Type="Int32" />
+    <Property Name="WorkYear" Type="Int32" />
+    <Property Name="MyDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="SelfAssessment" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="JianLiPic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="JianLiWord" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="IsPay" Type="Int32" />
+    <Property Name="PayType" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+    <Property Name="IsJinghua" Type="Int32" />
+    <Property Name="IsRemen" Type="Int32" />
+    <Property Name="IsTop" Type="Int32" />
+    <Property Name="WorkType" Type="Int32" />
+    <Property Name="WorkTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="BelongJobTrade" Type="Guid" />
+    <Property Name="BelongJob" Type="Guid" />
+    <Property Name="IWantPlace" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="ValidTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="Question">
+    <Key>
+      <PropertyRef Name="QuestionId" />
+    </Key>
+    <Property Name="QuestionId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="TopicID" Type="Int32" />
+    <Property Name="Coin" Type="Int32" />
+    <Property Name="CoinType" Type="Int32" />
+    <Property Name="PVCount" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="BestAnswerId" Type="Int64" />
+    <Property Name="IsJinghua" Type="Int32" />
+    <Property Name="IsRemen" Type="Int32" />
+    <Property Name="IsTop" Type="Int32" />
+    <Property Name="IsChecked" Type="Int32" />
+    <Property Name="NiceAnswerId" Type="Int64" />
+    <Property Name="EditCount" Type="Int32" />
+    <Property Name="FilePath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ContentNeedPay" Type="Boolean" />
+    <Property Name="ContentFeeType" Type="Int32" />
+    <Property Name="ContentFee" Type="Int32" />
+    <Property Name="IsAnonymous" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Report">
+    <Key>
+      <PropertyRef Name="ReportId" />
+    </Key>
+    <Property Name="ReportId" Type="Guid" Nullable="false" />
+    <Property Name="MainId" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int32" Nullable="false" />
+    <Property Name="Desc" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+    <Property Name="IsHandle" Type="Boolean" Nullable="false" />
+  </EntityType>
+  <EntityType Name="ScoreBeloneItem">
+    <Key>
+      <PropertyRef Name="ScoreBeloneItemId" />
+    </Key>
+    <Property Name="ScoreBeloneItemId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ScoreCoinLogId" Type="Int64" Nullable="false" />
+    <Property Name="MainId" Type="Int64" Nullable="false" />
+    <Property Name="MainType" Type="Int32" Nullable="false" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="ScoreCoinLog">
+    <Key>
+      <PropertyRef Name="ScoreCoinLogId" />
+    </Key>
+    <Property Name="ScoreCoinLogId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CoinType" Type="Int32" Nullable="false" />
+    <Property Name="Coin" Type="Int32" Nullable="false" />
+    <Property Name="CoinSource" Type="Int32" Nullable="false" />
+    <Property Name="CoinTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="CreateUser" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="SendCV">
+    <Key>
+      <PropertyRef Name="SendCVId" />
+    </Key>
+    <Property Name="SendCVId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ZhaoPinPublisher" Type="Int64" />
+    <Property Name="ZhaoPinID" Type="Int64" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CVPath" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SendTime" Type="DateTime" Precision="3" />
+    <Property Name="IsRead" Type="Int32" />
+    <Property Name="ReadTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ShareLink">
+    <Key>
+      <PropertyRef Name="ShareLinkID" />
+    </Key>
+    <Property Name="ShareLinkID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="ShareOpenId" Type="String" MaxLength="18" FixedLength="false" Unicode="false" />
+    <Property Name="ShareToken" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="ShareMd5Key" Type="String" MaxLength="8" FixedLength="false" Unicode="false" />
+    <Property Name="ShareAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="PVCount" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ShareRegistLog">
+    <Key>
+      <PropertyRef Name="ShareRegistLogID" />
+    </Key>
+    <Property Name="ShareRegistLogID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShareUserID" Type="Int64" />
+    <Property Name="ShareUserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="UserName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="ShipAddress">
+    <Key>
+      <PropertyRef Name="ShipAddressId" />
+    </Key>
+    <Property Name="ShipAddressId" Type="Guid" Nullable="false" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="ReceiveName" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="WeChatNo" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="ReceiveAddress" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Tel" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+    <Property Name="IsDefault" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SiteHead">
+    <Key>
+      <PropertyRef Name="SiteHeadId" />
+    </Key>
+    <Property Name="SiteHeadId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="HeadImg" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="IsDefault" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="SiteNotice">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NoticeType" Type="Int32" Nullable="false" />
+    <Property Name="ShortTitle" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ShortTitleBGColor" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="ShortTitleFontColor" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="TitleBGColor" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="TitleFontColor" Type="String" Nullable="false" MaxLength="7" FixedLength="false" Unicode="false" />
+    <Property Name="Url" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+    <Property Name="UserId" Type="Int64" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="Slide">
+    <Key>
+      <PropertyRef Name="SlideId" />
+    </Key>
+    <Property Name="SlideId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Img" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Url" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="EndTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="FontColor" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="SlideType" Type="Int32" />
+  </EntityType>
+  <EntityType Name="SoftLink">
+    <Key>
+      <PropertyRef Name="SoftLinkID" />
+    </Key>
+    <Property Name="SoftLinkID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SoftLinkType" Type="Int32" />
+    <Property Name="LinkName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LinkAddress" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LinkMemo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+  </EntityType>
+  <EntityType Name="SoftLinkType">
+    <Key>
+      <PropertyRef Name="SoftLinkTypeID" />
+    </Key>
+    <Property Name="SoftLinkTypeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SoftLinkTypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="SoftLinkColor" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="SoftLinkLogo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="StudyClass">
+    <Key>
+      <PropertyRef Name="StudyClassId" />
+    </Key>
+    <Property Name="StudyClassId" Type="Guid" Nullable="false" />
+    <Property Name="StudyUnitId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortIndex" Type="Int32" Nullable="false" />
+    <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="StudyShareImgSet">
+    <Key>
+      <PropertyRef Name="StudyShareImgSetId" />
+    </Key>
+    <Property Name="StudyShareImgSetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Url" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsUse" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="StudyUnit">
+    <Key>
+      <PropertyRef Name="StudyUnitId" />
+    </Key>
+    <Property Name="StudyUnitId" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="SortIndex" Type="Int32" Nullable="false" />
+    <Property Name="CreateUser" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="SuggestSite">
+    <Key>
+      <PropertyRef Name="SuggestSiteId" />
+    </Key>
+    <Property Name="SuggestSiteId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="SiteName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="SiteAddress" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="Tag">
+    <Key>
+      <PropertyRef Name="TagId" />
+    </Key>
+    <Property Name="TagId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TagName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="TagCreateType" Type="Int32" />
+    <Property Name="TagBelongId" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserBase">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Account" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="Source" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="Sign" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="HeadUrl" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+    <Property Name="Gender" Type="Int32" />
+    <Property Name="Province" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="County" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Birth" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Work" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="JingYing" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="WorkYear" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="LoginTime" Type="DateTime" Precision="3" />
+    <Property Name="LoginIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="OpenId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="UserDisabledLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int64" Nullable="false" />
+    <Property Name="ActionUserId" Type="Int64" Nullable="false" />
+    <Property Name="ExpriseTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserExt">
+    <Key>
+      <PropertyRef Name="UserExtId" />
+    </Key>
+    <Property Name="UserExtId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="TotalScore" Type="Int32" />
+    <Property Name="TotalCoin" Type="Int32" />
+    <Property Name="LevelName" Type="Int32" />
+    <Property Name="OnlyLevelName" Type="Int32" />
+    <Property Name="CloseTime" Type="DateTime" Precision="3" />
+    <Property Name="UserV" Type="Int32" />
+    <Property Name="RealName" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="CardID" Type="String" MaxLength="18" FixedLength="false" Unicode="false" />
+    <Property Name="CardPic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="FaRenPic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CompanyTel" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="VIP" Type="Int32" />
+    <Property Name="VIPExpiryTime" Type="DateTime" Precision="3" />
+    <Property Name="HeadNameShowType" Type="Int32" />
+    <Property Name="CheckBBS" Type="Int32" />
+    <Property Name="UserCenterSkin" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="UserSignTotalCount" Type="Int32" />
+    <Property Name="UserSignContinueCount" Type="Int32" />
+    <Property Name="UserMonthSignContinueCount" Type="Int32" />
+    <Property Name="UserSignTime" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserGift">
+    <Key>
+      <PropertyRef Name="UserGiftId" />
+    </Key>
+    <Property Name="UserGiftId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GiftID" Type="Int64" />
+    <Property Name="BuyUserID" Type="Int64" />
+    <Property Name="BuyTime" Type="DateTime" Precision="3" />
+    <Property Name="BuyCount" Type="Int32" />
+    <Property Name="GType" Type="Int32" />
+    <Property Name="GiftFeeId" Type="Int64" />
+    <Property Name="Fee" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="FeeType" Type="Int32" />
+    <Property Name="IsPay" Type="Int32" />
+    <Property Name="LinkMan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="LinkTel" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <EntityType Name="UserLike">
+    <Key>
+      <PropertyRef Name="UserLikeId" />
+    </Key>
+    <Property Name="UserLikeId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="LikeTargetID" Type="Int64" />
+    <Property Name="LikeType" Type="Int64" />
+    <Property Name="LikeTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserLoginLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int64" Nullable="false" />
+    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="UserScore">
+    <Key>
+      <PropertyRef Name="UserScoreId" />
+    </Key>
+    <Property Name="UserScoreId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="Score" Type="Int32" />
+    <Property Name="ScoreType" Type="Int32" />
+    <Property Name="CreateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="UpdateTIme" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserSet">
+    <Key>
+      <PropertyRef Name="UserSetId" />
+    </Key>
+    <Property Name="UserSetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserId" Type="Int64" Nullable="false" />
+    <Property Name="ShowOrHideBaseInfo" Type="Boolean" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="UserShareLog">
+    <Key>
+      <PropertyRef Name="UserShareLogId" />
+    </Key>
+    <Property Name="UserShareLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ShareTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="ClassId" Type="Guid" Nullable="false" />
+    <Property Name="IsDelete" Type="Boolean" Nullable="false" />
+    <Property Name="Url" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="UseImage" Type="Int32" />
+  </EntityType>
+  <EntityType Name="UserStudy">
+    <Key>
+      <PropertyRef Name="UserStudyId" />
+    </Key>
+    <Property Name="UserStudyId" Type="Guid" Nullable="false" />
+    <Property Name="StudyUnitId" Type="Guid" Nullable="false" />
+    <Property Name="StudyClassId" Type="Guid" Nullable="false" />
+    <Property Name="IsStudyed" Type="Boolean" Nullable="false" />
+    <Property Name="UserID" Type="Int64" Nullable="false" />
+    <Property Name="CreateTime" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="VIPHead">
+    <Key>
+      <PropertyRef Name="VIPHeadId" />
+    </Key>
+    <Property Name="VIPHeadId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserID" Type="Int64" />
+    <Property Name="HeadUrl" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="IsChecked" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+  </EntityType>
+  <EntityType Name="ZhaoPin">
+    <Key>
+      <PropertyRef Name="ZhaoPinID" />
+    </Key>
+    <Property Name="ZhaoPinID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Publisher" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Gangwei" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Money" Type="Int32" />
+    <Property Name="Study" Type="Int32" />
+    <Property Name="WorkHistory" Type="Int32" />
+    <Property Name="WorkPlace" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="CLogo" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="CPeople" Type="Int32" />
+    <Property Name="CVip" Type="Int32" />
+    <Property Name="CDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="JobPic" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="JobWord" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Contact" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PayType" Type="Int32" />
+    <Property Name="IsPay" Type="Int32" />
+    <Property Name="CreateTime" Type="DateTime" Precision="3" />
+    <Property Name="IsDelete" Type="Int32" />
+    <Property Name="PVCount" Type="Int64" />
+    <Property Name="JobRequire" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="IsJinghua" Type="Int32" />
+    <Property Name="IsRemen" Type="Int32" />
+    <Property Name="IsTop" Type="Int32" />
+    <Property Name="WorkeType" Type="Int32" />
+    <Property Name="WorkTime" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="BelongJobTrade" Type="Guid" />
+    <Property Name="BelongJob" Type="Guid" />
+    <Property Name="JobFuLi" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="NeedCount" Type="Int32" />
+    <Property Name="ValidTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateTime" Type="DateTime" Precision="3" />
+    <Property Name="UpdateUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+  </EntityType>
+</Schema>

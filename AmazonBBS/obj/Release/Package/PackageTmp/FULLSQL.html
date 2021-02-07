@@ -1,0 +1,89 @@
+﻿DBCC CHECKIDENT (UserBase, RESEED, 10000)
+DBCC CHECKIDENT (BBSEnum, RESEED, 10000)
+DBCC CHECKIDENT (Question, RESEED, 10000)
+DBCC CHECKIDENT (ScoreCoinLog, RESEED, 10000)
+DBCC CHECKIDENT (UserExt, RESEED, 10000)
+
+DBCC CHECKIDENT (Answer, RESEED, 10000)
+DBCC CHECKIDENT (FeeAnswerLog, RESEED, 100000)
+
+DBCC CHECKIDENT (Prise, RESEED, 10000)
+DBCC CHECKIDENT (UserLike, RESEED, 10000)
+DBCC CHECKIDENT (Master, RESEED, 10000)
+DBCC CHECKIDENT (Article, RESEED, 10000)
+
+DBCC CHECKIDENT (Activity, RESEED, 100000)
+DBCC CHECKIDENT (ActivityFee, RESEED, 100000)
+DBCC CHECKIDENT (ActivityJoin, RESEED, 100000)
+
+DBCC CHECKIDENT (Gift, RESEED, 100000)
+DBCC CHECKIDENT (GiftFee, RESEED, 10000)
+DBCC CHECKIDENT (UserGift, RESEED, 10000)
+
+DBCC CHECKIDENT (Chat, RESEED, 1000)
+
+
+DBCC CHECKIDENT (SoftLinkType, RESEED, 10000)
+DBCC CHECKIDENT (SoftLink, RESEED, 10000)
+DBCC CHECKIDENT (ZhaoPin, RESEED, 10000)
+DBCC CHECKIDENT (QiuZhi, RESEED, 10000)
+DBCC CHECKIDENT (Product, RESEED, 10000)
+DBCC CHECKIDENT (FeeHR, RESEED, 10000)
+DBCC CHECKIDENT (News, RESEED, 10000)
+DBCC CHECKIDENT (About, RESEED, 10000)
+DBCC CHECKIDENT (JobComment, RESEED, 10000)
+DBCC CHECKIDENT (AD, RESEED, 10000)
+DBCC CHECKIDENT (PayCBLog, RESEED, 10000)
+DBCC CHECKIDENT (LeaveWord, RESEED, 10000)
+DBCC CHECKIDENT (BXTOrder, RESEED, 10000)
+
+
+--------------------------------2018.5.28
+DBCC CHECKIDENT (Comment, RESEED, 10000)
+DBCC CHECKIDENT (SuggestSite, RESEED, 10000)
+
+--------------------------------2018.6.10
+DBCC CHECKIDENT (EmailNotice, RESEED, 10000)
+DBCC CHECKIDENT (OAuth, RESEED, 10000)
+
+DBCC CHECKIDENT (ShareLink, RESEED, 10000)
+DBCC CHECKIDENT (ShareRegistLog, RESEED, 10000)
+DBCC CHECKIDENT (EditLog, RESEED, 10000)
+DBCC CHECKIDENT (SiteHead, RESEED, 10000)
+
+DBCC CHECKIDENT (Notice, RESEED, 10000)
+DBCC CHECKIDENT (ErrorLog, RESEED, 10000)
+
+DBCC CHECKIDENT (Tag, RESEED, 10000)
+DBCC CHECKIDENT (MenuBelongTag, RESEED, 10000)
+
+DBCC CHECKIDENT (SendCV, RESEED, 10000)
+DBCC CHECKIDENT (InviteInterview, RESEED, 10000)
+DBCC CHECKIDENT (ProductBuy, RESEED, 10000)
+DBCC CHECKIDENT (VIPHead, RESEED, 10000)
+DBCC CHECKIDENT (JoinItemQuestionExt, RESEED, 10000)
+DBCC CHECKIDENT (JoinItemAnswerExt, RESEED, 10000)
+
+
+
+
+
+--------------------------------
+insert into BBSEnum (EnumType,EnumDesc,EnumCode,Url,IsBBS,SortIndex,CreateTime,CreateUser,UpdateTime,UpdateUser,IsDelete)
+VALUES
+(1,'开发','Develop','',1,1,getdate(),'system',getdate(),'system',0),
+(1,'运营','Running','',1,2,getdate(),'system',getdate(),'system',0),
+(1,'推广','SEO','',1,3,getdate(),'system',getdate(),'system',0),
+(1,'其他','Other','',1,4,getdate(),'system',getdate(),'system',0),
+(1,'文章','Article','',0,5,getdate(),'system',getdate(),'system',0),
+(1,'活动','Party','',0,6,getdate(),'system',getdate(),'system',0),
+(1,'礼物兑换','Gift','',3,7,getdate(),'system',getdate(),'system',0),
+
+(1,'导航','SoftLink','',0,8,getdate(),'system',getdate(),'system',0),
+
+(1,'招聘','ZhaoPin','',2,9,getdate(),'system',getdate(),'system',0),
+(1,'求职','QiuZhi','',2,10,getdate(),'system',getdate(),'system',0),
+(1,'产品服务','Product','',0,11,getdate(),'system',getdate(),'system',0),
+(1,'数据分析','DataAnalysis','',3,12,getdate(),'system',getdate(),'system',0),
+(1,'课程','KeCheng','',3,14,getdate(),'system',getdate(),'system',0),
+(1,'主页','About','',0,13,getdate(),'system',getdate(),'system',0)

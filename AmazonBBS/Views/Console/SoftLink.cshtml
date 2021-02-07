@@ -1,0 +1,360 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model SoftLink
+@{
+    ViewBag.Title = "软件导航新增";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    List<SoftLinkType> types = SoftLinkTypeBLL.Instance.SelectAll();
+    SoftLink softlink = Model;
+    int softlinkid = softlink == null ? 0 : softlink.SoftLinkID;
+    bool isEdit = softlink != null;//是否编辑模式
+
+    List<SoftLinkType> softlinktypelist = ViewBag.SoftLinkTypeList;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-6">
+                    <h1>软件导航新增</h1>
+                    <div class="well">
+                        <h6 class="Lpdl15">新增软件导航分类</h6>
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="addsoftlink" placeholder="导航分类" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <input type="text" class="form-control" id="addsoftLogo" placeholder="导航分类LOGO" />
+                                <input style="display:none" type="file" id="select_addsoftLogo" value="" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <input type="color" class="form-control" id="addsoftcolor" placeholder="导航分类颜色" />
+                            </div>
+                            <a id="btn_addSoftlink" class="btn btn-primary">确认新增</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <h6 class="Lpdl15">新增标签超链接</h6>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        @*<label class="col-sm-2 control-label">分类</label>*@
+                        <div class="col-sm-8">
+                            @if (isEdit)
+                            {
+                                <select id="softlinktype" class="form-control">
+                                    @{
+                                        foreach (SoftLinkType item in types)
+                                        {
+                                            if (item.SoftLinkTypeID == softlink.SoftLinkType)
+                                            {
+                                                <option selected="selected" value="@item.SoftLinkTypeID">@item.SoftLinkTypeName</option>
+                                            }
+                                            else
+                                            {
+                                                <option value="@item.SoftLinkTypeID">@item.SoftLinkTypeName</option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <select id="softlinktype" class="form-control">
+                                    <option value="">请选择导航分类</option>
+                                    @{
+                                        foreach (SoftLinkType item in types)
+                                        {
+                                            <option value="@item.SoftLinkTypeID">@item.SoftLinkTypeName</option>
+                                        }
+                                    }
+                                </select>
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-8">
+                            @if (isEdit)
+                            {
+                                <input type="text" class="form-control" id="softlinkName" placeholder="请输入链接名称" value="@softlink.LinkName" />
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="softlinkName" placeholder="请输入链接名称" />
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-8">
+                            @if (isEdit)
+                            {
+                                <input type="text" class="form-control" id="softlinkHref" placeholder="请输入链接网址" value="@softlink.LinkAddress" />
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" id="softlinkHref" placeholder="请输入链接网址" />
+                            }
+                        </div>
+                    </div>
+                    <div class="form-group-sm clearfix Lmgt5">
+                        <div class="col-sm-8">
+                            @if (isEdit)
+                            {
+                                <textarea placeholder="请输入链接描述" class="form-control" id="softlinkDesc" style="min-height:100px;"></textarea>
+                                <script>
+                                    $("#softlinkDesc").val('@softlink.LinkMemo')
+                                </script>
+                            }
+                            else
+                            {
+                                <textarea placeholder="请输入链接描述" class="form-control" id="softlinkDesc" style="min-height:100px;"></textarea>
+                            }
+                        </div>
+                        @if (isEdit)
+                        {
+                            <a onclick="submitSoftlink(1)" class="btn btn-primary">确认修改</a>
+                        }
+                        else
+                        {
+                            <a onclick="submitSoftlink(0)" class="btn btn-primary">确认新增</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (softlinktypelist != null)
+    {
+        <div class="col-md-10">
+            <table class="table table-bordered table-hover">
+                <caption>导航分类管理</caption>
+                <thead>
+                    <tr>
+                        <th width="20%">导航名</th>
+                        <th width="20%">导航LOGO</th>
+                        <th width="20%">导航颜色</th>
+                        <th width="20%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (SoftLinkType item in softlinktypelist)
+                        {
+                            long softID = item.SoftLinkTypeID;
+                            string softlinkname = item.SoftLinkTypeName;
+                            <tr>
+                                <td style="color:@item.SoftLinkColor">@softlinkname</td>
+                                <td><img width="30" height="30" src="@item.SoftLinkLogo" alt="@softlinkname" /></td>
+                                <td style="color:@item.SoftLinkColor">@item.SoftLinkColor</td>
+                                <td>
+                                    <a onclick="EditSoftLinkType(this,@softID)" class="btn-sm btn-primary">编辑</a>
+                                    <a onclick="Delete(this,@softID)" class="btn-sm btn-danger">删除</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+<div class="EditSoftLinkType Ldn">
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" id="softTypeName" name="softTypeName" placeholder="导航分类名" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input style="display:none" type="file" id="select_softLogo" value="" />
+            <input class="form-control" id="softLogo" name="softLogo" placeholder="导航LOGO" />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-12">
+            <input class="form-control" id="softcolor" name="softcolor" type="color" placeholder="导航字体颜色" />
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    //删除
+    function Delete(me,id){
+        AlertConfirm("确定要删除此导航链接吗？删除之后该导航链接下的所有导航超链接全将失效！","确认删除",'我点错了',function()
+        {
+            $.post("/Console/DeleteSoftLinkType/{0}".Format(id),function(data){
+                if(data.Ok){
+                    layer.msg("删除成功");
+                    $(me).parent().parent().remove();
+                } else {
+                    layer.msg(data.Msg);
+                }
+            });
+        });
+    }
+    //编辑
+    $("#softLogo").on("click focus", (function () {
+        $("#select_softLogo").click();
+    }));
+    $("#select_softLogo").change(function (data) {
+        $("#softLogo").data("ischange",!0);
+        $("#softLogo").val($("#select_softLogo").val());
+    });
+    //新增
+    $("#addsoftLogo").on("click focus", (function () {
+        $("#select_addsoftLogo").click();
+    }));
+    $("#select_addsoftLogo").change(function (data) {
+        $("#addsoftLogo").data("ischange",!0);
+        $("#addsoftLogo").val($("#select_addsoftLogo").val());
+    });
+
+    //编辑导航分类
+    function EditSoftLinkType(me,id){
+        var parent = $(me).parent().parent(),
+            softTypeName= $("#softTypeName"),
+            softLogo= $("#softLogo"),
+            softcolor = $("#softcolor");
+        softTypeName.val(parent.children().eq(0).text());
+        softLogo.val(parent.children().eq(1).children().attr("src"));
+        softcolor.val(parent.children().eq(2).text());
+        var layerindex = AlertActionAreaWithConfirmWithSize($(".EditSoftLinkType"), "编辑导航分类", "300px", null, "确认编辑", null, function () {
+            if (CHECKNOTEMPTY(softTypeName, "导航分类名")) {
+                if (CHECKNOTEMPTY(softLogo, "导航LOGO")) {
+                    if (CHECKNOTEMPTY(softcolor, "导航字体颜色")) {
+                        var formdata = new FormData();
+                        formdata.append("id", id);
+                        formdata.append("softname", softTypeName.val());
+                        formdata.append("softlogo", softLogo.val());
+                        formdata.append("softcolor", softcolor.val());
+                        if ($("#softLogo").data("ischange")) {
+                            //上传新LOGO
+                            formdata.append("SoftLogoImg", $("#select_softLogo")[0].files[0]);
+                        }
+                        $.ajax({
+                            url: "/Console/EditSoftLinkType",
+                            type: "post",
+                            dataType: "json",
+                            contentType: false,
+                            processData: false,
+                            data: formdata,
+                            success: function (data) {
+                                if (data.Ok) {
+                                    layer.close(layerindex);
+                                    $("#softTypeName").val("");
+                                    $("#softLogo").val("");
+                                    $("#softcolor").val("");
+                                    layer.msg("编辑成功", {
+                                        time: 300, end: function () {
+                                            location.reload(!0);
+                                        }
+                                    });
+                                } else {
+                                    layer.msg(data.Msg || "编辑失败");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }, function () {
+            $("#softTypeName").val("");
+            $("#softLogo").val("");
+            $("#softcolor").val("");
+        });
+    }
+
+    $("#btn_addSoftlink").click(function () {
+        var addsoftlink=$("#addsoftlink"),
+            addsoftLogo=$("#addsoftLogo"),
+            addsoftcolor=$("#addsoftcolor");
+        if (CHECKNOTEMPTY(addsoftlink,"导航分类")) {
+            if (CHECKNOTEMPTY(addsoftLogo,"导航分类LOGO")) {
+                if (CHECKNOTEMPTY(addsoftcolor,"导航分类颜色")) {
+                    var formdata = new FormData();
+                    formdata.append("name",addsoftlink.val());
+                    formdata.append("color",addsoftcolor.val());
+                    formdata.append("logo", $("#select_addsoftLogo")[0].files[0]);
+                    $.ajax({
+                        url: "/Console/AddSoftType",
+                        type: "post",
+                        dataType: "json",
+                        contentType: false,
+                        processData: false,
+                        data: formdata,
+                        success: function (data) {
+                            if (data.Ok) {
+                                layer.msg("新增成功",{time:300,end: function () { location.reload(!0); }})
+                            } else {
+                                layer.msg(data.Msg || "失败");
+                            }
+                        }
+                    });
+                }
+            }
+        }
+    });
+
+    function submitSoftlink(otype) {
+        @if (types.Count > 0)
+         {
+            <text>
+        var softlinktype = $("#softlinktype"),
+            softlinkname = $("#softlinkName"),
+            softlinkhref = $("#softlinkHref"),
+            softlinkdesc = $("#softlinkDesc");
+        if (CHECKNOTEMPTY(softlinktype, "请选择分类")) {
+            if (CHECKNOTEMPTY(softlinkname, "链接名称")) {
+                if(Leo.tools.CheckLength(softlinkname.val(),1,20,"链接名称")){
+                    if (CHECKNOTEMPTY(softlinkhref, "链接网址")) {
+                        if(Leo.tools.CheckLength(softlinkhref.val(),1,200,"链接网址")){
+                            if (CHECKNOTEMPTY(softlinkdesc, "链接描述")) {
+                                if(Leo.tools.CheckLength(softlinkdesc.val(),1,200,"链接描述")){
+                                    $.post("/Console/AddSoftLink", {
+                                        name: softlinkname.val(), href: softlinkhref.val(), typeid: softlinktype.val(), desc: softlinkdesc.val(), otype: otype,id:@(isEdit?softlinkid:0)
+                                        }).success(function (data) {
+                                            if (data.Ok) {
+                                                layer.msg(otype == 0 ? "新增成功":"编辑成功");
+                                                softlinktype.val("");
+                                                softlinkname.val("");
+                                                softlinkhref.val("");
+                                                softlinkdesc.val("");
+                                            } else {
+                                                layer.msg(data.Msg || "失败");
+                                            }
+                                        });
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        </text>
+        }else
+        {
+        <text>
+        layer.msg("还未新增软件导航分类");
+        $("#softlink").focus();
+        </text>
+        }
+    }
+
+    function CHECKNOTEMPTY(item, msg) {
+        var i = $.trim(item.val());
+        var ok = !0;
+        if (i == null || i == undefined | i == "") {
+            ok = !1;
+            layer.msg(msg+"不能为空");
+            item.focus();
+        }
+        return ok;
+    }
+</script>

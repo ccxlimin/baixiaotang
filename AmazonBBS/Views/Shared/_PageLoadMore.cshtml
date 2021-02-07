@@ -1,0 +1,22 @@
+﻿@using AmazonBBS.Model;
+@model Paging
+@{
+    var url = Request.Url.AbsolutePath.ToLower();
+
+    var pagecount = Model.PageCount;//总页数
+    var recordcount = Model.RecordCount;//数据总量
+    var pagesize = Model.PageSize;//每页总量
+
+    var currentindex = Model.PageIndex;//当前页码
+    var previndex = currentindex - 1;//上一页
+    var nextindex = currentindex + 1;//下一页
+
+    if (pagesize * currentindex < recordcount)
+    {
+        <div class="Ltac Lpdt10 Lpdb10 Lbgcw">
+            <a class="btn-pageLoadMore" data-more="@(nextindex)_@(pagesize)">
+                加载更多数据
+            </a>
+        </div>
+    }
+}

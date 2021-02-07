@@ -1,0 +1,91 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@{
+    int menutype = Model;
+    Uri uri = Request.Url;
+    string action = uri.AbsolutePath.Split('/')[1];
+    bool isBBS = false;
+    bool isGift = false;
+    string action_ = action.ToLower();
+    if (action_ == "bbs" || action_ == "product")
+    {
+        isBBS = true;
+        action = uri.Segments.Length > 2 ? uri.Segments[3] : action;
+    }
+    else if (action_ == "gift")
+    {
+        if (uri.Segments.Length > 2)
+        {
+            action = uri.Segments[3] == "2" ? "DataAnalysis" : "KeCheng";
+        }
+        else
+        {
+            isGift = true;
+        }
+        isGift = uri.Segments.Length > 2 ? uri.Segments[3] == "3" ? false : true : true;
+    }
+    var menuList = BBSEnumBLL.Instance.Query(BBSEnumType.Menu.GetHashCode()).Where(a =>
+    {
+        if (isBBS)
+        {
+    //return (a.IsBBS == menutype || a.IsBBS == 8) && a.EnumCode != action;
+    return (a.IsBBS == menutype || a.IsBBS == 8);
+        }
+        else
+        {
+            return a.IsBBS == menutype;
+    //return a.IsBBS == menutype && a.EnumCode != action;
+}
+    });
+}
+<div>
+    <ul class="nav nav-tabs">
+        @foreach (BBSEnum item in menuList)
+        {
+        <style>
+                                        .small-menu-@(item.EnumCode)-css{
+                                            color:@item.FontColor !important;
+                                        }
+                                        .small-menu-@(item.EnumCode)-css:hover{
+                                            background-color:@item.FontBGColor !important;
+                                            font-size:16px;
+                                            font-weight:bold;
+                                            border-bottom:1px solid blue !important;
+                                            color:red !important;
+                                            transition:.3s ease-in-out;
+                                        }
+                                        .small-menu-@(item.EnumCode)-css:active{
+                                            background-color:@item.FontBGColor !important;
+                                            opacity:0.5;
+                                        }
+        </style>
+            if (item.IsBBS == 1)
+            {
+                <li>
+                    @if (action == item.EnumCode)
+                    {
+                        <a style="font-size:16px;font-weight:bold;border-bottom:1px solid blue;color:red !important;" class="small-menu-@(item.EnumCode)-css">@item.EnumDesc</a>
+                    }
+                    else
+                    {
+                        <a class="small-menu-@(item.EnumCode)-css" href="/BBS/Topic/@item.EnumCode">@item.EnumDesc</a>
+                    }
+                </li>
+            }
+            else
+            {
+                <li>
+                    @if (action == item.EnumCode)
+                    {
+                        <a style="font-size:16px;font-weight:bold;border-bottom:1px solid blue;color:red !important;" class="small-menu-@(item.EnumCode)-css">@item.EnumDesc</a>
+                    }
+                    else
+                    {
+                        <a class="small-menu-@(item.EnumCode)-css" href="/@item.EnumCode">@item.EnumDesc</a>
+                    }
+                </li>
+            }
+        }
+    </ul>
+    <ul></ul>
+</div>

@@ -1,0 +1,75 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<JobTrade>
+@{
+    List<JobTrade> list = Model;
+}
+@if (list.Count > 0)
+{
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover">
+            <caption>行业管理</caption>
+            <thead>
+                <tr>
+                    <th width="25%">序号</th>
+                    <th width="25%">行业</th>
+                    <th width="25%">创建人</th>
+                    <th width="25%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < list.Count; i++)
+                {
+                    JobTrade item = list[i];
+                    string id = item.JobTradeId.ToString();
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@item.JobTradeName</td>
+                        <td>@(item.CreateType == 1 ? "System" : "用户创建")</td>
+                        <td>
+                            <a onclick="Edit(this,'@id')" class="btn-sm btn-primary">编辑</a>
+                            <a onclick="DeleteTrade(this,'@id',1)" class="btn-sm btn-danger">删除</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function Edit(target, id) {
+            var element = $(target).parent().parent().children().eq(1);
+            var oldValue = $.trim(element.html());
+            layer.prompt({
+                title: '请修改并确认',
+                value: oldValue,
+                formType: 3,
+                maxlength: 20
+            },
+                function (text, index) {
+                    text = $.trim(text);
+                    if (text != oldValue) {
+                        CLOSE(index);
+                        var layerindex = LOAD();
+                        $.post("/Common/EditTrade/{0}".Format(id), {
+                            tradeName: text,
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("修改成功");
+                                element.html(text);
+                            } else {
+                                MSG(data.Msg || "修改失败");
+                            }
+                        });
+                    } else {
+                        Leo.msgfail("值未改变！");
+                    }
+                });
+        }
+    </script>
+}
+else
+{
+    <div class="post">
+        暂未添加行业类别信息！
+    </div>
+}

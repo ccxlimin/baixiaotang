@@ -1,0 +1,25 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<HomeTagsViewModel>
+@{
+    ViewBag.Title = "标签";
+}
+
+<div class="">
+    <div class="mod-body">
+        <div class="postHome">
+            <ul class="userTabs nav nav-tabs nav-tabs-a-borderColor-top-blue">
+                <li class="active"><a href="#Sort_All" data-toggle="tab" data-reactid="Sort_All">全部</a></li>
+                <li><a href="#Sort_Hot" data-toggle="tab" data-reactid="Sort_Hot">热门</a></li>
+                <li><a href="#Sort_JingHua" data-toggle="tab" data-reactid="Sort_JingHua">精华</a></li>
+                <li><a href="#Sort_30" data-toggle="tab" data-reactid="Sort_30">30天</a></li>
+            </ul>
+            <div class="tag_all_List Lpd10-0">
+                @Html.Partial("_LoadTagList", Model)
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("tag", "index");
+</script>

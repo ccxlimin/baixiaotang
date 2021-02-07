@@ -1,0 +1,489 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@{
+    List<BBSEnum> menus = BBSEnumBLL.Instance.Query(BBSEnumType.Menu.GetHashCode(), true);
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isLogin = UserBaseBLL.Instance.IsLogin;
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    bool isroot = UserBaseBLL.Instance.IsRoot;
+    //int customertype = 1;
+
+    bool isusercenter = false;
+    string userCenter = string.Empty;
+    string path = Request.Url.PathAndQuery;
+    string[] segments = path.Split('/');
+    bool isGift = false;
+    if (segments.Length > 1)
+    {
+        string segment_path = segments[1].ToLower();
+        if (segment_path == "user")
+        {
+            //customertype = 0;
+            string userskin = string.Empty;
+            if (segments.Length > 2 && segments[2].ToLower() == "detail")
+            {
+                userskin = ViewBag.Skin;
+            }
+            else
+            {
+                isusercenter = true;
+                userskin = UserBaseBLL.Instance.GetUserSkin(user.UserID);
+            }
+            userCenter = "userbg {0}".FormatWith(userskin);
+        }
+        //else if (segment_path == "console")
+        //{
+        //    customertype = 0;
+        //}
+        else if (segment_path == "gift")
+        {
+            isGift = true;
+            //if (segments.Length == 4)
+            //{
+            //    if (segments[3] == "3")
+            //    {
+            //        customertype = 3;
+            //    }
+            //}
+        }
+    }
+
+    List<ClickMsg> clickMsgs = ClickMsgBLL.Instance.FindALL(0);
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 百晓堂</title>
+    <meta name="keywords" content="百晓堂,百晓堂社区,独立站,亚马逊百晓生,百晓生分析师,天机百晓生,亚马逊百晓堂,baixiaosheng,baixiaotang,baixiaotangtop" />
+    <meta name="description" content="百晓堂商学院是亚马逊培训、人才输送、公司内训及电商服务于一体的专业教育服务机构。官网：技术交流、教育、招聘、产品开发，一个可以跳槽、组织活动、交流的社区平台。创始人百晓生：自媒体红人及资深卖家，创Z型打法、趋势打法，多类目爆款上万单/小时成绩。" />
+    @*<base href="http://www.baixiaotangtop.com" />*@
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/Content/main")
+    @*<script src="~/Scripts/layer-1.8.5/layer.min.js?v=20200101"></script>*@
+    @*<script src="~/Scripts/layer-1.8.5/CommonLayer.js?v=20200101"></script>*@
+    @*<script src="~/Content/summernote/dist/summernote.js?v=20200101"></script>*@
+    @*<link href="~/Content/summernote/dist/summernote.css?v=20200101" rel="stylesheet" />*@
+</head>
+<body class="@userCenter">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("百晓堂", "Index", "Home", new { area = string.Empty }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    @{
+                        var groupList = menus.GroupBy(a => a.GroupBy).OrderBy(a => a.First().GroupBy);
+                    }
+                    <li class="nav-allmenu-lee">
+                        <a>所有分类</a>
+                        <div class="Ldn allmenuList">
+                            @foreach (var groupItem in groupList)
+                            {
+                                <div class="allmenuItem">
+                                    @if (groupItem.Count() == 1)
+                                    {
+                                        var temp = groupItem.First();
+                                        if (string.IsNullOrEmpty(temp.Url))
+                                        {
+                                            <a href="/@(temp.EnumCode.ToLower())" target="_blank">@temp.EnumDesc</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@(temp.Url)" target="_blank">@temp.EnumDesc</a>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        switch (groupItem.First().GroupBy)
+                                        {
+                                            case 1:
+                                                <a href="/bbs/topic/develop" target="_blank">社区贴吧</a>break;
+                                            case 2:
+                                                <a href="/zhaopin" target="_blank">招聘求职</a>break;
+                                            case 3:
+                                                <a href="/article" target="_blank">文章</a>break;
+                                            case 4:
+                                                <a href="/kecheng" target="_blank">干货课程</a>break;
+                                            case 5:
+                                                <a href="/dataanalysis" target="_blank">百晓堂服务</a>
+                                                break;
+                                            case 6:
+                                                <a href="/softlink" target="_blank">链接</a>break;
+                                            case 7:
+                                                <a href="/softlink" target="_blank">AMZ123导航</a>break;
+                                            case 8:
+                                                <a href="/softlink" target="_blank">百晓生科技</a>break;
+                                        }
+                                        foreach (var item in groupItem)
+                                        {
+                                            if (item.IsBBS == 1)
+                                            {
+                                                @*//判断是否为Amz数据分析协会，此页面需要 VIP 才能进入
+                                                    if (item.EnumCode.ToLower() == "other")
+                                                    {
+                                                        //如果是会员，则正常跳转，否则提示
+                                                        if (isVip)
+                                                        {
+                                                            <a href="/bbs/topic/@item.EnumCode.ToLower()" class="all-menu-@(item.EnumCode)-css">@item.EnumDesc</a>
+                                                        }
+                                                        else
+                                                        {
+                                                            <a class="all-menu-@(item.EnumCode)-css @(isLogin?"novip":"btn_login")">@item.EnumDesc</a>
+                                                        }
+                                                    }
+                                                    else
+                                                    {*@
+                                                <a href="/bbs/topic/@item.EnumCode.ToLower()" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a>
+                                                //}
+                                            }
+                                            else
+                                            {
+                                                if (string.IsNullOrEmpty(item.Url))
+                                                {
+                                                    <a href="/@(item.EnumCode.ToLower())" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@(item.Url.ToLower())" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a>
+                                                }
+                                            }
+                                        }
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </li>
+                    @{
+                        foreach (var groupItem in groupList)
+                        {
+                            <li>
+                                @{
+                                    if (groupItem.Count() == 1)
+                                    {
+                                        var temp = groupItem.First();
+                                        if (string.IsNullOrEmpty(temp.Url))
+                                        {
+                                            <a href="/@(temp.EnumCode.ToLower())" class="all-menu-@(temp.EnumCode)-css" target="_blank">@temp.EnumDesc</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="@(temp.Url.ToLower())" class="all-menu-@(temp.EnumCode)-css" target="_blank">@temp.EnumDesc</a>
+                                        }
+                                        <style>
+                                            .all-menu-@(temp.EnumCode)-css{
+                                color:@temp.FontColor !important;
+                            }
+                                            .all-menu-@(temp.EnumCode)-css:hover{
+                                background-color:@temp.FontBGColor !important;
+                                font-size:16px;
+                                font-weight:bold;
+                                color:red !important;
+                                transition:.3s ease-in-out;
+                            }
+                                            .all-menu-@(temp.EnumCode)-css:active{
+                                background-color:@temp.FontBGColor !important;
+                                opacity:0.5;
+                            }
+                                        </style>
+                                    }
+                                    else
+                                    {
+                                        switch (groupItem.First().GroupBy)
+                                        {
+                                            case 1:
+                                                <a href="/bbs/topic/develop" target="_blank">社区贴吧</a>break;
+                                            case 2:
+                                                <a href="/zhaopin" target="_blank">招聘求职</a>break;
+                                            case 3:
+                                                <a href="/article" target="_blank">文章</a>break;
+                                            case 4:
+                                                <a href="/kecheng" target="_blank">干货课程</a>break;
+                                            case 5:
+                                                <a href="/dataanalysis" target="_blank" style="color:#8080ff;">百晓堂服务</a>
+                                                break;
+                                            case 6:
+                                                <a href="/softlink" target="_blank">链接</a>break;
+                                            case 7:
+                                                <a href="/softlink" target="_blank">AMZ123导航</a>break;
+                                            case 8:
+                                                <a href="/softlink" target="_blank">百晓生科技</a>break;
+                                        }
+
+                                        <ul class="dropdown-menu dropdown-toggle">
+                                            @foreach (var item in groupItem)
+                                            {
+                                                <style>
+                                            .all-menu-@(item.EnumCode)-css{
+                                color:@item.FontColor !important;
+                            }
+                                            .all-menu-@(item.EnumCode)-css:hover{
+                                background-color:@item.FontBGColor !important;
+                                font-size:16px;
+                                font-weight:bold;
+                                color:red !important;
+                                transition:.3s ease-in-out;
+                            }
+                                            .all-menu-@(item.EnumCode)-css:active{
+                                background-color:@item.FontBGColor !important;
+                                opacity:0.5;
+                            }
+                                                </style>
+                                                if (item.IsBBS == 1)
+                                                {
+                                                    //判断是否为Amz数据分析协会，此页面需要 VIP 才能进入
+                                                    @*if (item.EnumCode.ToLower() == "other")
+                                                        {
+                                                            //如果是会员，则正常跳转，否则提示
+                                                            if (isVip)
+                                                            {
+                                                                <li><a href="/bbs/topic/@item.EnumCode.ToLower()" class="all-menu-@(item.EnumCode)-css">@item.EnumDesc</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a class="all-menu-@(item.EnumCode)-css @(isLogin ? "novip" : "btn_login")">@item.EnumDesc</a></li>
+                                                            }
+                                                        }
+                                                        else
+                                                        {*@
+                                                    <li><a href="/bbs/topic/@item.EnumCode.ToLower()" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a></li>
+                                                    //}
+                                                }
+                                                else
+                                                {
+                                                    if (string.IsNullOrEmpty(item.Url))
+                                                    {
+                                                        <li><a href="/@(item.EnumCode.ToLower())" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a></li>
+                                                    }
+                                                    else
+                                                    {
+                                                        <li><a href="@(item.Url.ToLower())" class="all-menu-@(item.EnumCode)-css" target="_blank">@item.EnumDesc</a></li>
+                                                    }
+                                                }
+                                            }
+                                        </ul>
+                                    }
+                                }
+                            </li>
+                        }
+                        @*<li>
+                                <a>搜索</a>
+                                <ul class="dropdown-menu dropdown-toggle" style="width:320px;">
+                                    <li>
+                                        <div class="Lpd05">
+                                            <div class="Lfl">
+                                                <select class="form-control form-control-afterWithInput">
+                                                    <option value="question">帖子</option>
+                                                    <option value="article">文章</option>
+                                                    <option value="user">用户</option>
+                                                </select>
+                                            </div>
+                                            <div class="Lfl">
+                                                <input placeholder="关键字(Enter)" type="text" class="form-control form-control-beforeWithInput form-control-afterWithInput" />
+                                            </div>
+                                            <div class="Lfl">
+                                                <button type="button" class="btn-fullSearch btn btn-default form-control-beforeWithInput">搜索</button>
+                                            </div>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </li>*@
+                    }
+                </ul>
+
+                @if (isLogin)
+                {
+                    @Html.Partial("_Logon", user)
+                }
+                else
+                {
+                    @Html.Partial("_Login")
+                }
+            </div>
+        </div>
+    </div>
+    <script>
+        Leo.user.id=@(isLogin?user.UserID:0);
+        Leo.user.login = !!@(isLogin?1:0);
+        Leo.user.uname ='@(isLogin?user.UserName:string.Empty)';
+    </script>
+    <div class="@(isGift?"container containergift":"container") body-content">
+        @if (isusercenter)
+        {
+            <div class="usercenter-skinwrap">
+                <a title="皮肤设置" class="skinsetbtn"></a>
+            </div>
+            <div class="usercenter-skinlist Ldn" id="skinList">
+                <ul class="clearfix"></ul>
+            </div>
+        }
+        @RenderBody()
+        <footer>
+            <div>&copy; 2017-@DateTime.Now.Year 百晓堂版权所有<a href="http://www.beian.miit.gov.cn/" target="_blank" class="text"> 粤ICP备18024364号-1 </a></div>
+        </footer>
+    </div>
+    @RenderSection("scripts", false)
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118414767-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-118414767-1');
+    </script>
+    <script>
+        function LOAD(msg) {
+            var _layerIndex_Timeout_ = layer.load(msg || "提交数据中");
+            setTimeout(null, 200);
+            return _layerIndex_Timeout_;
+        }
+
+        function CLOSE(index) {
+            layer.close(index);
+        }
+
+        function MSG(msg, callback, time) {
+            if (!callback && !time) {
+                layer.msg(msg);
+            } else {
+                layer.msg(msg, { time: time || 350, end: function () { callback(); } });
+            }
+        }
+
+        function CHECKNOTEMPTY(item, msg) {
+            var i = Leo.tools.isString(item) ? item : $.trim(item.val());
+            var ok = !0;
+            if (i == null || i == undefined | i == "") {
+                ok = !1;
+                layer.msg(msg + "不能为空")
+                item.focus();
+            }
+            return ok;
+        }
+    </script>
+    @if (isroot)
+    {
+        <script>
+            $(".btn-edit-comment").click(function () {
+                var me = $(this), commentid = me.parent().data("comentoperaid");
+                //var textEle = me.parent().parent().parent().prev().find(".comment-content");
+                var textEle = $(".commentContent" + commentid);
+                layer.prompt({
+                    title: '请修改评论内容，并确认',
+                    value: $.trim(textEle.html()),
+                    formType: 2,
+                    maxlength: 2000
+                },
+                    function (text, index) {
+                        layer.close(index);
+                        var layerindex = LOAD();
+                        $.post("/Comment/Edit/{0}".Format(commentid), {
+                            content: encodeURI(text),
+                            pageEnum: location.pathname.split("/")[1].toUpperCase()
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("评论修改成功");
+                                textEle.html(text);
+                            } else {
+                                MSG(data.Msg || "评论修改失败");
+                            }
+                        });
+                    });
+            });
+            $(".btn-delete-comment").click(function () {
+                var me = $(this);
+                AlertConfirm("你确定要删除此评论吗？", "确定删除", "取消", function () {
+                    $.post("/Comment/Delete/{0}".Format(me.parent().data("comentoperaid")),
+                        {
+                            pageEnum: location.pathname.split("/")[1].toUpperCase()
+                        }, function (data) {
+                            if (data.Ok) {
+                                MSG("删除成功");
+                                me.parent().parent().parent().parent().remove();
+                                $(".aw-item").length == 0 && ($(".commentsTitle").text("0人参与评论"));
+                            }
+                        })
+                });
+            });
+        </script>
+    }
+    <script>
+        Leo.SearchAllSite();
+        $(".nav-allmenu-lee a").on("onmouseenter click dbclick onmouseover", function () {
+            var bwidth = $("body").width();
+            if (bwidth < 480) {
+                $(".allmenuList").css({ width: bwidth, "min-width": bwidth });
+            }
+        });
+        Leo.AD(@(Html.Raw(JsonHelper.ToJson(clickMsgs.Select(a => new { msg = a.Msg, color = a.Color }).ToList()))));
+    </script>
+    @{
+        @*if (customertype > 0)
+            {
+                @Html.Partial("_CustomService", customertype)
+            }*@
+    }
+    @if (isLogin)
+    {
+        if (ismaster)
+        {
+            <script>
+                if (location.href.indexOf("localhost:4144") == -1) {
+                    var timeinterval = setInterval(function () {
+                        $.post("/console/orderToSend", function (res) {
+                            if (res.Ok) {
+                                if (res.Data != 0) {
+                                    $(".newOrder").text("新订单({0})".Format(res.Data || 0))
+                                }
+                            } else {
+                                if (res.ID == -9999) {
+                                    clearInterval(timeinterval);
+                                }
+                            }
+                        });
+                    }, 5000)
+                }
+            </script>
+        }
+        else
+        {
+            <script>
+                if (location.href.indexOf("localhost:4144") == -1) {
+                    var timeinterval = setInterval(function () {
+                        $.post("/user/orderToCheck", function (res) {
+                            if (res.Ok) {
+                                if (res.Data != 0) {
+                                    $(".newOrder").text("订单({0})".Format(res.Data || 0))
+                                }
+                            } else {
+                                if (res.ID == -9999) {
+                                    clearInterval(timeinterval);
+                                }
+                            }
+                        });
+                    }, 5000)
+                }
+            </script>
+        }
+    }
+
+    <!--百度商桥-->
+    @*<script>
+            var _hmt = _hmt || [];
+            (function () {
+                var hm = document.createElement("script");
+                hm.src = "https://hm.baidu.com/hm.js?b8e9cfd5a4f95898784822b0f52f44d8";
+                var s = document.getElementsByTagName("script")[0];
+                s.parentNode.insertBefore(hm, s);
+            })();
+
+        </script>*@
+
+</body>
+</html>

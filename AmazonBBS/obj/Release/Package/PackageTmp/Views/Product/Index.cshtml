@@ -1,0 +1,74 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model ProductViewModel
+@{
+    ViewBag.Title = "产品服务列表";
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+}
+@Html.Partial("_LoadMenuDisplay", 1)
+<div class="clearfix">
+    <h2>
+        产品服务列表
+        <a href="/product/publish" class="@(islogin?string.Empty:"btn_login") btn btn-primary">我要发布产品</a>
+        <span class="btn-search-leo btn btn-primary Lfr">
+            搜索
+        </span>
+        <span style="display:inline-block;float:right;width:30%">
+            <input class="searchValue form-control" placeholder="搜索你想要的内容(标题/作者/用户)" />
+        </span>
+    </h2>
+</div>
+<div class="product-searchForm">
+    <form class="form-horizontal" id="search-form-product">
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_cname" class="col-md-2 control-label Lpdl0i">公司名</label>
+                <div class="col-md-10 Lpdl0i">
+                    <input class="form-control" id="search_cname" name="search_cname" placeholder="公司名" />
+                </div>
+            </div>
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_pname" class="col-md-2 control-label Lpdl0i">产品名称</label>
+                <div class="col-md-10 Lpdl0i">
+                    <input class="form-control" id="search_pname" name="search_pname" placeholder="产品名称" />
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-6 Lpdl0i">
+                <label for="search_price" class="col-md-2 control-label Lpdl0i">产品价格</label>
+                <div class="col-md-10 Lpdl0i">
+                    <select id="search_price" name="search_price" class="form-control">
+                        <option value="">-筛选价格-</option>
+                        <option value="1">0-500</option>
+                        <option value="2">500-1000</option>
+                        <option value="3">1000-2000</option>
+                        <option value="4">2000-3000</option>
+                        <option value="5">3000-5000</option>
+                        <option value="6">5000+</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-6 Lpdl0i">
+                <script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+                <label class="col-md-2 control-label Lpdl0i" for="search_endTime">截止时间</label>
+                <div class="col-md-10 Lpdl0i">
+                    <input type="text" class="pickup-time form-control" id="search_endTime" name="search_endTime" placeholder="产品截止时间"/>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt5 Lpdl0i">
+            <div class="col-md-offset-6 Lpdl0i">
+                <div class="col-md-12 Ltar">
+                    <a class="btn-search-form btn btn-primary">搜索</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="product-list-wrap">
+    @Html.Partial("_Search", Model)
+</div>
+<script>
+    Leo.init("product", "index");
+</script>

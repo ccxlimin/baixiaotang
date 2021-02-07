@@ -1,0 +1,49 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    UserExt userext = UserExtBLL.Instance.GetExtInfo(user.UserID);
+    ViewBag.Title = "我的个人中心";
+}
+<div class="row row-top Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="row">
+                <div class="well-lg">
+                    <h4>
+                        亲爱的 @user.UserName ，您好!
+                    </h4>
+                    <div class="well">
+                        可用积分：@userext.TotalScore
+                    </div>
+                    <div class="well">
+                        @*VIP分即金钱*@
+                        可用VIP分：@userext.TotalCoin
+                    </div>
+                    <div class="well">
+                        VIP专属等级：
+                        @{
+                            if (userext.VIP < 0)
+                            {
+                                <span>您的会员已过期，请<a href="/user/scoreexchange">前去购买</a></span>
+                            }
+                            else if (userext.VIP == 0)
+                            {
+                                <span>您还不是VIP专属会员，请<a href="/user/scoreexchange">前去购买</a></span>
+                            }
+                            else
+                            {
+                                <span>您是<span style="color:orange;">VIP@(userext.VIP)</span>尊贵用户，会员有效期截止@(userext.VIPExpiryTime)</span>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user");
+</script>

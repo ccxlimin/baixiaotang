@@ -1,0 +1,34 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model UserViewModel
+@{
+    ViewBag.Title = "我的订单";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="col-md-12">
+                <ul id="myTab" class="nav nav-tabs">
+                    <li class="active"><a href="#load-allorder" data-toggle="tab" data-index="1">全部订单</a></li>
+                    <li><a href="#load-tocheck" data-toggle="tab" data-index="2">待收货</a></li>
+                    <li><a href="#load-finished" data-toggle="tab" data-index="3">已完成</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="tab-pane fade in active" id="load-allorder">
+                        <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+                    </div>
+                    <div class="tab-pane fade" id="load-tocheck">
+                        <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+                    </div>
+                    <div class="tab-pane fade" id="load-finished">
+                        <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "order");
+</script>

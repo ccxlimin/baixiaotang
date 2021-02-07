@@ -1,0 +1,80 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyMessage
+@{
+    string defaultHeadUrl = "/Content/img/head_default.gif";
+    List<_MsgBox> chats = Model.ChatList;
+    long meID = UserBaseBLL.Instance.UserID;
+    Paging page = Model.ChatPage;
+    foreach (_MsgBox item in chats)
+    {
+        <div class="aw-item inbox-style">
+            <div class="mod-head">
+                <a class="aw-user-img aw-border-radius-5" href="/user/detail/@item.FromUserName">
+                    <img src="@(item.HeadUrl ?? defaultHeadUrl)" onerror="this.src='/Content/img/head_default.gif';" />
+                </a>
+                <div class="title">
+                    @{
+                        long chatId = 0;
+                        string chatUserName = string.Empty;
+                        if (meID == item.FromID)
+                        {
+                            chatId = item.ToID.Value;
+                            chatUserName = item.ToUserName;
+                            <span>
+                                我发送给
+                                <a href="/user/detail/@item.ToUserName">
+                                    @(item.ToUserName)
+                                </a>
+                                ：@Html.Raw(item.Message)
+                            </span>
+                        }
+                        else
+                        {
+                            chatId = item.FromID.Value;
+                            chatUserName = item.FromUserName;
+                            <span>
+                                <a href="/user/detail/@item.FromUserName">
+                                    @(item.FromUserName)
+                                </a>
+                                发送给我：@Html.Raw(item.Message)
+                            </span>
+                        }
+                    }
+                </div>
+            </div>
+            @*<div class="mod-body clearfix">
+                    <div class="markitup-box">
+                        @Html.Raw(item.Message)
+                    </div>
+                </div>*@
+            <div class="mod-footer">
+                <div class="meta clearfix">
+                    <span class="text-color-999 pull-right">
+                        @{
+                            DateTime time = item.SendTime.Value;
+                            if (time.Date == DateTime.Now.Date)
+                            {
+                                <span>今天 @time.ToString("HH:mm")</span>
+                            }
+                            else if (time.Date == DateTime.Now.AddDays(-1).Date)
+                            {
+                                <span>昨天 @time.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>@time.ToString("yyyy-MM-dd HH:mm")</span>
+                            }
+                        }
+                    </span>
+                    <span class="operate">
+                        <a class="btn_sendMsg" data-id="@chatId" data-name="@chatUserName">回复</a>
+                        @*<a class="btn_dialog" data-id="@chatId">查看对话</a>*@
+                        <a class="btn_dialog" href="/user/dialog/@chatId" target="_blank">查看对话</a>
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    @Html.Partial("_PageLoadMore", page)
+}

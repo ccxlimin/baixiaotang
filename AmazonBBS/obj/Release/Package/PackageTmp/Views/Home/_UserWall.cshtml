@@ -1,0 +1,45 @@
+﻿@using AmazonBBS.Model
+@model List<UserViewModel>
+@{
+    string defaultHeadUrl = "/Content/img/head_default.gif";
+    List<UserViewModel> users = Model;
+}
+@if (users != null && users.Count > 0)
+{
+    <div class="content clearfix">
+        @for (int i = 0, length = users.Count; i < length; i++)
+        {
+            UserViewModel item = users[i];
+            <div class="col-md-4 col-sm-2 col-xs-4 UserHeadInfo @(i<9?string.Empty:"Ldn")">
+                <a href="/user/detail/@item.UserName" target="_blank" data-toggle="popover" data-placement="bottom" class="thumbnail col-md-12">
+                    <div class="headimgWrap">
+                        <img src="@(item.HeadUrl??defaultHeadUrl)" onerror="javascript:this.src='@defaultHeadUrl';" style="width:100%;height:auto;" />
+                    </div>
+                    <div class="caption captionName Ltac">
+                        <h6>@item.UserName</h6>
+                        <span class="captionUserv">
+                            @Html.Partial("_UserV", item.UserV)
+                        </span>
+                    </div>
+                    <span class="logoHuangguan">
+                        @if (i < 3)
+                        {
+                            <img src="~/Content/img/huangguan.png" width="18" height="18" />
+                            <span style="color:yellow;">@(i + 1)</span>
+                        }
+                        else
+                        {
+                            <span style="color:red;">@(i + 1)</span>
+                        }
+                    </span>
+                </a>
+            </div>
+        }
+    </div>
+    if (users.Count > 9)
+    {
+        <div class="Ltac">
+            <a href="javascript:void(0);" class="showHeadImg">显示全部</a>
+        </div>
+    }
+}

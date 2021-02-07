@@ -1,0 +1,31 @@
+﻿<script>
+    //修改浏览量
+    $(".editPV").click(function (e) {
+        e.preventDefault();
+        var me = $(this);
+        layer.prompt({ title: "请修改浏览量", formType: 3, shadeClose: !0 }, function (count, index) {
+            if (!isNaN(count)) {
+                if (count > -1) {
+                    CLOSE(index);
+                    var loadIndex = LOAD("正在修改浏览量…");
+                    setTimeout(function () {
+                        $.post("/PV/Edit/{0}".Format($(me.parent().data("mid"))), { number: count, editEnum: location.pathname.split("/")[1] }, function (data) {
+                            if (data.Ok) {
+                                layer.msg("修改成功");
+                                me.parent().parent().find(".pageviews-pv").text(count + "次浏览");
+                            } else {
+                                layer.msg(data.Msg || "修改失败");
+                            }
+                            layer.close(loadIndex);
+                        })
+                    }, 1000);
+                } else {
+                    MSG("浏览量咋能为负呢？");
+                }
+            }
+            else {
+                MSG("请输入数字");
+            }
+        });
+    });
+</script>

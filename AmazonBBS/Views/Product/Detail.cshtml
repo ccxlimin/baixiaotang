@@ -1,0 +1,131 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _Product
+@{
+    ViewBag.Title = $"{Model.PTitle}_产品详情";
+    var m = Model;
+    UserExt ext = UserExtBLL.Instance.GetExtInfo(Convert.ToInt64(m.CreateUser));
+    bool isuserv = UserExtBLL.Instance.IsFaRenOauth(ext.UserV.Value);
+    bool islogin = UserBaseBLL.Instance.IsLogin;
+
+    bool canSeeContact = (bool)ViewBag.canSeeContact;
+
+    //是否已过期
+    bool youxiao = DateTime.Now < Model.ValidTime;
+}
+
+<div class="post Lmgt20">
+    <div class="post-head">
+        @if (!youxiao)
+        {
+            <h3 class="Lcr">该产品信息已下线</h3>
+        }
+        <h3>
+            @m.PTitle
+            @if (islogin)
+            {
+                <button onclick="var me=$(this);me.hide();setTimeout(function(){me.show()},1);print()" class="btn btn-sm btn-primary ">打印</button>
+            }
+            else
+            {
+                <button class="btn_login btn btn-sm btn-primary ">打印</button>
+            }
+        </h3>
+    </div>
+    <div class="post-content clearfix">
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">
+                <span>公司名称：</span>
+                <span>
+                    @m.CompanyName
+                    <span style="color:red;font-size:12px;">
+                        @(isuserv ? "用户已认证" : "该用户未认证")
+                    </span>
+                </span>
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                产品服务截止时间：@(m.CreateTime.Value.AddDays(30).ToString(5))
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                最后更新时间：@m.CreateTime.Value.ToString(11)
+            </div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">
+                产品价格：@(m.PPrice.HasValue ? m.PPrice + "元" : "面谈")
+            </div>
+            <div class="col-md-4 Lpdl0i">
+                发货或服务时效：@(m.SendDay ?? 30)天
+            </div>
+            @if (youxiao)
+            {
+                <div class="col-md-4 Lpdl0i">
+                    <a class="btn-orderbuy btn-sm btn-primary">预约购买</a>
+                </div>
+            }
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            <div class="col-md-4 Lpdl0i">产品服务单位：@(m.PUnit)@(m.PUnit == 1 ? "包" : m.PUnit == 2 ? "个" : "件")</div>
+            <div class="col-md-4 Lpdl0i">产品重量：@m.PWeight</div>
+            <div class="col-md-4 Lpdl0i">产品尺寸：@m.PSize</div>
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            产品定位：@m.PLocation
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">
+            联系方式：
+            @if (youxiao)
+            {
+                if (canSeeContact)
+                {
+                    <span>@m.Contact</span>
+                }
+                else
+                {
+                    <span class="z_contact">********</span>
+                }
+                if (!canSeeContact)
+                {
+                    <a class="btn-sm btn-danger @(islogin ? "feeSeeContact" : "btn_login")">消费VIP分查看联系方式</a>
+                    <script>
+                        $(".feeSeeContact").click(function () {
+                            var me = $(this);
+                            AlertConfirm("确认要付费查看联系方式吗？", "付费查看", "我再想想", function () {
+                                $.post("/zhaopin/fee/{0}".Format(@m.ProductID), { type: 1 }, function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("付费成功");
+                                        $(".z_contact").text(data.Data);
+                                        me.remove();
+                                    } else {
+                                        layer.msg(data.Msg || "付费失败");
+                                        setTimeout(function () {
+                                            if (data.Url) {
+                                                location.href = data.Url;
+                                            }
+                                        });
+                                    }
+                                });
+                            });
+                        });
+                    </script>
+                }
+            }
+        </div>
+        <div class="col-md-12 Lpdl0i clearfix">产品功能：@(m.PFunction ?? "未填写")</div>
+        <div class="col-md-12 Lpdl0i clearfix">产品介绍：@(m.PDesc ?? "未填写")</div>
+        <div class="col-md-12 Lpdl0i clearfix">产品图片：<span class="layer-photos-wrap"><img style="max-width:418px;" src="@m.ProductPic" /></span></div>
+    </div>
+    <div style="margin-top:10px;">
+        <button type="button" class="btn_comment btn btn-default" data-mid="@m.ProductID">评论</button>
+    </div>
+    @Html.Partial("_DOComment", 0)
+</div>
+@{
+    ViewBag.UserID = Convert.ToInt64(m.CreateUser);
+    ViewBag.MainID = m.ProductID;
+}
+@Html.Partial("_CommentList", m.Comments)
+<script>
+    Leo.init("product", "detail", {id:@Model.ProductID,error:@(youxiao?1:0)}).LoadCommentControl().LoadPriseControl();
+</script>

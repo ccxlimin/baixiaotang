@@ -1,0 +1,311 @@
+﻿@using AmazonBBS.Common
+@using AmazonBBS.Model
+@model List<ClickMsg>
+@{
+    ViewBag.Title = "点击显示随机信息";
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <h3>新增点击显示随机信息</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-md-8 col-sm-8 Lmgt5">
+                                <textarea placeholder="鼠标点击提示语，可以含超链接" class="form-control" id="clickTip"></textarea>
+                                <div class="Ldn hrefarea">
+                                    <input type="text" class="hrefName form-control" placeholder="超链接显示名称" />
+                                    <input type="text" class="hrefAddress form-control" placeholder="超链接网址(最好带全http，如http://www.baidu.com)" />
+                                    <a class="btn-addhref-sure btn-sm btn-info">确定添加超链接</a>
+                                    <a class="btn-addhref-cancle btn-sm btn-danger">暂不添加</a>
+                                </div>
+                                <a class="btn-addhref btn-sm btn-primary">添加超链接</a>
+                            </div>
+                            <div class="col-md-8 col-sm-8 Lmgt5">
+                                <textarea placeholder="鼠标点击提示语-英文，可以含超链接" class="form-control" id="clickTip_en"></textarea>
+                                <div class="Ldn hrefarea_en">
+                                    <input type="text" class="hrefName_en form-control" placeholder="超链接显示名称-英文" />
+                                    <input type="text" class="hrefAddress_en form-control" placeholder="超链接网址-英文(最好带全http，如http://www.baidu.com)" />
+                                    <a class="btn-addhref-sure_en btn-sm btn-info">确定添加超链接-英文</a>
+                                    <a class="btn-addhref-cancle_en btn-sm btn-danger">暂不添加</a>
+                                </div>
+                                <a class="btn-addhref_en btn-sm btn-primary">添加超链接-英文</a>
+                            </div>
+                            <div class="col-md-8 col-sm-8 Lmgt5">
+                                <input id="clickTip_color" class="form-control" type="color" placeholder="字体颜色" />
+                            </div>
+                            <div class="col-sm-8 Lmgt5">
+                                <a onclick="addNew()" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    @if (Model.Count > 0)
+    {
+        <div class="col-md-10">
+            <div class="well">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th width="30%">提示语</th>
+                            <th width="40%">提示语-英文</th>
+                            <th width="15%">提示语颜色</th>
+                            <th width="15%">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td style="color:@item.Color;">@Html.Raw(item.Msg)</td>
+                                <td>@Html.Raw(item.Msg_en)</td>
+                                <td style="color:@item.Color;">@item.Color</td>
+                                <td>
+                                    <a onclick="edit(this,'@item.ClickMsgId')" class="btn-sm btn-primary">编辑</a>
+                                    @if (item.IsDelete == 0)
+                                    {
+                                        <a onclick="Delete(this,'@item.ClickMsgId',1)" class="btn-sm btn-danger">删除</a>
+                                    }
+                                    else
+                                    {
+                                        <a onclick="Delete(this,'@item.ClickMsgId',0)" class="btn-sm btn-success">恢复</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+<div class="EditSign Ldn">
+    <div class="form-group Lmgt10">
+        <div class="col-md-12">
+            <textarea placeholder="鼠标点击提示语，可以含超链接" class="form-control" id="edit_clickTip" style="resize:none;height:60px;"></textarea>
+            <div class="Ldn edit_hrefarea">
+                <input type="text" class="edit_hrefName form-control" placeholder="超链接显示名称" />
+                <input type="text" class="edit_hrefAddress form-control" placeholder="超链接网址(最好带全http，如http://www.baidu.com)" />
+                <a class="edit_btn-addhref-sure btn-sm btn-info">确定添加超链接</a>
+                <a class="edit_btn-addhref-cancle btn-sm btn-danger">暂不添加</a>
+            </div>
+            <a class="edit_btn-addhref btn-sm btn-primary">添加超链接</a>
+        </div>
+        <div class="col-md-12">
+            <textarea placeholder="鼠标点击提示语-英文，可以含超链接" class="form-control" id="edit_clickTip_en" style="resize:none;height:60px;"></textarea>
+            <div class="Ldn edit_hrefarea_en">
+                <input type="text" class="edit_hrefName_en form-control" placeholder="超链接显示名称-英文" />
+                <input type="text" class="edit_hrefAddress_en form-control" placeholder="超链接网址-英文(最好带全http，如http://www.baidu.com)" />
+                <a class="edit_btn-addhref-sure_en btn-sm btn-info">确定添加超链接-英文</a>
+                <a class="edit_btn-addhref-cancle_en btn-sm btn-danger">暂不添加</a>
+            </div>
+            <a class="edit_btn-addhref_en btn-sm btn-primary">添加超链接-英文</a>
+        </div>
+        <div class="col-md-12">
+            <input id="edit_clickTip_color" class="form-control" type="color" placeholder="字体颜色" />
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-subEdit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    function edit(target, id) {
+        var me = $(target);
+        var edit_clickTip = $("#edit_clickTip"), edit_clickTip_en = $("#edit_clickTip_en"), edit_clickTip_color = $("#edit_clickTip_color");
+        edit_clickTip.val(me.parent().parent().children().eq(0).html());
+        edit_clickTip_en.val(me.parent().parent().children().eq(1).html());
+        edit_clickTip_color.val(me.parent().parent().children().eq(2).html());
+        var layerIndex = AlertActionAreaWithConfirmWithSize($(".EditSign"), "编辑提示信息", "330px", null, "确定编辑", null, function () {
+            if (Leo.tools.CheckFormNotEmpty(edit_clickTip, "鼠标点击提示语")) {
+                if (Leo.tools.CheckFormNotEmpty(edit_clickTip_en, "鼠标点击提示语-英文")) {
+                    var lindex = LOAD("正在修改...");
+                    $.post("/Console/EditTapShowInfo/{0}".Format(id), {
+                        clickTip: encodeURI(edit_clickTip.val()),
+                        clickTip_en: encodeURI(edit_clickTip_en.val()),
+                        color: encodeURI(edit_clickTip_color.val())
+                    }, function (data) {
+                        layer.close(layerIndex)
+                        layer.close(lindex)
+                        if (data.Ok) {
+                            Leo.msgsuccess("编辑成功", function () { location.reload(!0); }, 350);
+                        } else {
+                            Leo.msgfail("编辑失败");
+                        }
+                    });
+                }
+            }
+        }, function () {
+            edit_clickTip.val(""); edit_clickTip_en.val(""); edit_clickTip_color.val("#000000");
+            $(".edit_hrefarea_en,.edit_hrefarea,.edit_btn-addhref-cancle,.edit_btn-addhref-cancle_en").addClass("Ldn");
+            $(".edit_btn-addhref_en,.edit_btn-addhref").removeClass("Ldn");
+        });
+    }
+
+    function Delete(target, id, deleteOrRedelete) {
+        var me = $(target);
+        var tip = deleteOrRedelete == 1 ? "删除" : "恢复";
+        AlertConfirm("确定要{0}该配置吗？".Format(tip), tip, "取消", function () {
+            var lindex = LOAD("正在{0}中...".Format(tip));
+            $.post("/Console/DeleteTapShowInfo/{0}".Format(id), { deleteOrReDelete: deleteOrRedelete }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("{0}成功".Format(tip));
+                    me.unbind("click").removeAttr("onclick").bind("click", function () {
+                        Delete(target, id, deleteOrRedelete == 1 ? 0 : 1);
+                        me.text(deleteOrRedelete == 1 ? "恢复" : "删除");
+                    });
+                }
+                else {
+                    Leo.msgfail(data.Msg || "{0}失败".Format(tip));
+                }
+                CLOSE(lindex);
+            });
+        });
+    }
+
+    function addNew() {
+        var clickTip = $("#clickTip"), clickTip_en = $("#clickTip_en");
+        if (Leo.tools.CheckFormNotEmpty(clickTip, "超链接显示名称")) {
+            if (Leo.tools.CheckFormNotEmpty(clickTip_en, "超链接显示名称-英文")) {
+                var lindex = LOAD("正在添加...");
+                $.post("/Console/AddTapShowInfo", { clickTip: encodeURI(clickTip.val()), clickTip_en: encodeURI(clickTip_en.val()), color: encodeURI($("#clickTip_color").val()) }, function (data) {
+                    if (data.Ok) {
+                        Leo.msgsuccess("设置成功", function () { location.reload(!0); })
+                    } else {
+                        Leo.msgfail("设置失败");
+                    }
+                    CLOSE(lindex);
+                });
+            }
+        }
+    }
+
+    $(".btn-addhref").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".hrefarea").removeClass("Ldn");
+        $(".btn-addhref-sure").unbind("click").bind("click", function () {
+            var hname = $(".hrefName"), haddress = $('.hrefAddress');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#clickTip").val($("#clickTip").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".hrefarea").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+        $(".btn-addhref-cancle").unbind("click").bind("click", function () {
+            $(".hrefarea").addClass("Ldn");
+            me.removeClass("Ldn");
+        });
+    });
+
+    $(".btn-addhref_en").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".hrefarea_en").removeClass("Ldn");
+        $(".btn-addhref-sure_en").unbind("click").bind("click", function () {
+            var hname = $(".hrefName_en"), haddress = $('.hrefAddress_en');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#clickTip_en").val($("#clickTip_en").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".hrefarea_en").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+        $(".btn-addhref-cancle_en").unbind("click").bind("click", function () {
+            $(".hrefarea_en").addClass("Ldn");
+            me.removeClass("Ldn");
+        });
+    });
+
+    $(".edit_btn-addhref").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".edit_hrefarea").removeClass("Ldn");
+        $(".edit_btn-addhref-sure").unbind("click").bind("click", function () {
+            var hname = $(".edit_hrefName"), haddress = $('.edit_hrefAddress');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#edit_clickTip").val($("#edit_clickTip").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".edit_hrefarea").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+        $(".edit_btn-addhref-cancle").unbind("click").bind("click", function () {
+            $(".edit_hrefarea").addClass("Ldn");
+            me.removeClass("Ldn");
+            ReHeight(-90);
+        });
+        ReHeight(90);
+        $(".layui-layer.layui-layer-page.layer-anim").css("height", "auto")
+    });
+
+    $(".edit_btn-addhref_en").click(function () {
+        var me = $(this);
+        me.addClass("Ldn");
+        $(".edit_hrefarea_en").removeClass("Ldn");
+        $(".edit_btn-addhref-sure_en").unbind("click").bind("click", function () {
+            var hname = $(".edit_hrefName_en"), haddress = $('.edit_hrefAddress_en');
+            if ($.trim(hname.val())) {
+                if ($.trim(haddress.val())) {
+                    $("#edit_clickTip_en").val($("#edit_clickTip_en").val() + "<a href='{1}' target='_blank'>{0}</a>".Format(hname.val(), haddress.val().indexOf("http") > -1 ? haddress.val() : "http://" + haddress.val()));
+                    $(".edit_hrefarea_en").addClass("Ldn");
+                    hname.val(""), haddress.val("");
+                    me.removeClass("Ldn");
+                } else {
+                    Leo.msgfail("请添加超链接网址");
+                    haddress.focus();
+                }
+            } else {
+                Leo.msgfail("请添加超链接显示名称");
+                hname.focus();
+            }
+        });
+        $(".edit_btn-addhref-cancle_en").unbind("click").bind("click", function () {
+            $(".edit_hrefarea_en").addClass("Ldn");
+            me.removeClass("Ldn");
+            ReHeight(-90);
+        });
+        ReHeight(90);
+        $(".layui-layer.layui-layer-page.layer-anim").css("height", "auto")
+    });
+
+    function ReHeight(height) {
+        var layerEle = $(".EditSign").parent().parent(), h1 = layerEle.height() + height;
+        layerEle.height(h1);
+    }
+</script>

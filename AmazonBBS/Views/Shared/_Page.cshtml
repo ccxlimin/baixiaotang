@@ -1,0 +1,60 @@
+﻿@using AmazonBBS.Model;
+@model Paging
+@{
+    var url = Request.Url.AbsolutePath;
+
+    var pagecount = Model.PageCount;//总页数
+    var recordcount = Model.RecordCount;//数据总量
+    var pagesize = Model.PageSize;//每页总量
+
+    var currentindex = Model.PageIndex;//当前页码
+    var previndex = currentindex - 1;//上一页
+    var nextindex = currentindex + 1;//下一页
+
+    if (pagecount > 1)
+    {
+        <div class="L_page_wrap">
+            <ul class="L_page_wrap_ul">
+                @{
+                    // 每1页 总20页
+                    if (currentindex < 1) { currentindex = 1; }
+                    if (currentindex > pagecount) { currentindex = pagecount; }
+                    //首页/上一页
+                    if (currentindex > 1)
+                    {
+                        <li><a class="page_first page" data-pagerindex="1" data-tips="首页"></a></li>
+                        <li><a class="page_prev page" data-pagerindex="@previndex" data-tips="上一页"></a></li>
+                    }
+
+                    // 显示当前页码的前2页码和后两页码
+                    // 若1 则 1 2 3 4 5, 若2 则 1 2 3 4 5, 若3 则1 2 3 4 5,
+                    // 若4 则 2 3 4 5 6 ,若10 则 8 9 10 11 12
+                    int beforecurrentindex = (currentindex + 2 <= pagecount) ? (currentindex - 2) : (pagecount - 4);
+                    int aftercurrentindex = currentindex - 2 > 0 ? (currentindex + 2 <= pagecount ? currentindex + 2 : pagecount) : 5;
+
+                    if (beforecurrentindex < 1) { beforecurrentindex = 1; }
+                    if (aftercurrentindex > pagecount) { aftercurrentindex = pagecount; }
+
+                    for (int i = 1; i <= pagecount && beforecurrentindex <= aftercurrentindex; i++, beforecurrentindex++)
+                    {
+                        if (beforecurrentindex == currentindex)
+                        {
+                            <li><a class="L_page_active" data-pagerindex="@currentindex">@currentindex</a></li>
+                        }
+                        else
+                        {
+                            <li><a class="page_beside page" data-pagerindex="@beforecurrentindex" data-tips="第@(beforecurrentindex)页">@beforecurrentindex</a></li>
+                        }
+                    }
+
+                    //下一页/尾页
+                    if (currentindex < pagecount)
+                    {
+                        <li><a class="page_next page" data-pagerindex="@nextindex" data-tips="下一页"></a></li>
+                        <li><a class="page_last page" data-pagerindex="@pagecount" data-tips="尾页"></a></li>
+                    }
+                }
+            </ul>
+        </div>
+                    }
+}

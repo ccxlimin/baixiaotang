@@ -1,0 +1,330 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model UserManageViewModel
+@{
+    int score = 9999;
+    int vipscore = 9999;
+    if (!UserBaseBLL.Instance.IsRoot)
+    {
+        score = Convert.ToInt32(ConfigHelper.AppSettings("normalMasterGiveUserMAXScore"));
+        vipscore = Convert.ToInt32(ConfigHelper.AppSettings("normalMasterGiveUserMAXVIPScore"));
+    }
+    string v1 = ConfigHelper.AppSettings("UserAuth1");
+    string v2 = ConfigHelper.AppSettings("UserAuth2");
+    string v3 = ConfigHelper.AppSettings("UserAuth3");
+
+    //拉取 头衔 和 专属头衔
+    List<BBSEnum> list = BBSEnumBLL.Instance.Query(BBSEnumType.LevelName.GetHashCode(), true);
+    List<BBSEnum> onlyList = BBSEnumBLL.Instance.Query(BBSEnumType.OnlyLevelName.GetHashCode(), true);
+}
+<table class="manageUserTable table table-bordered table-hover">
+    <caption>用户管理</caption>
+    <thead>
+        <tr>
+            <th class="checkbox_th Ldn"></th>
+            <th width="10%">用户昵称</th>
+            <th width="30%">个性签名</th>
+            <th>注册时间</th>
+            <th>上次登录时间</th>
+            <th>IP地址</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.UserInfoList != null)
+            {
+                foreach (UserInfoViewModel item in Model.UserInfoList)
+                {
+                    long uid = item.UserID;
+                    string uname = item.UserName;
+                    <tr>
+                        <td class="checkbox_td Ldn"><input type="checkbox" /></td>
+                        <td class="username_td"><a data-name="@uname" data-id="@uid" onclick="UInfo(@uid,'@uname')" title="@uname">@uname</a></td>
+                        <td>@item.Sign</td>
+                        <td>@Convert.ToDateTime(item.CreateTime).ToString("yyyy-MM-dd")</td>
+                        <td>@Convert.ToDateTime(item.LoginTime).ToString("yyyy-MM-dd")</td>
+                        <td>@item.LoginIP</td>
+                        <td>
+                            <a onclick="Lock(@uid,'@uname')" class="btn-xs btn-primary">封禁</a>
+                            <a onclick="GiveVipScore(@uid,'@uname',1)" class="btn-xs btn-primary">赠积分</a>
+                            <a onclick="GiveVipScore(@uid,'@uname',2)" class="btn-xs btn-primary">赠VIP分</a>
+                            <a onclick="GiveLevelName(this,@uid,'@uname',1)" class="btn-xs btn-primary">赠头衔</a>
+                            <a onclick="GiveLevelName(this,@uid,'@uname',2)" class="btn-xs btn-primary">赠专属头衔</a>
+                            @if (item.CheckBBS == 1)
+                            {
+                                <a onclick="Check(this,@uid,'@uname',0)" class="btn-xs btn-default">取消审核</a>
+                            }
+                            else
+                            {
+                                <a onclick="Check(this,@uid,'@uname',1)" class="btn-xs btn-primary">审核</a>
+                            }
+                            <a onclick="Delete(this,@uid)" class="btn-xs btn-danger">删除</a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6"><span style="font-size:20px;font-weight:bold;">没有符合的数据</span></td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+@if (Model.Page != null)
+{
+    if (ViewBag.Page == "_Page")
+    {
+        @Html.Partial("_Page", Model.Page)
+    }
+    else
+    {
+        @Html.Partial("_PageLink", Model.Page)
+    }
+}
+<div id="accountLock" class="Ldn">
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <select id="fengjinTime" class="form-control">
+                <option value="">请选择封禁时长</option>
+                <option value="1440">1天</option>
+                <option value="14400">10天</option>
+                <option value="72000">50天</option>
+                <option value="144000">100天</option>
+                <option value="0">永久封禁</option>
+            </select>
+        </div>
+        @*<div class="col-sm-12 Lmgt5 Ltac">
+                <a id="btn_fengjin" class="btn btn-primary"></a>
+            </div>*@
+    </div>
+</div>
+<div id="accountGiveVipScore" class="Ldn">
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12 col-md-12">
+            <input class="form-control" type="number" min="1" max="9999" id="GiveVipScoreValue" />
+        </div>
+        @*<div class="col-sm-12 Lmgt5 Ltac">
+                <a id="btn_GiveVipScore" class="btn btn-primary"></a>
+            </div>*@
+    </div>
+</div>
+<div id="accountLevelName-wrap" class="Ldn" style="margin-bottom:0;">
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <select id="accountLevelName" class="form-control">
+                <option value="">请选择头衔</option>
+                @foreach (BBSEnum item in list)
+                {
+                    <option value="@item.BBSEnumId">@item.EnumDesc</option>
+                }
+            </select>
+        </div>
+        @*<div class="col-sm-12 Lmgt5 Ltac">
+                <a id="btn_levelName" class="btn btn-primary"></a>
+            </div>*@
+    </div>
+</div>
+<div id="accountOnlyLevelName-wrap" class="Ldn" style="margin-bottom:0;">
+    <div class="form-group-sm clearfix Lmgt5">
+        <div class="col-sm-12">
+            <select id="accountOnlyLevelName" class="form-control">
+                <option value="">请选择专属头衔</option>
+                @foreach (BBSEnum item in onlyList)
+                {
+                    <option value="@item.BBSEnumId">@item.EnumDesc</option>
+                }
+            </select>
+        </div>
+        @*<div class="col-sm-12 Lmgt5 Ltac">
+                <a id="btn_onlylevelName" class="btn btn-primary"></a>
+            </div>*@
+    </div>
+</div>
+<script>
+    function UInfo(uid, uname) {
+        var layerIndex = LOAD("获取{0}信息中".Format(uname));
+        debugger
+        $.get("/Console/userDetailInfo/{0}".Format(uid), function (data) {
+            if (data.Ok) {
+                var user = data.Data.UserBase;
+                var ext = data.Data.UserExt;
+                var infoDIV = $("<div>");
+                infoDIV.append($("<div>").text("用户名：" + user.UserName));
+                infoDIV.append($("<div>").text("注册方式：" + (user.Source == 1 ? "QQ注册" : user.Source == 2 ? "邮箱注册" : "微信注册")));
+                infoDIV.append($("<div>").text("性别：" + (user.Gender == 1 ? "男" : "女")));
+                infoDIV.append($("<div>").text("邮箱：" + (user.Account || "")));
+                infoDIV.append($("<div>").text("所在地：" + (user.Province || "")));
+                infoDIV.append($("<div>").text("工作年限：" + (user.WorkYear || "")));
+                infoDIV.append($("<div>").text("出生日期：" + (user.Birth || "")));
+                var userv = "未认证";
+                var farenV = false;
+                switch (ext.UserV) {
+                    case 1: userv = "@(v1)"; break;
+                    case 2: userv = "@(v2)"; break;
+                    case 4: userv = "@(v3)"; farenV = true; break;
+                    case 3: userv = "@(v1)和@(v2)"; break;
+                    case 5: userv = "@(v1)和@(v3)"; farenV = true; break;
+                    case 6: userv = "@(v2)和@(v3)"; farenV = true; break;
+                    case 7: userv = "@(v1)、@(v2)、@(v3)"; farenV = true; break;
+                }
+                infoDIV.append($("<div>").text("用户认证：" + userv));
+                if (farenV) {
+                    infoDIV.append($("<div>").append("真实姓名：" + ext.RealName));
+                    //infoDIV.append($("<div>").append("身份证号：" + (ext.CardID.substr(0, 6) + "********" + ext.CardID.substr(14))));
+                    infoDIV.append($("<div>").append("身份证号：" + (ext.CardID)));
+                    infoDIV.append($("<div>").append("公司名称：" + ext.CompanyName));
+                    //infoDIV.append($("<div>").append("联系电话：" + (ext.CompanyTel.substr(0, 3) + "****" + ext.CompanyTel.substr(7))));
+                    infoDIV.append($("<div>").append("联系电话：" + (ext.CompanyTel)));
+                    infoDIV.append($("<div>").addClass("layer-photos-wrap").text("身份证：").append($("<img>").attr({ "src": ext.CardPic, width: 20, height: 20 })));
+                    infoDIV.append($("<div>").addClass("layer-photos-wrap").text("营业执照：").append($("<img>").attr({ "src": ext.FaRenPic, width: 20, height: 20 })));
+                }
+                infoDIV.appendTo($("body"));
+                AlertDivWithOutID(infoDIV, "500px", "380px", user.UserName + "的详细信息", function () {
+                    infoDIV.remove();
+                });
+                Leo.ShowMaxImg();
+            } else {
+                MSG(data.Msg || "获取成员信息失败");
+            }
+            CLOSE(layerIndex);
+        });
+    }
+
+    function Delete(me, uid) {
+        AlertConfirm("确定要删除该用户吗？删除之后将无法登录！", "确定删除", "我再想想", function () {
+            var layerIndex = LOAD("删除用户中");
+            $.post("/Console/DeleteAccount", { uid: uid }, function (data) {
+                if (data.Ok) {
+                    layer.msg("删除成功");
+                    $(me).parent().parent().remove();
+                } else {
+                    layer.msg("删除失败", { time: 200, end: function () { location.reload(!0); } });
+                }
+                CLOSE(layerIndex);
+            });
+        });
+    }
+
+    /**封禁 */
+    function Lock(uid, name) {
+        var layindex = AlertActionAreaWithConfirmWithSize($("#accountLock"), "封禁 " + name, "260px", null, "确认封禁", null, function () {
+            if ($("#fengjinTime").val() == "") {
+                layer.msg("请选择封禁时长");
+                return !1;
+            } else {
+                var layerIndex = LOAD("封禁用户中");
+                $.post("/User/Close/{0}".Format(uid), { t: $("#fengjinTime").val() }, function (data) {
+                    if (data.Ok) {
+                        layer.msg("封禁" + name + "成功");
+                        $("#fengjinTime").val("");
+                        layer.close(layindex);
+                    } else {
+                        layer.msg(data.Msg || "失败");
+                    }
+                    CLOSE(layerIndex);
+                });
+            }
+        }, function () {
+            $("#fengjinTime").val("");
+        });
+    }
+
+    function GiveVipScore(uid, name, type) {
+        var score = @score, vipscore = @vipscore;
+        var currentScore = type == 1 ? score : vipscore;
+        var desc = type == 1 ? "积分" : "VIP分";
+        var _msg = "授予{0}{1}".Format(name, desc);
+        var layindex = AlertActionAreaWithConfirmWithSize($("#accountGiveVipScore"), _msg, "330px", null, "确认授予", null, function () {
+            if (CHECKNOTEMPTY($("#GiveVipScoreValue"), "要赠送{0}额度".Format(desc))) {
+                if ($("#GiveVipScoreValue").val() < 0) {
+                    Leo.msgfail("赠送{0}必须大于0".Format(desc))
+                    return
+                }
+                if ($("#GiveVipScoreValue").val() <= (currentScore)) {
+                    var layerIndex = LOAD("授予{0}中".Format(desc));
+                    $.post("/Console/GiveVipScore", {
+                        score: $("#GiveVipScoreValue").val(), uid: uid, type: type
+                    }, function (data) {
+                        layer.close(layindex);
+                        layer.close(layerIndex);
+                        if (data.Ok) {
+                            $("#GiveVipScoreValue").val("");
+                            layer.msg(_msg + "成功");
+                        } else {
+                            layer.msg(data.Msg || "失败");
+                        }
+                    });
+                } else {
+                    Leo.msgfail("赠送分不能超过{0}".Format(currentScore))
+                }
+            }
+        }, function () {
+            $("#GiveVipScoreValue").val("");
+        })
+        $("#GiveVipScoreValue").attr("placeholder", "{0}额度(1-{1})".Format(desc, currentScore)).focus()
+    }
+
+    function GiveLevelName(target, uid, name, type) {
+        var desc, wrap, selectElement, btnElement;
+        if (type == 1) {
+            desc = "头衔";
+            wrap = "#accountLevelName-wrap";
+            selectElement = "#accountLevelName";
+            btnElement = "#btn_levelName";
+        } else {
+            desc = "专属头衔";
+            wrap = "#accountOnlyLevelName-wrap";
+            selectElement = "#accountOnlyLevelName";
+            btnElement = "#btn_onlylevelName";
+        }
+        var layindex = AlertActionAreaWithConfirmWithSize($(wrap), "给{0}授予{1}".Format(name, desc), "330px", null, "确认授予", null, function () {
+            if (CHECKNOTEMPTY($(selectElement), desc)) {
+                var layerIndex = LOAD("授予{0}中".Format(desc));
+                $.post("/Console/GiveName?t={0}".Format(Leo.getPK()),
+                    { only: type == 2, levelName: $(selectElement).val(), uid: uid },
+                    function (data) {
+                        if (data.Ok) {
+                            MSG("授予{0}{1}成功".Format(name, desc));
+                            CLOSE(layindex);
+                        } else {
+                            layer.msg(data.Msg);
+                        }
+                        CLOSE(layerIndex);
+                    });
+            }
+        }, function () {
+            selectElement.val("");
+        });
+    }
+
+    function Check(target, uid, uname, type) {
+        var desc = type == 1 ? "审核" : "取消审核";
+        AlertConfirm("确定要设置{0}在发表文章时{1}吗？".Format(uname, desc), "确定", "我再想想", function () {
+            var layerIndex = LOAD("{0}中".Format(desc));
+            $.post("/Console/SetCheckForUser/{0}".Format(uid), { type: type }, function (data) {
+                if (data.Ok) {
+                    layer.msg("设置成功");
+                    $(target).unbind("click").attr("onclick", "Check(this,{0},'{1}',{2})".Format(uid, uname, type == 1 ? 0 : 1)).html(type == 1 ? "取消审核" : "审核").addClass(type == 1 ? "btn-default" : "btn-primary").removeClass(type == 1 ? "btn-primary" : "btn-default");
+                } else {
+                    layer.msg(data.Msg || "设置审核失败");
+                }
+                CLOSE(layerIndex);
+            });
+        });
+    }
+
+    function CHECKNOTEMPTY(item, msg) {
+        var i = $.trim(item.val());
+        var ok = !0;
+        if (i == null || i == undefined | i == "") {
+            ok = !1;
+            layer.msg(msg + "不能为空")
+            item.focus();
+        }
+        return ok;
+    }
+</script>

@@ -1,0 +1,164 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.Common
+@using AmazonBBS.BLL
+@model GiftViewModel
+@{
+    int id = ViewBag.ID;
+    string desc = string.Empty;
+    string action = string.Empty;
+    if (id == 1)
+    {
+        desc = "礼物";
+        action = "gift";
+    }
+    else if (id == 2)
+    {
+        desc = "数据分析";
+        action = "dataanalysis";
+    }
+    else
+    {
+        desc = "百晓堂课程";
+        action = "kecheng";
+    }
+    List<_Gift> list = Model.Gifts;
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+}
+<div class="leo col-sm-12">
+    @if (list != null)
+    {
+        <div class="clearfix">
+            <style>
+                .leo {
+                    float: left;
+                    padding: 20px;
+                    user-select: none;
+                }
+
+                    .leo .giftItem {
+                        padding: 0 15px 15px 0 !important;
+                    }
+
+                        .leo .giftItem a {
+                            position: relative;
+                        }
+
+                            .leo .giftItem a div:first-child {
+                                text-align: center;
+                            }
+
+                    .leo .thumbnail {
+                        padding: 0;
+                    }
+
+                        .leo .thumbnail img {
+                            height: auto;
+                            max-height: 100%;
+                            max-width: 100%;
+                        }
+
+                    .leo .giftItem a .caption .gift-title {
+                        margin: 3px 0 0 0;
+                        color: #000;
+                        display: inline-block;
+                        overflow: hidden;
+                        -webkit-line-clamp: 2;
+                        max-height: 30px;
+                        word-break: break-all;
+                        font-size: 14px;
+                        height: 30px;
+                        line-height: 15px;
+                        text-align: left;
+                        text-overflow: ellipsis;
+                    }
+            </style>
+            @foreach (_Gift item in list)
+            {
+                <div class="col-md-3 col-sm-6 col-xs-6 giftItem">
+                    <a target="_blank" href="/@action/detail/@item.GiftID" class="thumbnail">
+                        <div>
+                            <img src="@(item.GiftImgs ?? "/Content/img/party/poster_image_yundong_02.jpg")" onerror="this.src='/Content/img/default_img.png'" />
+                        </div>
+                        <div class="caption">
+                            <p class="gift-title">@item.GiftName</p>
+                            <p>
+                                @if (item.FeeType == 0)
+                                {
+                                    <span style="color:orange;">免费</span>
+                                }
+                                else
+                                {
+                                    <span style="color:orange;">@(item.FeeType == 10 ? "积分" : item.FeeType == 2 ? "VIP分" : "现金")：@item.Fee</span>
+                                }
+                                <span class="pageviews-pv Lfr">@(item.PVCount)次浏览</span>
+                            </p>
+                            <p class="Ltar Lmgb0">
+                                @Html.Partial("_QQTalk")
+                            </p>
+                        </div>
+                        <span class="btnActions Ldn" data-mid="@item.GiftID">
+                            <span class="editPV btn btn-primary btn-xs">修改浏览量</span>
+                            <span class="btnEdit btn btn-primary btn-xs">编辑</span>
+                            <span class="btnDelete btn btn-danger btn-xs">删除</span>
+                        </span>
+                    </a>
+                </div>
+            }
+            <script>
+                $(".btn-qqtalk").on("mouseover", function (e) {
+                    var me = $(this), _a = me.parent().parent().parent(), ahref = _a.attr("href");
+                    _a.attr({ "ahref": ahref, "href": me.attr("ahref"), "target": "_self" });
+                }).on("mouseleave", function () {
+                    var me = $(this), _a = me.parent().parent().parent(), ahref = _a.attr("ahref");
+                    _a.attr({ "href": ahref, "target": "_blank" }).removeAttr("ahref");
+                });
+            </script>
+        </div>
+        <div class="gift_Page_Wrap">
+            @Html.Partial("_Page", Model.GiftPage)
+        </div>
+    }
+    else
+    {
+        <div class="well Ltac">
+            官方暂时未设置@(desc)，敬请期待
+        </div>
+    }
+</div>
+@if (ismaster)
+{
+    @Html.Partial("_LoadEditPVScript")
+    <script>
+        $(".giftItem").mouseover(function () {
+            $(this).find(".btnActions").removeClass("Ldn");
+        }).mouseleave(function () {
+            $(this).find(".btnActions").addClass('Ldn');
+        });
+
+        $(".btnEdit").click(function (e) {
+            e.preventDefault();
+            location.href = "/gift/edit/" + $(this).parent().data("mid");
+        });
+
+        $(".btnDelete").click(function (e) {
+            e.preventDefault();
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此{0}吗？".Format('@desc'), "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD("删除中...");
+                setTimeout(function () {
+                    $.post("/gift/delete/{0}".Format(me.parent().data("mid")), function (data) {
+                        CLOSE(loadIndex);
+                        if (data.Ok) {
+                            MSG(data.Msg || "删除成功");
+                            me.parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+    </script>
+}

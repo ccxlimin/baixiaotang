@@ -1,0 +1,89 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model List<UserStudyCenterVM>
+@{
+    ViewBag.Title = "学习中心";
+}
+
+@if (Model.Count > 0)
+{
+    <div class="Lmgt20">
+        <script>
+    @{
+        var html = new MvcHtmlString(JsonHelper.ToJson(Model));
+    }
+    var studyList = JSON.parse('@html');
+        </script>
+        <style>
+            table td, table th {
+                border: 1px solid #6e6e6e !important;
+                text-align: center;
+            }
+
+            table img {
+                width: 18px;
+                height: 18px;
+                vertical-align: middle;
+                cursor: pointer;
+            }
+
+            table a {
+                text-decoration: underline;
+            }
+        </style>
+        <h4>学习计划(请按顺序学习)</h4>
+        <table class="table table-bordered">
+            <tr>
+                <th>学习章节</th>
+                <th>学习课程</th>
+                <th>学习操作</th>
+            </tr>
+            @foreach (var item in Model)
+            {
+                for (var index = 0; index < item.StudyClasses.Count; index++)
+                {
+                    var c = item.StudyClasses[index];
+                    <tr>
+                        @if (index == 0)
+                        {
+                            <td rowspan="@item.StudyClasses.Count">@item.StudyUnit.Name</td>
+                        }
+                        <td>
+                            @c.StudyClass.Name
+                            <img src="~/Content/img/search-1.png" onmouseover="this.src='/content/img/search.png'" onmouseout="this.src='/content/img/search-1.png'" title="点击查看学习内容" onclick="window.open('/study/detail/@c.StudyClass.StudyClassId')" />
+                        </td>
+                        <td>
+                            @if (!c.StudyStatus.HasValue)
+                            {
+                                <button class="btn-study btn btn-sm btn-primary" data-id="@c.StudyClass.StudyClassId">学习</button>
+                            }
+                            else
+                            {
+                                if (c.StudyStatus.Value)
+                                {
+                                    <button class="btn-study btn btn-sm" data-id="@c.StudyClass.StudyClassId">已学完，可重新学习</button>
+                                }
+                                else
+                                {
+                                    <button class="btn-study-finish btn btn-sm btn-info" data-id="@c.StudyClass.StudyClassId">学习中，点击完成学习</button>
+                                    <a class="btn btn-sm btn-danger" href="/study/detail/@c.StudyClass.StudyClassId">前往学习</a>
+                                    @*<button class="btn-share btn btn-sm">分享</button>*@
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </table>
+        <script>
+            Leo.init("study", "index");
+        </script>
+    </div>
+}
+else
+{
+    <div>
+        暂无相关学习内容
+    </div>
+}

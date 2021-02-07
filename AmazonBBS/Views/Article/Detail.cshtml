@@ -1,0 +1,415 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _Article
+@{
+    ViewBag.isAuthor = true;
+
+    string baseurl = ConfigHelper.AppSettings("BaseUrl");
+
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isLogin = user != null;
+    long currentUserID = isLogin ? user.UserID : -1;
+    bool notAuthor = currentUserID != Model.UserID;
+
+    ViewBag.baseurl = baseurl;
+    ViewBag.currentUid = currentUserID;
+    ViewBag.CommentScore = ConfigHelper.AppSettings("commentArticle");
+
+    string defaultUrl = baseurl + "/Content/img/head_default.gif";
+    ViewBag.Title = Model.Title + " - 文章";
+
+    var comments = Model.Comments.Comments;
+    var commentspage = Model.Comments.CommentPage;
+    List<Tag> tags = Model.Tags;
+    List<BBSEnum> ScoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+}
+@Styles.Render("~/Content/css2")
+@Scripts.Render("~/Content/main2")
+@*<link rel="stylesheet" href="~/Content/bbscss/discuz.common.css" />
+    <link rel="stylesheet" href="~/Content/bbscss/discuz.css" />*@
+<div class="containerwrap Lmgt20">
+    <div id="wp" class="wp">
+        <div id="ct" class="wp cl ">
+            <div class="mn" style="width:100%">
+                <div id="postlist" class="pl bm box1">
+                    <!--抢楼回帖奖励-->
+                    <div class="vwthdtit cl">
+                        <div class="vwthduser cl z">
+                        </div>
+                        <h1 class="vwthdts z">
+                            @if (tags.Count > 0)
+                            {
+                                foreach (var tag in tags)
+                                {
+                                    <a class="tagItem label label-warning" href="/tag/a/@tag.TagId" target="_blank">@tag.TagName</a>
+                                }
+                            }
+                            <a href="@baseurl/article/detail/@Model.ArticleId" id="thread_subject" title="@Model.Title">@Model.Title</a>
+                        </h1>
+                        <span class="vwthdreplies y">
+                            <strong>@Model.Comments.Comments.Count</strong><br>回复
+                        </span>
+                        <span class="vwthdviews y">
+                            <strong>@Model.PVCount</strong><br>浏览
+                        </span>
+                        <span class="vwthdviews y">
+                            <strong class="likecount">@Model.LikeCount</strong><br>关注
+                        </span>
+                        <span class="xg1 copy">
+                            <a class="btn-paste Lusn" data-clipboard-text="@(Model.Title)&#13;@(baseurl)/article/detail/@(Model.ArticleId)&#13;(出处：百晓堂)">&nbsp;[复制链接]</a>
+                        </span>
+                    </div>
+                    <table cellspacing="0" cellpadding="0" class="ad" style=" display:none;">
+                        <tbody>
+                            <tr>
+                                <td class="pls"></td>
+                                <td class="plc"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @*如果不是第一页，则不加载主题*@
+                    @if (Model.Comments != null && Model.Comments.CommentPage.PageIndex == 1)
+                    {
+                        <div id="post_@(Model.ArticleId)" class="viewbox firstfloor cl" style="margin-top:0;">
+                            <table id="pid@(Model.UserID)" class="plhin boxtable" summary="pid@(Model.UserID)" cellspacing="0" cellpadding="0">
+                                <tbody>
+                                    <tr>
+                                        <td class="pls" rowspan="2">
+                                            @if (!Model.IsAnonymous || Model.UserID == currentUserID || UserBaseBLL.Instance.IsMaster)
+                                            {
+                                                @Html.Partial("_DiscuzLeftUserInfo", Model.DiscuzLeftUserInfo)
+                                            }
+                                            else
+                                            {
+                                                <div class="pls favatar">
+                                                    <div>
+                                                        <div class="avatar">
+                                                            <a href="javascript:;" class="avtm">
+                                                                <img src="~/Content/img/anonymous.png">
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pi">
+                                                        <div class="authi">
+                                                            <a>匿名用户</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </td>
+                                        <td class="plc" style="width:100%">
+                                            <div class="pi">
+                                                @*<strong>
+                                                        <a href="javascript:;" title="楼主" id="postnum@(Model.UserID)">
+                                                            楼主
+                                                        </a>
+                                                    </strong>*@
+                                                <div class="pti">
+                                                    <div class="pdbt"></div>
+                                                    <div class="authi firstauthi">
+                                                        @*<img class="authicn vm" id="authicon@(Model.UserID)" src="static/image/common/online_member.gif">*@
+                                                        <em>发表于 @Model.CreateTime.Value.ToString(1)</em>
+                                                        @if (Model.ShowCoinTips)
+                                                        {
+                                                            <em class="Lcr">&nbsp;该文章为您 +@ConfigHelper.AppSettings("addQuestion") 积分</em>
+                                                        }
+                                                        <style>
+                                                            .quick_action a {
+                                                                background: none;
+                                                            }
+                                                        </style>
+                                                        <span data-name="分享组件" class="social-share-cs"></span>
+                                                        <em class="Lfr">
+                                                            <span class="quick_action" data-mid="@Model.ArticleId">
+                                                                @if (notAuthor)
+                                                                {
+                                                                    <span class="content-main-button" data-mid="@Model.ArticleId">
+                                                                        <button type="button" class="Button VoteButton VoteButton--up @(Model.IsAgainst?string.Empty:Model.IsPrised?"":isLogin ? "btn_prise" : "btn_login")">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                    <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </span>@(Model.IsAgainst ? string.Empty : Model.IsPrised ? "已点赞" : "点赞") @(Model.PriseCount)
+                                                                        </button>
+                                                                        <button class="@(Model.PriseCount>0?string.Empty:"Ldni") Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-type="3" data-mid="@Model.ArticleId">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                            </span>
+                                                                        </button>
+                                                                        <button type="button" class="Button VoteButton VoteButton--down @(Model.IsPrised?string.Empty:Model.IsAgainst?"":isLogin ? "btn_against" : "btn_login")">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                                    <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                                </svg>
+                                                                            </span>@(Model.IsPrised ? string.Empty : Model.IsAgainst ? "已反对" : "反对") @(Model.AgainstCount)
+                                                                        </button>
+                                                                        <button class="@(Model.AgainstCount>0?string.Empty:"Ldni") Button VoteButton Lpd0i showAgainstUser" style="margin:0 5px 0 0;" title="查看反对人数" data-type="3" data-mid="@Model.ArticleId">
+                                                                            <span style="display: inline-flex; align-items: center;">
+                                                                                <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                            </span>
+                                                                        </button>
+                                                                    </span>
+                                                                }
+                                                                <a class="fastre btn_comment Lmgl5">评论</a>
+                                                                @if (notAuthor)
+                                                                {
+                                                                    if (Model.IsLiked)
+                                                                    {
+                                                                        <a class="fastre btn_unlike">已关注</a>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <a class="fastre @(isLogin ? "btn_like" : "btn_login")">关注该贴</a>
+                                                                    }
+                                                                    @*if (Model.IsPrised)
+                                                                        {
+                                                                            <a class="fastre">已点赞</a>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <a class="fastre @(isLogin ? "btn_prise" : "btn_login")">点赞</a>
+                                                                        }*@
+                                                                }
+                                                            </span>
+                                                            <span class="authorFloorIndex" title="由@(Model.UserName)发表">楼主</span>
+                                                        </em>
+                                                        @*<span class="pipe">|</span>
+                                                            <a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;page=1&amp;authorid=8077" rel="nofollow">只看该作者</a>
+                                                            <span class="none"><img src="static/image/common/arw_r.gif" class="vm" alt="回帖奖励"></span>
+                                                            <span class="pipe show">|</span><a href="http://www.51bestseller.com/forum.php?mod=viewthread&amp;tid=8149&amp;extra=&amp;ordertype=1" class="show">倒序浏览</a>
+                                                            <span class="pipe show">|</span><a href="javascript:;" onclick="readmode($('thread_subject').innerHTML, @(Model.UserID));" class="show">阅读模式</a>*@
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*主题 S*@
+                                            <div class="pct">
+                                                <style type="text/css">
+                                                    .pcb {
+                                                        margin-right: 0
+                                                    }
+                                                </style>
+                                                <div class="pcb">
+                                                    <div class="t_fsz">
+                                                        @if (!Model.ContentNeedPay.HasValue || (Model.ContentNeedPay.HasValue && !Model.ContentNeedPay.Value) || currentUserID == Model.UserID || Model.IsBuyContent)
+                                                        {
+                                                            <table cellspacing="0" cellpadding="0">
+                                                                <tr>
+                                                                    <td class="t_f">
+                                                                        @*@Html.Raw(Model.Body.Replace("&nbsp;", string.Empty))*@
+                                                                        @Html.Raw(Model.Body)
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        }
+                                                        else
+                                                        {
+                                                            @*购买主题 S*@
+                                                            //如果主题需要付费才能看到
+                                                            <div class="locked contentLocked">
+                                                                @if (isLogin)
+                                                                {
+                                                                    <a href="javascript:;" class="y viewpay buycontent" data-mid="@Model.ArticleId" data-feetype="@Model.ContentFeeType" data-fee="@Model.ContentFee" title="购买主题">购买主题</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a href="javascript:;" class="y viewpay btn_login" title="购买主题">登录后购买</a>
+                                                                }
+                                                                <em class="right">
+                                                                    已有 @(Model.ContentBuyCount) 人购买&nbsp;
+                                                                </em>
+                                                                本主题需向作者支付 <strong>@(Model.ContentFee) @(Model.ContentFeeType == 10 ? "积分" : "VIP分")</strong> 才能浏览
+                                                            </div>
+                                                            @*购买主题 E*@
+                                                        }
+
+                                                        @*如果有附件*@
+                                                        @if (Model.AttachMents.Count > 0)
+                                                        {
+                                                            if (isLogin)
+                                                            {
+                                                                @*下载附件 S*@
+                                                                <div class="pattl">
+                                                                    @foreach (AttachMentWithBuyInfo attach in Model.AttachMents)
+                                                                    {
+                                                                        <ignore_js_op>
+                                                                            <dl class=" tattl">
+                                                                                <dt>
+                                                                                    <img src="@baseurl/content/fileicon/@(attach.FileIcon).png" border="0" class="vm" alt="">
+                                                                                </dt>
+                                                                                <dd>
+                                                                                    <p class="attnm">
+                                                                                        @if (!attach.IsFee || currentUserID == Model.UserID || attach.IsBuy)
+                                                                                        {
+                                                                                            <a href="@(baseurl)/down?mt=2&md=@(Model.ArticleId)&ad=@(attach.AttachMentId)" target="_self" initialized="true">@attach.FileName</a>
+                                                                                        }
+                                                                                        else
+                                                                                        {
+                                                                                            <a class="downHref_@(attach.AttachMentId)" href="javascript:;" initialized="true">@attach.FileName</a>
+                                                                                        }
+
+                                                                                    </p>
+                                                                                    <div class="tip tip_4" id="aid6793_menu" style="position: absolute; z-index: 301; left: 593.5px; top: 1357px; display: none;" disautofocus="true" initialized="true">
+                                                                                        <div class="tip_c">
+                                                                                            <p class="y">@(attach.CreateTime.ToString(11)) 上传</p>
+                                                                                            <p>点击文件名下载附件</p>
+                                                                                        </div>
+                                                                                        <div class="tip_horn"></div>
+                                                                                    </div>
+                                                                                    <p></p>
+                                                                                    <p>@(attach.FileSize), 下载次数: @attach.DownCount</p>
+                                                                                    @*附件价格S*@
+                                                                                    @if (attach.IsFee)
+                                                                                    {
+                                                                                        <p class="hasbuyerd_@(attach.AttachMentId)">
+                                                                                            售价: <strong>@(attach.Fee) @(attach.FeeType == 10 ? "积分" : "VIP分")</strong> &nbsp;
+                                                                                            @*[<a href="http://www.51bestseller.com/forum.php?mod=misc&amp;action=viewattachpayments&amp;aid=6525" onclick="showWindow('attachpay', this.href)" target="_blank">记录</a>]*@
+                                                                                            @if (!attach.IsBuy && Model.UserID != currentUserID)
+                                                                                            {
+                                                                                                <span>
+                                                                                                    [<a data-aid="@attach.AttachMentId" data-feetype="@attach.FeeType" data-fee="@attach.Fee" data-filename="@attach.FileName" data-mid="@Model.ArticleId" class="buy-attach-btn">购买</a>]
+                                                                                                </span>
+                                                                                            }
+                                                                                        </p>
+                                                                                    }
+                                                                                    @*附件价格E*@
+                                                                                </dd>
+                                                                            </dl>
+                                                                        </ignore_js_op>
+                                                                    }
+                                                                </div>
+                                                                @*下载附件 E*@
+                                                            }
+                                                            else
+                                                            {
+                                                                //需要登录才能查看附件或其他资源
+                                                                <div class="attach_nopermission attach_tips">
+                                                                    <div>
+                                                                        <h3><strong>本帖子中包含更多资源</strong></h3>
+                                                                        <p>您需要 <a href="@(baseurl)/account/login?returnurl=@Request.Url">登录</a> 才可以下载或查看，没有帐号？<a href="@(baseurl)/account/register?returnurl=@Request.Url" title="注册帐号">立即注册</a> </p>
+                                                                    </div>
+                                                                    <span class="atips_close" onclick="this.parentNode.style.display='none'">x</span>
+                                                                </div>
+                                                            }
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*主题 E*@
+                                        </td>
+                                    </tr>
+                                    <tr class="Ldn">
+                                        <td class="plc plm">
+                                            <div class="cloudcube_btn cl">
+                                                <a href="http://www.51bestseller.com/home.php?mod=spacecp&amp;ac=favorite&amp;type=thread&amp;id=8149&amp;formhash=27fb4d2e" id="k_favorite" onclick="showWindow(this.id, this.href, 'get', 0);" onmouseover="this.title = $('favoritenumber').innerHTML + ' 人收藏'" title="0 人收藏"><i><img src="static/image/common/fav.gif" alt="收藏">收藏<span id="favoritenumber" style="display:none">0</span></i></a>
+                                            </div>
+                                            <div class="vwthdaid cl">
+                                                <div class="vwthdact cl">
+                                                </div>
+                                                <div class="vwthdbdshare y">
+                                                    <div class="bdsharebuttonbox bdshare-button-style1-24" data-bd-bind="1547002544901">
+                                                        <a href="#" class="bds_more" data-cmd="more"></a>
+                                                        <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间"></a>
+                                                        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+                                                        @*<a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博"></a>*@
+                                                        <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网"></a>
+                                                        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+                                                    </div>
+                                                    <script>
+                                                        window._bd_share_config = { "common": { "bdSnsKey": {}, "bdText": "", "bdMini": "2", "bdMiniList": false, "bdPic": "", "bdStyle": "1", "bdSize": "24" }, "share": {} }; with (document) 0[(getElementsByTagName('head')[0] || body).appendChild(createElement('script')).src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5)];
+                                                    </script>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr id="_postposition@(Model.UserID)"></tr>
+                                    <tr>
+                                        <td class="pls"></td>
+                                        <td class="plc" style="overflow:visible;--> width:100%">
+                                            <div class="po hin">
+                                                <div class="pob cl">
+                                                    <em data-mid="@Model.ArticleId">
+                                                        <a class="fastre btn_comment Lmgl5">评论</a>
+                                                        @if (notAuthor)
+                                                        {
+                                                            if (Model.IsLiked)
+                                                            {
+                                                                <a class="fastre btn_unlike">已关注</a>
+                                                            }
+                                                            else
+                                                            {
+                                                                <a class="fastre @(isLogin ? "btn_like" : "btn_login")">关注该贴</a>
+                                                            }
+                                                            @*if (Model.IsPrised)
+                                                                {
+                                                                    <a class="fastre">已点赞</a>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <a class="fastre @(isLogin ? "btn_prise" : "btn_login")">点赞</a>
+                                                                }*@
+                                                            <button type="button" class="Lmg8 Button VoteButton VoteButton--up @(Model.IsPrised?"":isLogin ? "btn_prise" : "btn_login")">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--TriangleUp VoteButton-TriangleUp" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                        <path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57 11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z" fill-rule="evenodd"></path>
+                                                                    </svg>
+                                                                </span>@(Model.IsAgainst ? string.Empty : Model.IsPrised ? "已点赞" : "点赞") @(Model.PriseCount)
+                                                            </button>
+                                                            <button class="@(Model.PriseCount>0?"":"Ldni") Lmg8 Button VoteButton Lpd0i showPriseUser" title="查看点赞人数" data-type="3" data-mid="@Model.ArticleId">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                </span>
+                                                            </button>
+                                                            <button type="button" class="Lmg8 Button VoteButton VoteButton--down @(Model.IsPrised?string.Empty:Model.IsAgainst?"":isLogin ? "btn_against" : "btn_login")">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--TriangleDown" fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+                                                                        <path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896 0-1.386-.876-1.9-1.956-1.9z" fill-rule="evenodd"></path>
+                                                                    </svg>
+                                                                </span>@(Model.IsPrised ? string.Empty : Model.IsAgainst ? "已反对" : "反对") @(Model.AgainstCount)
+                                                            </button>
+                                                            <button class="@(Model.AgainstCount>0?"":"Ldni") Button VoteButton Lpd0i showAgainstUser" title="查看反对人数" data-type="3" data-mid="@Model.ArticleId">
+                                                                <span style="display: inline-flex; align-items: center;">
+                                                                    <svg class="Zi Zi--Dots Button-zi" fill="currentColor" viewBox="0 0 24 24" width="1em" height="1em"><path d="M5 14a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm7 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z" fill-rule="evenodd"></path></svg>
+                                                                </span>
+                                                            </button>
+                                                        }
+                                                    </em>
+
+                                                    <p>
+                                                        <a href="javascript:;" class="report" data-mid="@Model.ArticleId" data-type="2">举报</a>
+                                                    </p>
+
+                                                    @*<ul id="mgc_post_@(Model.UserID)_menu" class="p_pop mgcmn" style="display: none;">
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=bump&amp;idtype=tid&amp;id=8149" id="a_bump" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/bump.small.gif">提升卡</a></li>
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=stick&amp;idtype=tid&amp;id=8149" id="a_stick" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/stick.small.gif">置顶卡</a></li>
+                                                            <li><a href="http://www.51bestseller.com/home.php?mod=magic&amp;mid=jack&amp;idtype=tid&amp;id=8149" id="a_jack" onclick="showWindow(this.id, this.href)"><img src="static/image/magic/jack.small.gif">千斤顶</a></li>
+                                                        </ul>
+                                                        <script type="text/javascript" reload="1">checkmgcmn('post_@(Model.UserID)')</script>*@
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="ad">
+                                        <td class="pls"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    @*回复留言 S*@
+                    @{
+                        ViewBag.UserID = Model.UserID;
+                        ViewBag.MainID = Model.ArticleId;
+                        @Html.Partial("_CommentList_New", Model.Comments)
+                    }
+                    @*回复留言 E*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_DOComment", 0)
+@*<script src="~/Scripts/ZeroClipboard/ZeroClipboard.min.js"></script>*@
+<script>
+    Leo.init("article", "detail",@Model.ArticleId).LoadCommentControlForDiscuz(!0).LoadPriseControlForDiscuz();
+</script>

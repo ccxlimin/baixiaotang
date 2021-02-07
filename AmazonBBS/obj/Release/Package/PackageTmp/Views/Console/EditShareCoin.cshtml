@@ -1,0 +1,104 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    ViewBag.Title = "分享奖励设置";
+    List<BBSEnum> list = BBSEnumBLL.Instance.Query(BBSEnumType.ShareCoin.GetHashCode(), true);
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <table class="table table-bordered  table-hover">
+            <caption>分享链接奖励列表</caption>
+            <thead>
+                <tr>
+                    <th width="33%">成功分享次数(不能相同)</th>
+                    <th width="33%">奖励积分</th>
+                    <th width="33%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (BBSEnum item in list)
+                {
+                    <tr>
+                        <td>@item.SortIndex</td>
+                        <td>@item.EnumDesc</td>
+                        <td>
+                            <a class="btn-sm btn-primary" onclick="MENUEDIT(0,this,@item.BBSEnumId)">编辑</a>
+                            <a class="btnSubmit btn-sm btn-warning Ldn">提交</a>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a class="btn-sm btn-primary" onclick="MENUEDIT(5,this)">新增奖励积分</a>
+                        <a class="btnSubmit btn-sm btn-warning Ldn">提交</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<script>
+    function MENUEDIT(type, target, _id) {
+        var $t = $(target),
+            $si = $t.parent().parent().children().eq(0),
+            $ed = $t.parent().parent().children().eq(1),
+            oldval = [$si.text(), $ed.text()];
+        $si.html($("<input>").css({ "border": 0, "outline": 0, "width": "100%", "height": "100%", "border": "1px solid red" }).attr("placeholder", "请输入分享次数").val(oldval[0]));
+        $ed.html($("<input>").css({ "border": 0, "outline": 0, "width": "100%", "height": "100%", "border": "1px solid red" }).attr("placeholder", "请输入奖励积分").val(oldval[1]));
+
+        target.onclick = null;
+        $t.next(".btnSubmit").removeClass("Ldn").click(function () {
+            EDITSUBMIT(type, target, _id, oldval);
+        });
+        $t.text(type == 0 ? "取消编辑" : "取消新增").unbind("click").click(function () {
+            CANCLEEDIT(type, target, oldval, _id);
+        });
+    }
+    function CANCLEEDIT(type, target, oldval, id) {
+        var $t = $(target);
+        $si = $t.parent().parent().children().eq(0),
+            $ed = $t.parent().parent().children().eq(1),
+            $si.html(oldval[0]);
+        $ed.html(oldval[1]);
+        target.onclick = null;
+        $t.next(".btnSubmit").addClass("Ldn").unbind("click");
+        $t.text(type == 0 ? "编辑" : "新增分享奖励").unbind("click").click(function () {
+            MENUEDIT(type, target, id);
+        });
+    }
+    function EDITSUBMIT(type, target, id, oldval) {
+        var t = $(target).parent().parent().children(), a, b;
+        if ((a = $.trim(t.eq(0).children().val())) == "") {
+            layer.msg("分享次数不能为空");
+            return !1;
+        }
+        else if ((b = $.trim(t.eq(1).children().val())) == "") {
+            layer.msg("奖励积分不能为空");
+            return !1;
+        }
+        else if (type == 0 && a == oldval[0] && b == oldval[1]) {
+            layer.msg("值未做修改，无需提交保存");
+            CANCLEEDIT(0, target, oldval, id);
+            return !1;
+        }
+        else {
+            $.post("/CONSOLE/EditMenu?t={0}".Format(Leo.getPK()),
+                { sort: a, cn: b, type: type, id: type == 0 ? id : 0 }, function (data) {
+                    if (data.Ok) {
+                        CANCLEEDIT(type, target, [a, b], id);
+                        MSG(data.Msg || "更新成功", function () {
+                            location.reload(!0);
+                        })
+                    } else {
+                        layer.msg(data.Msg);
+                    }
+                });
+        }
+        //type 0编辑 3新增头衔 4新增专属头衔 5分享链接奖励编辑
+    }
+</script>

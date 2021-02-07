@@ -1,0 +1,199 @@
+﻿@{
+    ViewBag.Title = "批量设置标签";
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <ul id="myTab" class="nav nav-tabs">
+            <li class="active">
+                <a href="#load-question" data-toggle="tab" data-index="1">
+                    批量设置帖子标签
+                </a>
+            </li>
+            <li><a href="#load-article" data-toggle="tab" data-index="2">批量设置文章标签</a></li>
+        </ul>
+        <div id="myTabContent" class="tab-content">
+            <div class="setBtn Ldn">
+                <a class="btn btn-primary">设置标签</a>
+            </div>
+            <div class="tab-pane fade in active" id="load-question">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+            <div class="tab-pane fade" id="load-article">
+                <div class="loadwrap"><img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>
+            </div>
+        </div>
+    </div>
+    <div class="tagsWrap_BatchSet Ldn">
+        <div class="tagsList"></div>
+        @*<a class="btn_set_tags">确定设置</a>*@
+    </div>
+    <script>
+        var mids = [], selecttags = [], tags, type = 1;
+
+        function LoadWrap(element) {
+            $(element).html('<div class="loadwrap">正在整理数据，请稍等<img src="/Scripts/layer-1.8.5/skin/default/loading-0.gif" /></div>');
+        }
+
+        function BuildListHtml(n, url) {
+            var divItem = $("<tr>");
+            var checkBox = $("<td>").append($("<input type='checkbox'>")
+                .click(function () {
+                    if (this.checked) {
+                        mids.push(n.mid)
+                    } else {
+                        mids.splice(mids.indexOf(n.mid), 1);
+                    }
+                })
+            );
+            var title = $("<td>").append($("<a>").attr({ "href": url.Format(n.mid), "target": "_blank" }).text(n.title));
+            divItem.append(checkBox, title);
+            var tagsWrap = $("<td>");
+            if (n.tags.length > 0) {
+                $.each(n.tags, function () {
+                    tagsWrap.append($("<span>").addClass("tagitem").text(this.name).attr("id", "tag_{0}_{1}".Format(n.mid, this.id)));
+                });
+                divItem.append(tagsWrap);
+            }
+            return divItem;
+        }
+
+        function NoHtmlList() {
+            return $('<div style="text-align:center;"><div class="well"><h4>无数据</h4></div></div>');
+        }
+
+        function EachList(data, element, callback) {
+            if (data.Ok) {
+                data = data.Data;
+                var divWrap;
+                if (data.length > 0) {
+                    $(".setBtn").removeClass("Ldn");
+                    divWrap = $("<table>").addClass("batchTags_Wrap table table-bordered table-hover");
+                    divWrap.append($("<tr>").append($("<th>").text("选"), $("<th>").text("帖子标题"), $("<th>").text("标签")))
+                    $.each(data, function (i, n) {
+                        callback(n).appendTo(divWrap);
+                    });
+                } else {
+                    divWrap = NoHtmlList();
+                }
+                $(element).html(divWrap);
+            }
+        }
+        function LoadQuestion() {
+            $.get("/Console/LoadQuestionForSetTag", function (data) {
+                EachList(data, "#load-question", function (n) {
+                    return BuildListHtml(n, Leo.baseUrl + "/bbs/detail/{0}");
+                });
+            });
+        }
+        function LoadArticle() {
+            $.get("/Console/LoadArticleForSetTag", function (data) {
+                EachList(data, "#load-article", function (n) {
+                    return BuildListHtml(n, Leo.baseUrl + "/article/detail/{0}");
+                });
+            });
+        }
+
+        $(function () {
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var index = $(e.target).data("index");
+                $(".setBtn").addClass("Ldn");
+
+                mids = [];
+                selecttags = [];
+
+                if (index == "1") {
+                    LoadWrap("#load-question");
+                    LoadQuestion();
+                    type = 1;
+                } else {
+                    LoadWrap("#load-article");
+                    LoadArticle();
+                    type = 2;
+                }
+            });
+        });
+
+        function OpenDetail(id, body) {
+            alert(body);
+        }
+
+        function GetAllTags() {
+            $.get("/console/GetAllTags", function (data) {
+                if (data.Ok) {
+                    if (data.Data.length > 0) {
+                        tags = data.Data;
+                    }
+                }
+            });
+        }
+
+        function BuildTagHtml() {
+            var ul = $("<ul>");
+            $.each(tags, function () {
+                var item = this;
+                ul.append($("<li>").text(item.name).data("id", item.id)
+                    .click(function () {
+                        var me = $(this);
+                        if (me.data("selected")) {
+                            $(this).css("background-color", "#f0ad4e").data("selected", !1);
+                            selecttags.splice(selecttags.indexOf(item.id), 1);
+                        } else {
+                            if (selecttags.length < 3) {
+                                $(this).css("background-color", "#24b654").data("selected", !0);
+                                selecttags.push(item.id)
+                            } else {
+                                Leo.msgfail("最多只能选3个标签啦！")
+                            }
+                        }
+                        console.log(selecttags);
+
+                    })
+                );
+            });
+            $(".tagsWrap_BatchSet .tagsList").empty().append(ul);
+            selecttags = [];
+        }
+        var layerIndex;
+        //设置标签
+        $(".setBtn").click(function () {
+            if (mids.length > 0) {
+                BuildTagHtml();
+                //layerIndex = AlertDivNoTitle(".tagsWrap_BatchSet", "60%", "50%", null, function () {
+                //    $(".set_tags_wrapper").removeClass("Ldn");
+                //    selecttags = [];
+                //});
+                layerIndex = AlertActionAreaWithConfirmWithSize($(".tagsWrap_BatchSet"), "设置标签", "60%", '400px', '确定设置', null, function () {
+                    if (selecttags.length > 0) {
+                        $.post("/console/batchSetTags/{0}".Format(type), {
+                            mids: mids,
+                            tagids: selecttags
+                        }, function (data) {
+                            if (data.Ok) {
+                                layer.close(layerIndex);
+                                location.reload(!0);
+                            }
+                        });
+                    } else {
+                        Leo.msgfail("请至少选择一个标签");
+                    }
+                }, function () {
+                    //$(".set_tags_wrapper").removeClass("Ldn");
+                    selecttags = [];
+                });
+                //$(".set_tags_wrapper").removeClass("Ldn");
+            } else {
+                Leo.msgfail("至少选择一条");
+            }
+        });
+        //$(".btn_set_tags").click(function () {
+
+        //});
+        LoadQuestion();
+        setTimeout(function () {
+            GetAllTags();
+        }, 1000);
+    </script>
+</div>

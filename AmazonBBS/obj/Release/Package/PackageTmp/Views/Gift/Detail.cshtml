@@ -1,0 +1,230 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model _Gift
+@{
+    int gtype = Model.GType.Value;
+    string desc = gtype == 1 ? "礼品" : gtype == 2 ? "数据" : "百晓堂课程";
+    ViewBag.Title = "{0}_{1}详情".FormatWith(Model.GiftName, desc);
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    bool isLogin = user != null;
+
+    List<GiftFee> feelist = Model.FeeList;
+    List<JoinItemQuestionExt> joinQuestions = Model.JoinQuestions;
+
+    int allUserBuyCount = Model.AllBuyCount;
+
+    List<UserBuyGiftListInfo> userJoinList = Model.JoinFeeList;
+    string userjoin = JsonHelper.ToJson(userJoinList.GroupBy(a => a.FeeName).Select(a => new { count = a.Sum(b => b.BuyCount), name = a.First().FeeName }));
+    //bool isJoined = false;
+    //if (isLogin)
+    //{
+    //    isJoined = UserGiftBLL.Instance.IsJoined(user.UserID, Model.GiftID);
+    //}
+}
+<link href="~/Content/huodong.css?v=20200113" rel="stylesheet" />
+<div class="content-body content_body_2" avalonctrl="party_join_controller">
+    <div class="content-body_head">
+        <div class="content-body_head_wrap" style="text-align:left;">
+            <div class="col-md-6">
+                <img style="width:100%;" src="@Model.GiftImgs" alt="@Model.GiftName">
+            </div>
+            <div class="col-md-6">
+                <h3 style="font-weight:bold;color:#000;">
+                    @Model.GiftName
+                </h3>
+                <div class="detail_user hdMan" avalonctrl="detail_info_base_controller">
+                    <div class="hdman_r">
+                        <div class="yhName">
+                            <p class="fbTime"><i></i>@(Model.GiftCreateTime.Value.ToString("yyyy年MM月dd日"))</p>
+                        </div>
+                        <div class="dt_review_item_count">
+                            <span id="info_hits"><i></i>@((Model.PVCount ?? 0) + 1)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix">@Model.GiftDesc</div>
+                <div class="detail_time_attr_join" avalonctrl="detail_info_base_controller">
+                    <div class="detail_time_attr_join_gray">
+                        <div class="detail_join_ticket" avalonctrl="detail_coupon_controller">
+                            <div class="detail_join_ticket_con">
+                                <!--收费项-->
+                                <div class="tc_c_feiLi_box">
+                                    <p class="title_txt">票种：</p>
+                                    <ul class="ticket tc_c_feiLi tickets">
+                                        @{
+                                            bool selected = false;
+                                            int selectedCount = 0;
+                                            for (int findex = 0; findex < feelist.Count; findex++)
+                                            {
+                                                GiftFee feeInfo = feelist[findex];
+                                                string cls = string.Empty;
+                                                if (feeInfo.FeeCount == 0)
+                                                {
+                                                    cls = "gray end";
+                                                }
+                                                else
+                                                {
+                                                    if (!selected)
+                                                    {
+                                                        selectedCount = feeInfo.FeeCount.Value;
+                                                        selected = true;
+                                                        cls = "select";
+                                                    }
+                                                }
+                                                <li class="@cls">
+                                                    <table width="170" border="0" cellspacing="0" cellpadding="0">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td align="center" valign="middle">
+                                                                    @if (feeInfo.FeeType == 0)
+                                                                    {
+                                                                        <span class="ticket_money" data-feeidn="@feeInfo.GiftFeeId" data-feetype="@feeInfo.FeeType" data-fee="@feeInfo.Fee"><span>免费</span></span>
+                                                                        <span class="ticket_des">@(feeInfo.FeeName.IsNullOrEmpty() ? (feeInfo.FeeType == 10 ? "福利票" : "标准票") : feeInfo.FeeName)</span>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        string paytype = feeInfo.FeeType == 10 ? "积分" : feeInfo.FeeType == 20 ? "VIP分" : "元";
+                                                                        <span class="ticket_des">
+                                                                            @(feeInfo.FeeName.IsNullOrEmpty() ? (feeInfo.FeeType == 10 ? "福利票" : "标准票") : feeInfo.FeeName)
+                                                                        </span>
+                                                                        <span class="ticket_money" data-feeidn="@feeInfo.GiftFeeId" data-feetype="@feeInfo.FeeType" data-fee="@feeInfo.Fee">@(feeInfo.FeeType == 10 || feeInfo.FeeType == 20 ? Convert.ToInt32(feeInfo.Fee) : feeInfo.Fee)<span class="Lfs12"> @(paytype)</span></span>
+                                                                    }
+                                                                    <p>
+                                                                        <span>
+                                                                            <span class="num" data-count="@feeInfo.FeeCount">剩余@(feeInfo.FeeCount)份</span>
+                                                                        </span>
+                                                                    </p>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </li>
+                                            }
+                                        }
+                                    </ul>
+                                    <p class="title_txt">数量</p>
+                                    <div class="select_num">
+                                        <a class="less"></a>
+                                        <div class="count">
+                                            <input type="text" value="1" />
+                                        </div>
+                                        <a class="add"></a>
+                                        <span class="item_limit_note">剩余@(selectedCount)张</span>
+                                    </div>
+                                    <!--报名按钮-->
+                                    <ul class="join clearfix" avalonctrl="detail_join_party_controller">
+                                        <li class="show" avalonctrl="detail_join_party_list_controller">
+                                            @if (Model.IsDelete == 0)
+                                            {
+                                                if (!isLogin)
+                                                {
+                                                    <a class="myApply btn btn-lg btn-info" href="/account/login?returnurl=@Request.Url" rel="nofollow">购买</a>
+                                                }
+                                                else
+                                                {
+                                                    if (userJoinList.Count > 0)
+                                                    {
+                                                        <a data-aid="@Model.GiftID" data-joinitem="@userjoin" class="btn_Ibuy hasBuy myApply btn btn-lg btn-success" href="javascript:void(0)" rel="nofollow">您已购买，继续购买</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a data-aid="@Model.GiftID" class="btn_Ibuy myApply btn btn-lg btn-info" href="javascript:void(0)" rel="nofollow">购买</a>
+                                                    }
+                                                }
+                                                if (isLogin && allUserBuyCount > 0 && (user.UserID == Model.GiftCreateUserID || UserBaseBLL.Instance.IsRoot))
+                                                {
+                                                    <a class="btn-joinManage btn btn-lg btn-primary" href="/gift/buyermanage/@Model.GiftID?gtype=@gtype" target="_blank">购买人员管理</a>
+                                                }
+                                                <a class="btn_comment myApply btn btn-lg btn-primary" data-mid="@Model.GiftID">评论</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn btn-large btn-warning">该@(desc)已失效</a>
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_DOComment", 0)
+<div class="content-body content_body_2">
+    <div class="content-body_head content-main">
+        <h3 style="border-bottom:1px solid #f1f1f1;padding-bottom:30px;text-align:left;">@(desc)详情</h3>
+        <div>
+            @Html.Raw(Model.GiftInfo)
+        </div>
+    </div>
+</div>
+<div class="content-body content_body_2">
+    <style>
+        .leo {
+            float: left;
+            padding: 20px;
+            user-select: none;
+        }
+
+            .leo .thumbnail {
+                padding: 0;
+            }
+    </style>
+    <div class="content-body_head">
+        <h3 style="border-bottom:1px solid #f1f1f1;padding-bottom:30px;text-align:left;">
+            购买人数(<span class="titleBuyCount">0</span>)
+        </h3>
+        <div class="joinedUserList" style="display:inline-block;">
+            <ul style="display:inline-block;"></ul>
+        </div>
+    </div>
+</div>
+@{
+    ViewBag.UserID = Model.GiftCreateUserID;
+    ViewBag.MainID = Model.GiftID;
+}
+@Html.Partial("_CommentList", Model.Comments)
+<script>
+    Leo.init("gift", "detail",@Model.GiftID).LoadCommentControl().LoadPriseControl();
+</script>
+@if (Model.OpenJoinItem == 1)
+{
+    <div class="form-horizontal baseInfoToJoin Ldn" style="background-color:#fff;">
+        <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+            <label for="baseinfoName" class="col-md-3 control-label Lpdl0i">姓名</label>
+            <div class="col-md-9 Lpdl0i">
+                <input class="form-control joinInputForm joinInputForm1" placeholder="姓名" />
+            </div>
+        </div>
+        <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+            <label for="baseinfoTel" class="col-md-3 control-label Lpdl0i">手机</label>
+            <div class="col-md-9 Lpdl0i">
+                <input class="form-control joinInputForm joinInputForm2" placeholder="手机" />
+            </div>
+        </div>
+        @{
+            int baseHeight = 185;
+            for (int i = 0; i < joinQuestions.Count; i++)
+            {
+                JoinItemQuestionExt item = joinQuestions[i];
+                if (baseHeight < 200)
+                {
+                    baseHeight += 45;
+                }
+                <div class="col-md-12 clearfix Lmgt10 Lpdl0i">
+                    <label for="baseinfoD1" class="col-md-3 control-label Lpdl0i">@item.ItemName</label>
+                    <div class="col-md-9 Lpdl0i">
+                        <input class="complete_@(item.JoinItemQuestionExtId) form-control joinInputForm joinInputForm@(i+3)" data-id="@item.JoinItemQuestionExtId" placeholder="@item.ItemName" />
+                    </div>
+                </div>
+            }
+            <div class="col-md-12 clearfix Lmgt10 Lpdl0i Ltac">
+                <a class="btn btn-primary btn-subInfoAndJoin" data-height="@(baseHeight)px">提交资料并购买</a>
+            </div>
+        }
+    </div>
+}

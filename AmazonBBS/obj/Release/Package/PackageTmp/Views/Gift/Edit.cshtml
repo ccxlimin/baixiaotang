@@ -1,0 +1,468 @@
+﻿@using AmazonBBS.BLL
+@using AmazonBBS.Model
+@using AmazonBBS.Common
+@model GiftCreateViewModel
+@{
+    int id = ViewBag.ID;
+    string desc = id == 1 ? "礼品" : id == 2 ? "数据" : "百晓堂课程";
+    ViewBag.Title = "编辑{0}".FormatWith(desc);
+    List<GiftFee> feelist = Model.GiftFees;
+    List<JoinItemQuestionExt> joinQuestions = Model.JoinItemQues;
+    int joinItemCount = joinQuestions.Count;
+}
+
+@using (Html.BeginForm("Edit", "Gift", new { id = Model.Gift.GiftID }, FormMethod.Post, new { @class = "form-horizontal Lmgt20", role = "form", id = "nmform" }))
+{
+    @Html.HiddenFor(m => m.Gift.GiftID)
+    @*礼物名称*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gift.GiftName, "{0}名称".FormatWith(desc), new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Gift.GiftName, new { @class = "form-control", placeholder = "请输入{0}名称(100字内)".FormatWith(desc) })
+        </div>
+    </div>
+
+    @*礼物图片Logo*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gift.GiftImgs, "{0}图片".FormatWith(desc), new { @class = "col-md-2 control-label" })
+        <div class="col-md-10 ">
+            @Html.HiddenFor(m => m.Gift.GiftImgs)
+            <img class="localgiftimg" width="210" height="123" src="@Model.Gift.GiftImgs" />
+            <input class="Ldni pickupimage" onchange="SetImg(this)" type="file" />
+            <a id="btn_addGiftImg" class="btn btn-primary">更换@(desc)图片</a>
+        </div>
+    </div>
+
+    @*礼物简介*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gift.GiftDesc, "{0}简介".FormatWith(desc), new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.TextBoxFor(m => m.Gift.GiftDesc, new { @class = "form-control", placeholder = "{0}简介(200字内)".FormatWith(desc) })
+        </div>
+    </div>
+
+    @*礼物详细介绍*@
+    <div class="form-group">
+        @Html.LabelFor(m => m.Gift.GiftInfo, "{0}详细介绍".FormatWith(desc), new { @class = "col-md-2 control-label" })
+        <div class="col-md-10">
+            @Html.HiddenFor(m => m.Gift.GiftInfo)
+            <div id="summernote"></div>
+        </div>
+    </div>
+
+    @*购买费用*@
+    <div class="form-group feetypeList">
+        <label class="col-md-2 control-label">票种类型</label>
+        @for (int i = 0; i < feelist.Count; i++)
+        {
+            <div class="feeitemwrap feeitemwrap-@(i) @(i>0?" col-md-offset-2 Lmgt5":string.Empty) col-md-10 Lpdl0">
+                <div class="col-md-9">
+                    <div class="col-md-3 col-sm-3 Lpdl0i">
+                        @Html.HiddenFor(m => m.GiftFees[i].FeeType)
+                        @Html.HiddenFor(m => m.GiftFees[i].GiftFeeId)
+                        @Html.HiddenFor(m => m.GiftFees[i].GiftID)
+                        <select id="pickupFee@(i)" class="form-control">
+                            <option value="0">免费</option>
+                            <option value="10">积分支付</option>
+                            <option value="20">VIP分支付</option>
+                            <option value="30">支付宝支付</option>
+                        </select>
+                        <script>
+                            $("#pickupFee{0}".Format(@i)).val(@Model.GiftFees[i].FeeType);
+                        </script>
+                    </div>
+                    <div class="col-md-3 col-sm-3 Lpdl0i">
+                        @Html.TextBoxFor(m => m.GiftFees[i].FeeName, new { @class = "form-control", placeholder = "票种名称" })
+                    </div>
+                    <div class="col-md-3 col-sm-3 Lpdl0i">
+                        @Html.TextBoxFor(m => m.GiftFees[i].Fee, new { @class = "form-control", placeholder = "购买费用", type = "number", min = 0 })
+                    </div>
+                    <div class="col-md-3 col-sm-3 Lpdl0i">
+                        @Html.TextBoxFor(m => m.GiftFees[i].FeeCount, new { @class = "form-control", placeholder = desc + "余量", type = "number", min = 1 })
+                    </div>
+                </div>
+                @if (i == feelist.Count - 1 && i < 5)
+                {
+                    <div class="col-md-3">
+                        <a class="btn btn-success btn-addFeetype" data-i="0">+添加票种</a>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+    //礼物购买需提交资料
+    <div class="form-group joinBaseInfos">
+        <label class="col-md-2 control-label" for="openJoinItems">购买填写项</label>
+        <div class="col-md-10">
+            <div class="checkbox">
+                <label>
+                    @Html.HiddenFor(m => m.Gift.OpenJoinItem)
+                    <input id="openJoinItems" type="checkbox" checked="@(Model.Gift.OpenJoinItem==1)">启用购买时提交资料填写项
+                </label>
+            </div>
+        </div>
+        <div class="joinItemsWrap @(Model.Gift.OpenJoinItem==1?string.Empty:"Ldn")">
+            <div class="col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+                <div class="col-md-3">
+                    <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="姓名" />
+                </div>
+            </div>
+            <div class="col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+                <div class="col-md-3">
+                    <input class="form-control" readonly="readonly" disabled="disabled" type="text" value="手机" />
+                </div>
+                @if (joinItemCount == 0)
+                {
+                    <div class="col-md-9">
+                        <a class="btn btn-success btn-addJoinInfo" data-i="0">+添加报名填写项</a>
+                    </div>
+                }
+            </div>
+            @for (int i = 0; i < joinItemCount; i++)
+            {
+                <div class="joinItemWrap joinItemWrap-@(i) col-md-offset-2 col-md-10 Lpdl0 Lmgt5">
+                    <div class="col-md-3">
+                        @Html.HiddenFor(m => m.JoinItemQues[i].JoinItemQuestionExtId)
+                        @Html.HiddenFor(m => m.JoinItemQues[i].MainID)
+                        @Html.TextBoxFor(m => m.JoinItemQues[i].ItemName, new { @class = "form-control", placeholder = "购买项名称" })
+                    </div>
+                    @if (i == joinItemCount - 1)
+                    {
+                        <div class="col-md-9">
+                            <a class="btn btn-success btn-addJoinInfo" data-i="0">+添加购买填写项</a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <a id="btn_editGift" class="btn btn-primary">确认修改@(desc)</a>
+        </div>
+    </div>
+}
+<script>
+    var t = Leo, check = t.tools.CheckFormNotEmpty;
+    var maxItem = 100, moneyCount = 100, deleteFeeBox = [], deleteJoinBox = [];
+    var regu = new RegExp("^([0-9]*[.1-9])$"); //小数测试
+    var reg = new RegExp("^[0-9]*[1-9][0-9]*$");
+
+    $("#btn_editGift").unbind("click").click(function () {
+        if (check("#Gift_GiftName", "@(desc)名称")) {
+            if (!check("#Gift_GiftImgs", "请上传@(desc)的图片LOGO")) { $(".pickupimage").click(); }
+            else {
+                if (check("#Gift_GiftDesc", "@(desc)简介")) {
+                    if ($('#summernote').summernote("isEmpty")) {
+                        layer.msg("@(desc)详细介绍不能为空");
+                    } else {
+                        var feeok = true, saveIndexItem = [], maxIndex = 0;
+                        for (var i = 0; i < moneyCount; i++) {
+                            if ($(".feeitemwrap-{0}".Format(i)).length > 0) {
+                                if (!check("#pickupFee{0}".Format(i), "费用类型")) { feeok = false; return !1; }
+                                if (!check("#GiftFees_{0}__FeeName".Format(i), "票种名称")) { feeok = false; return !1; }
+                                if (t.tools.CheckLength($("#GiftFees_{0}__FeeName".Format(i)).val(), 1, 15, "票种名称")) {
+                                    if (!check("#GiftFees_{0}__Fee".Format(i), "购买费用")) { feeok = false; return !1; }
+                                    if (!check("#GiftFees_{0}__FeeCount".Format(i), "购买余量")) { feeok = false; return !1; }
+                                    if ($("#pickupFee{0}".Format(i)).val() != 0 && $("#GiftFees_{0}__Fee".Format(i)).val() == 0) { $("#pickupFee{0}".Format(i)).focus(); Leo.msgfail("费用为0的话，请选择免费"); feeok = false; return !1; }
+                                } else { $("#GiftFees_{0}__FeeName".Format(i)).focus(); feeok = false; return !1; }
+                                maxIndex = i;
+                            } else {
+                                saveIndexItem.push(i);
+                            }
+                        }
+                        if (feeok) {
+                            $.each(saveIndexItem, function (i, n) {
+                                if (n < maxIndex) {
+                                    var html = [];
+                                    html.push('<div class="feeitemwrap feeitemwrap-{0} col-md-10 Lpdl0 Ldn">'.Format(n));
+                                    html.push('<input data-val="true" data-val-number="The field FeeType must be a number." id="GiftFees_{0}__FeeType" name="GiftFees[{0}].FeeType" type="hidden" value="">'.Format(n));
+                                    html.push('<input class="form-control" id="GiftFees_{0}__FeeName" name="GiftFees[{0}].FeeName" placeholder="票种名称" type="hidden" value="">'.Format(n));
+                                    html.push('<input class="form-control" data-val="true" data-val-number="The field Fee must be a number." id="GiftFees_{0}__Fee" min="0" name="GiftFees[{0}].Fee" placeholder="购买费用" type="hidden" value="">'.Format(n));
+                                    html.push('<input class="form-control" data-val="true" data-val-number="The field FeeCount must be a number." id="GiftFees_{0}__FeeCount" min="1" name="GiftFees[{0}].FeeCount" placeholder="余量" type="hidden" value="">'.Format(n));
+                                    html.push("</div>");
+                                    $(".feetypeList").append(html.join(''));
+                                }
+                            });
+                            if ($("#openJoinItems").prop("checked")) {
+                                var joinSaveIndexItem = [], maxJoinIndex = 0;
+                                for (var i = 0; i < maxItem; i++) {
+                                    var joinItem = "#JoinItemQues_{0}__ItemName".Format(i);
+                                    if ($(joinItem).length > 0) {
+                                        if (!check(joinItem, "购买项名称")) {
+                                            feeok = false; return !1;
+                                        } else {
+                                            feeok = t.tools.CheckLength(joinItem.val(), 1, 10, "购买项名称");
+                                        }
+                                        if (feeok) {
+                                            maxJoinIndex = i;
+                                        }
+                                    } else {
+                                        joinSaveIndexItem.push(i);
+                                    }
+                                }
+                                if (feeok) {
+                                    $.each(joinSaveIndexItem, function (i, n) {
+                                        if (n < maxJoinIndex) {
+                                            var html = [];
+                                            html.push('<div class="joinItemWrap joinItemWrap-{0} col-md-offset-2 col-md-10 Lpdl0 Lmgt5 Ldn">'.Format(n));
+                                            html.push('<input id="JoinItemQues_{0}__ItemName" name="JoinItemQues[{0}].ItemName" class="form-control" type="hidden" placeholder="购买项名称">'.Format(n));
+                                            html.push("</div>");
+                                            $(".joinBaseInfos").append(html.join(''));
+                                        }
+                                    });
+                                }
+                            }
+                            if (feeok) {
+                                $("#Gift_GiftInfo").val(encodeURI($('#summernote').summernote("code")));
+                                $("#nmform").ajaxSubmit(function (data) {
+                                    if (data.Ok) {
+                                        layer.msg(data.Msg || "@(desc)编辑成功");
+                                        setTimeout(function () {
+                                            location.href = "/gift/detail/@Model.Gift.GiftID";
+                                        }, 100);
+                                    } else {
+                                        layer.msg(data.Msg || "编辑失败");
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+    $("#btn_addGiftImg").bind("click").click(function () { $(".pickupimage").click(); });
+
+    function SetImg(target) {
+        Leo.SendFile("/Tool/UploadGiftImg", target, !1, function (data) {
+            if (data.Ok) {
+                $(".localgiftimg").attr("src", data.Url);
+                $("#Gift_GiftImgs").val(data.Url);
+            } else {
+                layer.msg(data.Msg);
+            }
+        });
+    }
+
+    Leo.RichText("#summernote", "/Tool/UploadGiftImg", "请输入该@(desc)的具体说明、参数等情况！可插入图片，编辑文字样式等！",
+        800, !1, function (data) {
+            if (data.Ok) {
+                $("#summernote").summernote('insertImage', data.Url);
+            } else {
+                layer.msg(data.Msg);
+            }
+        }, null, null, $("#Gift_GiftInfo").val());
+
+    ///添加票种和购买项
+    function InitFeeTypeChange(index) {
+        $("#pickupFee{0}".Format(index)).change(function () {
+            $(this).children().length == 5 && $(this).children().eq(0).remove();
+            $("#GiftFees_{0}__FeeType".Format(index)).val(this.value);
+            if (this.value == "0") {
+                $("#GiftFees_{0}__Fee".Format(index)).attr("readonly", !0).val("0");
+                $("#GiftFees_{0}__FeeName".Format(index)).val("福利票");
+            } else {
+                $("#GiftFees_{0}__Fee".Format(index)).removeAttr("readonly").val("");
+                $("#GiftFees_{0}__FeeName".Format(index)).val("");
+            }
+        });
+        $("#GiftFees_{0}__Fee".Format(index)).on("blur change paste", function () {
+            var item = $("#GiftFees_{0}__FeeType".Format(index)), me = $(this);
+            if (item.val() !== "30") {
+                var v = me.val();
+                if (!Leo.tools.isEmptyObject(v)) {
+                    var result = parseFloat(v);
+                    if (!reg.test(result)) {
+                        Leo.msgfail("非现金支付时不能为小数，只能为整数！");
+                        me.css("border-color", "red").focus();
+                    }
+                }
+            }
+        });
+    }
+
+    function addNewFeeType(index) {
+        if (index < moneyCount) {
+            $(".btn-addFeetype").UnBindAndBind("click", function () {
+                //判断删除盒子里是否有序号
+                if (deleteFeeBox.length > 0) {
+                    index = deleteFeeBox.shift();
+                }
+                BuildFeeTypeHtml(index);
+            });
+        } else {
+            t.msgwarn("最多只能添加{0}个".Format(moneyCount));
+            //最后一个删除选项进行初始化
+            deleteNewFeeType(index - 1);
+        }
+    }
+
+    function deleteNewFeeType(index) {
+        $(".btn-removeFeeType-{0}".Format(index)).UnBindAndBind("click", function () {
+            var lindex = AlertConfirm("确定要删除此票种吗？", "删除", "取消", function () {
+                CLOSE(lindex);
+                $(".feeitemwrap-{0}".Format(index)).remove();
+                deleteFeeBox.push(index);
+                var feeitemWrap = $(".feeitemwrap");
+                //if (feeitemWrap.length > 1) {
+                var feeitemwrapFirst = feeitemWrap.eq(0);
+                feeitemwrapFirst.removeClass("col-md-offset-2");
+                //判断删除时如何已达到满值减1，则最后一项显示添加票种按钮
+                //var feeitems = $(".feeitemwrap");
+                var _allLength = feeitemWrap.length;
+                var lastItem = feeitemWrap.last();
+                var btnAdd;
+                if (lastItem.find(".btn-addFeetype").length == 0) {
+                    var btn = lastItem.find(".btn-removeFeeType"), btnIndex = btn.data("i");
+                    btnAdd = $("<a>").addClass("btn btn-success btn-addFeetype".Format(index - 1)).data("i", btnIndex).text("+添加票种");
+                    btn.after(btnAdd);
+                }
+                if (feeitemWrap.length == 1) {
+                    lastItem.find(".btn-removeFeeType").remove();
+                }
+                //初始化添加按钮事件
+                addNewFeeType(_allLength);
+            });
+        });
+    }
+
+    function deleteNewJoinInfo(index) {
+        $(".btn-removeJoinInfo-{0}".Format(index)).UnBindAndBind("click", function () {
+            var lindex = AlertConfirm("确定要删除此填写项吗？", "删除", "取消", function () {
+                CLOSE(lindex);
+                $(".joinItemWrap-{0}".Format(index)).remove();
+                deleteJoinBox.push(index);
+                if ($(".joinItemWrap").length > 0) {
+                    var joinitems = $(".joinItemWrap");
+                    var _allLength = joinitems.length;
+                    var lastItem = joinitems.last();
+                    var btnAdd;
+                    if (lastItem.find(".btn-addJoinInfo").length == 0) {
+                        var btn = lastItem.find(".btn-removeJoinInfo"), btnIndex = btn.data("i");
+                        btnAdd = $("<a>").addClass("btn btn-success btn-addJoinInfo".Format(index - 1)).data("i", btnIndex).text("+添加购买填写项")
+                        btn.after(btnAdd);
+                    }
+                    //初始化添加按钮事件
+                    addJoinInfo(_allLength);
+                } else {
+                    $('.joinItemsWrap').children().eq(1).last().append($("<a>").addClass("btn btn-success btn-addJoinInfo").text('+添加购买填写项'));
+                    deleteJoinBox.length = 0;
+                    addJoinInfo(0);
+                }
+            });
+        });
+    }
+
+    function BuildFeeTypeHtml(index) {
+        var totalCount = $(".feeitemwrap").length;
+        var html = [];
+        html.push('<div class="feeitemwrap feeitemwrap-{0} col-md-offset-2 col-md-10 Lpdl0 Lmgt5">'.Format(index));
+        html.push('<div class="col-md-9">');
+        html.push('<div class="col-md-3 col-sm-3 Lpdl0i">');
+        html.push('<input data-val="true" data-val-number="The field FeeType must be a number." id="GiftFees_{0}__FeeType" name="GiftFees[{0}].FeeType" type="hidden" value="">');
+        html.push('<select id="pickupFee{0}" class="form-control">');
+        html.push('<option value="">费用类型</option>');
+        html.push('<option value="0">免费</option>');
+        html.push('<option value="10">积分支付</option>');
+        html.push('<option value="20">VIP分支付</option>');
+        html.push('<option value="30">支付宝支付</option>');
+        html.push('</select>');
+        html.push('</div>');
+        html.push('<div class="col-md-3 col-sm-3 Lpdl0i">');
+        html.push('<input class="form-control" data-val="true" id="GiftFees_{0}__FeeName" min="0" name="GiftFees[{0}].FeeName" placeholder="票种名称">');
+        html.push('</div>');
+        html.push('<div class="col-md-3 col-sm-3 Lpdl0i">');
+        html.push('<input class="form-control" id="GiftFees_{0}__Fee" min="0" name="GiftFees[{0}].Fee" placeholder="购买费用" type="number" value="">');
+        html.push('</div>');
+        html.push('<div class="col-md-3 col-sm-3 Lpdl0i">');
+        html.push('<input class="form-control" data-val="true" data-val-number="The field FeeCount must be a number." id="GiftFees_{0}__FeeCount" min="1" name="GiftFees[{0}].FeeCount" placeholder="@(desc)余量" type="number" value="">');
+        html.push('</div>');
+        html.push('</div>');
+        html.push('<div class="col-md-3">');
+        html.push('<a class="btn btn-danger btn-removeFeeType btn-removeFeeType-{0}" data-i="{0}">- 删除票种</a>'.Format(index));
+        if (totalCount < moneyCount - 1) {
+            html.push('<a class="btn btn-success btn-addFeetype" data-i="{0}">+添加票种</a>'.Format(index));
+        }
+        html.push('</div>');
+        html.push('</div>');
+
+        var btnAdd = $(".btn-addFeetype"), btnIndex = btnAdd.data('i') != index ? btnAdd.data('i') : index - 1;
+        if (totalCount == 1) {
+            btnAdd.before($("<a>").addClass("btn btn-danger btn-removeFeeType btn-removeFeeType-{0}".Format(btnIndex)).data("i", btnIndex).text("- 删除票种".Format(btnIndex)));
+        }
+        btnAdd.unbind("click").remove();
+        $(".feetypeList").append(html.join("").Format(index));
+        if (btnIndex != index) {
+            deleteNewFeeType(index);
+        }
+        deleteNewFeeType(btnIndex);
+        addNewFeeType(totalCount + 1);
+        InitFeeTypeChange(index);
+    }
+
+    function addJoinInfo(index) {
+        if (index < maxItem) {
+            $(".btn-addJoinInfo").UnBindAndBind("click", function () {
+                if (deleteJoinBox.length > 0) {
+                    index = deleteJoinBox.shift();
+                }
+                BuildJoinInfoHtml(index);
+            });
+        } else {
+            t.msgwarn("最多只能添加{0}个".Format(maxItem));
+            deleteNewJoinInfo(index - 1);
+        }
+    }
+
+    function BuildJoinInfoHtml(index) {
+        var totalCount = $(".joinItemWrap").length;
+        var html = [];
+        html.push('<div class="joinItemWrap joinItemWrap-{0} col-md-offset-2 col-md-10 Lpdl0 Lmgt5">'.Format(index));
+        html.push('<div class="col-md-3">');
+        html.push('<input id="JoinItemQues_{0}__ItemName" name="JoinItemQues[{0}].ItemName" class="form-control" type="text" placeholder="购买项名称">'.Format(index));
+        html.push('</div>');
+        html.push('<div class="col-md-9">');
+        html.push('<a class="btn btn-danger btn-removeJoinInfo btn-removeJoinInfo-{0}" data-i="{0}">- 删除购买填写项</a>'.Format(index));
+        if (totalCount < maxItem - 1) {
+            html.push('<a class="btn btn-success btn-addJoinInfo" data-i="{0}">+添加购买填写项</a>'.Format(index));
+        }
+        html.push('</div>');
+        html.push('</div>');
+
+        var btnAdd = $(".btn-addJoinInfo"), btnIndex = btnAdd.data('i') != index ? btnAdd.data('i') : index - 1;
+        btnAdd.unbind("click").remove();
+        $(".joinItemsWrap").append(html.join("").Format(index));
+        if (btnIndex != index) {
+            deleteNewJoinInfo(index);
+        }
+        deleteNewJoinInfo(btnIndex);
+        addJoinInfo(totalCount + 1);
+    }
+
+    var feeitemwrapcount = $(".feetypeList").find(".feeitemwrap").length;
+    if (feeitemwrapcount < moneyCount) {
+        addNewFeeType(feeitemwrapcount);
+    }
+    for (var __i = 0; __i < feeitemwrapcount; __i++) {
+        InitFeeTypeChange(__i);
+    }
+    var joincount = $(".joinBaseInfos").find(".joinItemWrap").length;
+    joincount < maxItem && addJoinInfo(joincount);
+
+    //启用填写项
+    $("#openJoinItems").change(function () {
+        if ($(this).prop("checked")) {
+            $("#Gift_OpenJoinItem").val("1");
+            $(".joinItemsWrap").removeClass("Ldn");
+        } else {
+            $("#Gift_OpenJoinItem").val("0");
+            $(".joinItemsWrap").addClass("Ldn");
+        }
+    });
+
+    $("#Gift_GiftName").focus();
+</script>

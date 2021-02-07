@@ -1,0 +1,111 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.Common
+@using AmazonBBS.BLL
+
+@model BaseListViewModel<News>
+@{
+    var list = Model.DataList;
+    var page = Model.Page;
+    bool isMaster = UserBaseBLL.Instance.IsMaster;
+}
+@if (list.Count > 0)
+{
+    for (int i = 0; i < list.Count; i++)
+    {
+        News item = list[i];
+        string _class = string.Empty;
+        switch (i % 5)
+        {
+            case 0: _class = "text-primary"; break;
+            case 1: _class = "text-success"; break;
+            case 2: _class = "text-info"; break;
+            case 3: _class = "text-warning"; break;
+            case 4: _class = "text-danger"; break;
+            default: _class = "text-left"; break;
+        }
+        <p class="newsItem" style="position:relative;">
+            <span class="pvcount badge badge-success" data-toggle="tooltip" title="@(item.PVCount)人浏览">@item.PVCount</span>
+            @if (DateTime.Now.Subtract(item.CreateTime.Value).Days <= 30)
+            {
+                <span class="badge badge-new">新</span>
+            }
+            <a class="@_class" href="/news/detail/@item.NewsID">@(item.NTitle)</a>
+            @if (isMaster)
+            {
+                <span class="btnActions Ldn">
+                    <span onclick="editPV(this,@item.NewsID)" class="btn btn-primary btn-xs">修改浏览量</span>
+                    <span onclick="NewsEdit(this,@item.NewsID)" class="btn btn-primary btn-xs">编辑</span>
+                    <span onclick="NewsDelete(this,@item.NewsID)" class="btn btn-danger btn-xs">删除</span>
+                </span>
+            }
+            <span class="Lfr">@item.CreateTime.Value.ToString(2)</span>
+        </p>
+    }
+    <div class="newsPageWrap">
+        @Html.Partial("_Page", page)
+    </div>
+    <script>
+        Leo.bootstrap
+    </script>
+    if (isMaster)
+    {
+        <script>
+            function NewsEdit(me, mid) {
+                location.href = "/news/edit/" + mid;
+            }
+            function editPV(me, mid) {
+                var $me = $(me);
+                layer.prompt({ title: "请修改浏览量", formType: 3, shadeClose: !0 }, function (count, index) {
+                    if (!isNaN(count)) {
+                        if (count > -1) {
+                            CLOSE(index);
+                            var loadIndex = LOAD("正在修改浏览量…");
+                            setTimeout(function () {
+                                $.post("/PV/newsPV/{0}".Format(mid), { number: count }, function (data) {
+                                    if (data.Ok) {
+                                        layer.msg("修改成功");
+                                        $me.parent().parent().find(".pvcount").text(count);
+                                    } else {
+                                        layer.msg(data.Msg || "修改失败");
+                                    }
+                                    layer.close(loadIndex);
+                                })
+                            }, 1000);
+                        } else {
+                            MSG("浏览量咋能为负呢？");
+                        }
+                    }
+                    else {
+                        MSG("请输入数字");
+                    }
+                });
+            }
+            function NewsDelete(me, mid) {
+                var me = $(me);
+                AlertConfirm("确定删除此新闻吗？删除后不可撤销！", "删除", "我点错了", function () {
+                    $.post("/news/Delete/{0}".Format(mid), function (data) {
+                        if (data.Ok) {
+                            me.parent().parent().parent().remove();
+                            layer.msg("删除成功");
+                        } else {
+                            layer.msg("删除失败");
+                        }
+                    });
+                });
+            }
+
+            $(".newsItem").mouseover(function () {
+                $(this).find(".btnActions").removeClass("Ldn");
+            }).mouseleave(function () {
+                $(this).find(".btnActions").addClass("Ldn");
+            });
+        </script>
+    }
+
+}
+else
+{
+    <div class="well">
+        暂无公告！
+    </div>
+}

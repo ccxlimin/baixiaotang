@@ -1,0 +1,216 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model TagViewModel
+@{
+    ViewBag.Title = "礼物数据课程排序";
+    string sort_gift = ConfigHelper.AppSettings("SortConfig_Gift");
+    string sort_data = ConfigHelper.AppSettings("SortConfig_Data");
+    string sort_kecheng = ConfigHelper.AppSettings("SortConfig_KeCheng");
+}
+<style>
+    body {
+        user-select: none;
+        -moz-user-select: none;
+    }
+</style>
+<div class="row Lmgt20">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div class="well">
+            <h4>礼物页面排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_default = new List<string>();
+                    if (sort_gift.IsNotNullOrEmpty())
+                    {
+                        roles_default = sort_gift.Split('+').ToList();
+                    }
+                }
+                @*<a onclick="selectSortType(this)" data-typedesc="gift-score" class="btn-sm btn-warning @(roles_default.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+积分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="gift-coin" class="btn-sm btn-warning @(roles_default.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+VIP分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="gift-cash" class="btn-sm btn-warning @(roles_default.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+现金</a>*@
+                <a onclick="selectSortType(this)" data-typedesc="gift-pvcount" class="btn-sm btn-warning @(roles_default.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="gift-createtime" class="btn-sm btn-warning @(roles_default.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="gift-desc" class="btn-sm btn-warning @(roles_default.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="gift-asc" class="btn-sm btn-warning @(roles_default.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="default-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (sort_gift.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_default)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="gift-score">-积分</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="gift-coin">-VIP分</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="gift-cash">-现金</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="gift-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="gift-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="gift-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="gift-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Gift')">提交设置</a>
+            </div>
+        </div>
+        <div class="well">
+            <h4>数据页面排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_hot = new List<string>();
+                    if (sort_data.IsNotNullOrEmpty())
+                    {
+                        roles_hot = sort_data.Split('+').ToList();
+                    }
+                }
+                @*<a onclick="selectSortType(this)" data-typedesc="data-score" class="btn-sm btn-warning @(roles_default.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+积分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="data-coin" class="btn-sm btn-warning @(roles_default.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+VIP分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="data-cash" class="btn-sm btn-warning @(roles_default.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+现金</a>*@
+                <a onclick="selectSortType(this)" data-typedesc="data-pvcount" class="btn-sm btn-warning @(roles_hot.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="data-createtime" class="btn-sm btn-warning @(roles_hot.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="data-desc" class="btn-sm btn-warning @(roles_hot.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="data-asc" class="btn-sm btn-warning @(roles_hot.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="hot-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (sort_data.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_hot)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="data-score">-积分</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="data-coin">-VIP分</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="data-cash">-现金</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="data-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="data-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="data-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="data-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'Data')">提交设置</a>
+            </div>
+        </div>
+        <div class="well">
+            <h4>课程页面排序规则</h4>
+            <div class="Lmgt10">
+                <a class="btn-sm btn-default disabled">可选排序标签：</a>
+                @{
+                    List<string> roles_jinghua = new List<string>();
+                    if (sort_kecheng.IsNotNullOrEmpty())
+                    {
+                        roles_jinghua = sort_kecheng.Split('+').ToList();
+                    }
+                }
+                @*<a onclick="selectSortType(this)" data-typedesc="kecheng-score" class="btn-sm btn-warning @(roles_default.Contains("1")?"Ldn":string.Empty)" data-sortindex="1">+积分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="kecheng-coin" class="btn-sm btn-warning @(roles_default.Contains("2")?"Ldn":string.Empty)" data-sortindex="2">+VIP分</a>
+                    <a onclick="selectSortType(this)" data-typedesc="kecheng-cash" class="btn-sm btn-warning @(roles_default.Contains("3")?"Ldn":string.Empty)" data-sortindex="3">+现金</a>*@
+                <a onclick="selectSortType(this)" data-typedesc="kecheng-pvcount" class="btn-sm btn-warning @(roles_jinghua.Contains("4")?"Ldn":string.Empty)" data-sortindex="4">+浏览量</a>
+                <a onclick="selectSortType(this)" data-typedesc="kecheng-createtime" class="btn-sm btn-warning @(roles_jinghua.Contains("5")?"Ldn":string.Empty)" data-sortindex="5">+创建时间</a>
+                <a onclick="selectSortType(this)" data-typedesc="kecheng-desc" class="btn-sm btn-warning @(roles_jinghua.Contains("6")?"Ldn":string.Empty)" data-sortindex="6">+降序</a>
+                <a onclick="selectSortType(this)" data-typedesc="kecheng-asc" class="btn-sm btn-warning @(roles_jinghua.Contains("7")?"Ldn":string.Empty)" data-sortindex="7">+升序</a>
+            </div>
+            <div class="jinghua-config-edit Lmgt10">
+                <a class="btn-sm btn-default disabled">按如下顺序排序：</a>
+                @if (sort_kecheng.IsNotNullOrEmpty())
+                {
+                    foreach (string item in roles_jinghua)
+                    {
+                        switch (item)
+                        {
+                            case "1":<a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="1" data-typeedesc="kecheng-score">-积分</a> break;
+                            case "2": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="2" data-typeedesc="kecheng-coin">-VIP分</a> break;
+                            case "3": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="3" data-typeedesc="kecheng-cash">-现金</a> break;
+                            case "4": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="4" data-typeedesc="kecheng-pvcount">-浏览量</a> break;
+                            case "5": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="5" data-typeedesc="kecheng-createtime">-创建时间</a> break;
+                            case "6": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="6" data-typeedesc="kecheng-desc">-降序</a> break;
+                            case "7": <a onclick="removeSortItem(this)" class="btn-sm btn-success Lmgl5" data-sortindex="7" data-typeedesc="kecheng-asc">-升序</a>break;
+                        }
+                    }
+                }
+            </div>
+            <div class="Lmgt10 Ldn">
+                <a class="btn-sm btn-primary" onclick="submitConfig(this, 'KeCheng')">提交设置</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function selectSortType(target) {
+        var me = $(target);
+        var typedesc = me.data("typedesc");
+        var renderwrap = me.parent().next();
+        var currentSortIndex = me.data("sortindex");
+        if (renderwrap.find("#{0}".Format(typedesc)).length == 0) {
+            var newElement = $("<a>").text(me.text().replace("+", "-")).data("typeedesc", typedesc).data("sortindex", currentSortIndex).attr("id", typedesc).addClass("btn-sm btn-success Lmgl5").click(function () {
+                removeSortItem(this, me);
+            });
+            if (renderwrap.children().length > 1) {
+                var lastEle = renderwrap.children().eq(-1);
+                var sortindex = lastEle.data("sortindex");
+                if (sortindex == 6 || sortindex == 7) {
+                    if (currentSortIndex != 6 && currentSortIndex != 7) {
+                        me.addClass("Ldn");
+                        lastEle.before(newElement);
+                        renderwrap.next().removeClass("Ldn");
+                    } else {
+                        Leo.msgfail("已经添加了{0}，请先移除{0}再添加新的！".Format(sortindex == 6 ? "降序" : "升序"));
+                    }
+                } else {
+                    me.addClass("Ldn");
+                    lastEle.after(newElement);
+                    renderwrap.next().removeClass("Ldn");
+                }
+            } else {
+                me.addClass("Ldn");
+                renderwrap.append(newElement);
+                renderwrap.next().removeClass("Ldn");
+            }
+        }
+    }
+
+    function submitConfig(target, type) {
+        var me = $(target), selectele = me.parent().prev();
+        if (selectele.children().length == 1) {
+            Leo.msgfail("请选择至少一个排序标签！");
+            selectele.prev().css("border", "1px solid #cecece");
+        } else {
+            var v = [];
+            selectele.children().each(function (i, n) {
+                if (i > 0) {
+                    v.push($(n).data("sortindex"));
+                }
+            });
+            $.post("/Console/SetGiftSortConfig", { sort: "SortConfig_{0}".Format(type), value: v.join("+") }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess("设置成功");
+                } else {
+                    Leo.msgfail("设置失败，依旧按默认法排序！");
+                }
+            })
+        }
+    }
+
+    function removeSortItem(target, source) {
+        var me = $(target);
+        if (source) {
+            source.removeClass("Ldn");
+        } else {
+            me.parent().prev().children().eq(parseInt(me.data("sortindex"))).removeClass("Ldn");
+        }
+        me.parent().next().removeClass("Ldn");
+        me.remove();
+    }
+</script>

@@ -1,0 +1,8 @@
+﻿@{
+    Uri returnUrl = Request.Url;
+}
+
+<ul class="nav navbar-nav navbar-right">
+    <li>@Html.ActionLink("登录", "login", "account", new { returnurl = returnUrl }, new { id = "loginLink" })</li>
+    <li>@Html.ActionLink("注册", "register", "account", new { returnurl = returnUrl }, new { id = "registerLink" })</li>
+</ul>

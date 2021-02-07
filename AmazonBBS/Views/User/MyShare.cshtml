@@ -1,0 +1,67 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyShareViewModel
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    ViewBag.Title = "我的分享 - 个人中心";
+
+    int registCount = Model.RegistCount;
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="well">
+                您的分享链接为：<br />
+                <span id="myShareLink" style="word-break:break-all;">@Model.ShareLink.ShareAddress</span><br />
+                <a class="btn btn-primary btn-paste Lusn" data-clipboard-text="@Model.ShareLink.ShareAddress">点击复制</a>
+            </div>
+            <div class="well">
+                <span>当前通过您分享的链接成功注册的用户数：@registCount</span>
+            </div>
+            @if (!Model.IsFirst)
+            {
+                if (Model.ShareCoinList.Count > 0)
+                {
+                    <div class="well">
+                        <table class="table table-bordered table-hover">
+                            <tr>
+                                <th width="33%">分享次数</th>
+                                <th width="33%">对应奖励(积分)</th>
+                                <th width="33%">领取达标奖励</th>
+                            </tr>
+                            @foreach (ShareCoinAndCount item in Model.ShareCoinList)
+                            {
+                                <tr>
+                                    <td>@item.ShareCount</td>
+                                    <td>@item.ShareCoin</td>
+                                    <td>
+                                        @if (item.IsPickCoin)
+                                        {
+                                            <a class="btn btn-default disabled">已领取</a>
+                                        }
+                                        else
+                                        {
+                                            if (item.ShareCount > registCount)
+                                            {
+                                                <a class="btn btn-default disabled">未达标</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="btn-getShareCoin btn btn-primary" data-coinID="@item.BBSID" data-coin="@item.ShareCoin">领取奖励</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
+<script src="~/Scripts/clipboard.min.js?v=20200111"></script>
+<script>
+    Leo.init("user", "myshare");
+</script>

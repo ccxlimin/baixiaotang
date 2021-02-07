@@ -1,0 +1,86 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model List<UserInfoViewModel>
+@{
+    ViewBag.Title = "用户法人认证审批";
+    List<UserInfoViewModel> list = Model;
+    Paging page = ViewBag.page;
+}
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        @if (list.Count > 0)
+        {
+            <table class="table table-bordered table-hover">
+                <caption>用户法人认证审批</caption>
+                <thead>
+                    <tr>
+                        <th width="10%">用户名</th>
+                        <th width="10%">姓名</th>
+                        <th width="20%">身份证号</th>
+                        <th width="20%">公司名称</th>
+                        <th width="15%">联系电话</th>
+                        <th width="5%">身份证</th>
+                        <th width="5%">营业执照</th>
+                        <th width="15%">操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        foreach (UserInfoViewModel item in list)
+                        {
+                            <tr>
+                                <td>@item.UserName</td>
+                                <td>@item.RealName</td>
+                                @{
+                                    string cardid = System.Text.RegularExpressions.Regex.Replace(item.CardID, "(\\d{6})\\d{8}(\\d{4})", "$1********$2");
+                                    string tel = System.Text.RegularExpressions.Regex.Replace(item.CompanyTel, "(\\d{3})\\d{4}(\\d{4})", "$1****$2");
+                                }
+                                <td>@cardid</td>
+                                <td>@item.CompanyName</td>
+                                <td>@tel</td>
+                                <td class="layer-photos-wrap"><img src="@item.CardPic" width="20" height="20" /></td>
+                                <td class="layer-photos-wrap"><img src="@item.FaRenPic" width="20" height="20" /></td>
+                                <td>
+                                    <a onclick="Pass(this,@item.UserID,'@item.UserName',1)" class="btnFaren btn-sm btn-primary">审核通过</a>
+                                    <a onclick="Pass(this,@item.UserID,'@item.UserName',0)" class="btnFaren btn-sm btn-primary">拒绝</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="Ltac">
+                <div class="well">
+                    <h4>暂无要审核的用户</h4>
+                </div>
+            </div>
+        }
+    </div>
+    @Html.Partial("_PageLink", page)
+</div>
+<script>
+    ///passType:1通过，0拒绝
+    function Pass(t, userid, username, passType) {
+        var me = $(t);
+        $.post("/Console/UserAuthPass/{0}".Format(userid), { passType: passType }, function (data) {
+            if (data.Ok) {
+                layer.msg(data.Msg || "操作成功");
+                me.parent().parent().remove();
+            }
+            else {
+                layer.msg(data.Msg || "操作失败")
+            }
+        });
+    }
+    function showPic(target) {
+        layer.photo()
+    }
+
+    Leo.ShowMaxImg();
+</script>

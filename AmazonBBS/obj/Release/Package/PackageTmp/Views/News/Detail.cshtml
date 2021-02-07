@@ -1,0 +1,22 @@
+﻿@using AmazonBBS.Model
+@model News
+@{
+    ViewBag.Title = "新闻详细";
+}
+<article class="post Lmgt20">
+    <div class="post-head">
+        <h1 class="post-title">
+            <span>@Model.NTitle</span>
+        </h1>
+        @*内容展示部分*@
+        <div class="post-content">
+            <p>
+                @Html.Raw(Model.NBody)
+            </p>
+        </div>
+    </div>
+</article>
+<script>
+    Leo.init('','detail',@Model.NewsID);
+</script>
+

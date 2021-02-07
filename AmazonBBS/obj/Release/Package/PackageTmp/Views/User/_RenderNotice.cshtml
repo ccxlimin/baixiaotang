@@ -1,0 +1,55 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model MyNotice
+@{
+    List<Notice> notices = Model.NoticeList;
+    Paging page = Model.NoticePage;
+    //和某人的对话记录
+    foreach (Notice item in notices)
+    {
+        <div class="aw-item inbox-style">
+            <div class="mod-head">
+                <a class="aw-user-img aw-border-radius-5">
+                    @if (item.IsRead == 0)
+                    {
+                        <img class="noticeIcon" src="~/Content/img/System_UnRead.png" />
+                    }
+                    else
+                    {
+                        <img src="~/Content/img/System_Read.png" />
+                    }
+                </a>
+                <div class="title">
+                    @Html.Raw(item.NoticeTitle)
+                </div>
+            </div>
+            <div class="mod-body" style="word-break:break-all;">
+                @Html.Raw(item.NoticeContent)
+            </div>
+            <div class="mod-footer">
+                <div class="meta clearfix">
+                    <span class="text-color-999">
+                        @{
+                            DateTime time = item.CreateTime.Value;
+                            if (time.Date == DateTime.Now.Date)
+                            {
+                                <span>今天 @time.ToString("HH:mm")</span>
+                            }
+                            else if (time.Date == DateTime.Now.AddDays(-1).Date)
+                            {
+                                <span>昨天 @time.ToString("HH:mm")</span>
+                            }
+                            else
+                            {
+                                <span>@time.ToString("yyyy-MM-dd HH:mm")</span>
+                            }
+                        }
+                    </span>
+                </div>
+            </div>
+        </div>
+    }
+    <div id="Noticepage">
+        @Html.Partial("_PageLoadMore", page)
+    </div>
+}

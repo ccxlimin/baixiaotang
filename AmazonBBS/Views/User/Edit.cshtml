@@ -1,0 +1,200 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    ViewBag.Title = "个性化设置 - 个人中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    UserBaseBLL bll = UserBaseBLL.Instance;
+    UserExtBLL extbll = UserExtBLL.Instance;
+
+    UserBase user = bll.UserInfo;
+    UserExt userext = extbll.GetExtInfo(user.UserID);
+    UserSet userSet = (UserSet)ViewBag.UserSet;
+
+    bool isRoot = bll.IsRoot;
+
+    string[] levels = UserExtBLL.Instance.GetLevelNameForUser(user.UserID);
+
+    int headnameshowtype = Convert.ToInt32(levels[3]);
+
+    List<SiteHead> listHeads = SiteHeadBLL.Instance.SearchAll();
+    //bool isFaRenAuth = userext.UserV == 3 || userext.UserV == 5 || userext.UserV == 6;
+}
+<script src="/Content/citypicker.js"></script>
+<script src="~/Scripts/layer-1.8.5/laydate/laydate.js"></script>
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="well-sm clearfix">
+                <div class="col-md-6">
+                    <div class="col-xs-12 col-md-12 clearfix Lpdl0i">
+                        <img class="myhead" width="50" height="50" src="@(user.HeadUrl??"/Content/img/head_default.gif")" />
+                        <a class="btn-primary btn-sm" onclick="ShowSystemHeads()">直接使用系统头像</a>
+                        <input type="file" id="selectimg" value="" />
+                        <a id="btn_changeHead" class="btn-success btn-sm">确定更换头像</a>
+                    </div>
+                </div>
+                @if (userext.VIP > 0)
+                {
+                    <div class="col-md-6">
+                        <span>VIP会员专属上传动态头像，需管理员审核</span>
+                        <input type="file" id="selectVIPimg" value="" />
+                        <a id="btn_changeVipHead" class="btn-success btn-sm">更换动态头像</a>
+                    </div>
+                }
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <input class="form-control" id="myNickName" placeholder="昵称" value="@user.UserName" data-default="@user.UserName" />
+                    <a id="btn_myNickName" class="btn-success btn-sm">更改昵称</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <input class="form-control" id="signinput" placeholder="个性签名" value="@user.Sign" />
+                    <a id="btn_MySign" class="btn-success btn-sm">更改个性签名</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <select id="setGender" class="form-control">
+                        <option value="">请选择性别</option>
+                        <option value="1">男</option>
+                        <option value="2">女</option>
+                    </select>
+                    <script>
+                        $("#setGender").val(@user.Gender).data("default",@user.Gender);
+                    </script>
+                    <a id="btn_setGender" class="btn-success btn-sm">更改性别</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <input class="form-control" value="@user.Birth" id="setBirth" data-default="@user.Birth" readonly="readonly" />
+                    <a id="btn_setBirth" class="btn-success btn-sm">更改年龄</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix" data-toggle="distpicker">
+                    <div class="col-md-4 Lpdl0i">
+                        @*<select name="setProvince" id="setProvince" data-province="--江苏省--" class="form-control"></select>*@
+                        <select name="setProvince" id="setProvince" data-province="--选择省--" class="form-control"></select>
+                    </div>
+                    <div class="col-md-4 Lpdl0i">
+                        <select name="setCity" id="setCity" data-city="--选择市--" class="form-control"></select>
+                    </div>
+                    <div class="col-md-4 Lpdl0i">
+                        <select name="setCounty" id="setCounty" data-district="--选择区/县/市--" class="form-control"></select>
+                    </div>
+                    <script>
+                        var _province = '@user.Province', _city = '@user.City', _county = '@user.County';
+                        setTimeout(function () {
+                            _province && $("#setProvince").val(_province).data("default",_province).trigger("change");
+                            _city && $("#setCity").val(_city).data("default",_city).trigger("change");
+                            _county && $("#setCounty").val(_county).data("default",_county).trigger("change");
+                        }, 100);
+                    </script>
+                    <a id="btn_setAreas" class="btn-success btn-sm">更改地区</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <input class="form-control" id="myJingYing" placeholder="经营类目" value="@user.JingYing" data-default="@user.JingYing" />
+                    <a id="btn_myJingYing" class="btn-success btn-sm">更改经营类目</a>
+                </div>
+            </div>
+            <div class="well-sm">
+                <div class="col-xs-12 col-md-12 clearfix">
+                    <input class="form-control" id="myWorkYear" placeholder="工作年限" value="@user.WorkYear" data-default="@user.WorkYear" />
+                    <a id="btn_myWorkYear" class="btn-success btn-sm">更改工作年限</a>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty(levels[2]))
+            {
+                <div class="well-sm">
+                    <div class="com-xs-12 col-md-12 clearfix">
+                        在其它页面显示您的信息时，请设置仅显示一种头衔
+                        <span style="color:red;">当前状态为:@(headnameshowtype == 1 ? "显示头衔" : "显示专属头衔")</span>
+                        @if (headnameshowtype == 1)
+                        {
+                            <span data-id="2" class="btn-change-showHeadName btn btn-primary btn-xs">切换为显示专属头衔</span>
+                        }
+                        else
+                        {
+                            <span data-id="1" class="btn-change-showHeadName btn btn-primary btn-xs">切换为显示头衔</span>
+                        }
+                    </div>
+                </div>
+            }
+            <div class="well-sm">
+                <div class="com-xs-12 col-md-12 clearfix">
+                    隐藏
+                    个人基本资料开关！如隐藏，则除管理员和您本人之外的所有人都无法看到；如显示，则所有人都可看到：
+                    <span style="color:red;">当前状态为:@(userSet.ShowOrHideBaseInfo ? "显示" : "隐藏")</span>
+                    @if (userSet.ShowOrHideBaseInfo)
+                    {
+                        <span data-value="false" class="btn-change-showHideInfo btn btn-primary btn-xs">隐藏个人资料</span>
+                    }
+                    else
+                    {
+                        <span data-value="true" class="btn-change-showHideInfo btn btn-primary btn-xs">显示个人资料</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="SystemHeads" class="Ldn">
+    @foreach (SiteHead item in listHeads)
+    {
+        <div class="imgwrap col-sm-6 col-md-4">
+            <a class="thumbnail">
+                <img onclick="PICKUPIMG(this)" src="@item.HeadImg" title="点击选择" />
+            </a>
+        </div>
+    }
+</div>
+<script>
+    Leo.init("user", "edit").SendFile("/Tool/UploadHead", $("#selectimg")[0], !1, function (data) {
+        if (data.Ok) {
+            layer.msg("头像更换成功");
+            $(".myhead").attr("src", data.Data || data.Url);
+        } else {
+            layer.msg(data.Msg);
+        }
+    }, "#btn_changeHead").SendFile("/Tool/UploadVipHead", $("#selectVIPimg")[0], !1, function (data) {
+        if (data.Ok) {
+            layer.msg("动态头像上传成功，等待管理员审核通过后即可使用！");
+        } else {
+            layer.msg(data.Msg);
+        }
+    }, "#btn_changeVipHead", 100);
+
+    function PICKUPIMG(target) {
+        AlertConfirm("确定使用该头像吗？", "更换", '取消', function () {
+            var src = $(target).attr("src");
+            $.post("/User/Head", { head: src }, function (data) {
+                if (data.Ok) {
+                    layer.msg("头像更新成功");
+                    $(".myhead").attr("src", src);
+                    layer.close(lindex);
+                } else {
+                    MSG("头像更新失败");
+                }
+            });
+        }, null)
+    }
+
+    function ShowSystemHeads() {
+        lindex = layer.open({
+            scrollbar: !1,
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: ["620px", "410px"],
+            shadeClose: !0,//单击遮罩层关闭窗口
+            content: $("#SystemHeads")
+        });
+    }
+</script>

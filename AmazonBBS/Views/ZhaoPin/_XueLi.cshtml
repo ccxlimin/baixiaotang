@@ -1,0 +1,22 @@
+﻿@{
+    int xueli = Model;
+    var msg = string.Empty;
+    switch (xueli)
+    {
+        case 1:
+            msg = "不限"; break;
+        case 2:
+            msg = "高中"; break;
+        case 3:
+            msg = "中专"; break;
+        case 4:
+            msg = "大专"; break;
+        case 5:
+            msg = "本科"; break;
+        case 6:
+            msg = "研究生"; break;
+        case 7:
+            msg = "博士"; break;
+    }
+    <span>@msg</span>
+}

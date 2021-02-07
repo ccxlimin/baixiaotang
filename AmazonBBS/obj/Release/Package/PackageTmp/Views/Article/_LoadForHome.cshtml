@@ -1,0 +1,158 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model ArticleViewModel
+@{
+    string defaultheadurl = "/Content/img/head_default.gif";
+    //int higescore = Convert.ToInt32(ConfigHelper.AppSettings("HigeScoreFlag"));
+    bool ismaster = UserBaseBLL.Instance.IsMaster;
+    long currentUid = UserBaseBLL.Instance.UserID;
+}
+<style>
+</style>
+@if (Model.Articles.Count > 0)
+{
+    foreach (_Article article in Model.Articles)
+    {
+        var isshow = !article.IsAnonymous || ismaster || currentUid == article.UserID;
+        <div class="aw-item">
+            @if (isshow)
+            {
+                <a class="aw-user-name" href="/user/detail/@article.UserName" rel="nofollow">
+                    <img src="@(article.HeadUrl ?? defaultheadurl)" onerror="javascript:this.src='/Content/img/head_default.gif'" alt="@article.UserName">
+                </a>
+            }
+            else
+            {
+                <a class="aw-user-name">
+                    <img src="~/Content/img/anonymous.png">
+                </a>
+            }
+            <div class="aw-question-content">
+                <h4>
+                    <a target="_blank" href="/article/detail/@article.ArticleId">
+                        @article.Title
+                    </a>
+                </h4>
+                @{
+                    string body = HtmlRegexHelper.ToText(article.Body);
+                    var length = body.Length;
+                    if (length > 0)
+                    {
+                        if (length > 39)
+                        {
+                            body = body.Substring(0, 39);
+                        }
+                        <div class="Lfs12">@(body)...</div>
+                    }
+                }
+                <div class="user-title" oncontextmenu="return !1;">
+                    @{
+                        if (isshow)
+                        {
+                            ViewBag.VIP = article.VIP;
+                            ViewBag.Time = article.VIPExpiryTime;
+                            var htm = Html.Partial("_VIP");
+                            <span style="vertical-align:middle;">
+                                @article.UserName • @Html.Raw(htm)
+                            </span>
+                            //管理员
+                            if (article.IsMaster)
+                            {
+                                <span data-toggle="tooltip" title="管理员">
+                                    <img width="20" height="20" src="/Content/U/Site/master.png" />
+                                </span>
+                            }
+                            //获取积分等级表
+                            List<BBSEnum> scoreLevelList = BBSEnumBLL.Instance.Query(BBSEnumType.ScoreLevel.GetHashCode());
+                            //积分等级
+                            int userScore = article.TotalScore;
+                            var item = scoreLevelList.Where(a => a.SortIndex <= userScore).OrderByDescending(a => a.SortIndex).FirstOrDefault();
+                            if (item != null)
+                            {
+                                var nextItem = scoreLevelList.FirstOrDefault(a => a.SortIndex > item.SortIndex);
+                                //循环计算等级称号
+                                int loopCount = scoreLevelList.Count;
+                                for (int loopIndex = 0; loopIndex < loopCount; loopIndex++)
+                                {
+                                    var findItem = scoreLevelList.LastOrDefault(a => a.SortIndex <= userScore);
+                                    if (findItem != null)
+                                    {
+                                        <span data-toggle="tooltip" title="等级：@item.EnumDesc">
+                                            <img width="20" height="20" src="/Content/img/LevelLogo/scorelevelname_@(findItem.EnumDesc).png" />
+                                        </span>
+                                        if (userScore > 0 && findItem.SortIndex > 0)
+                                        {
+                                            userScore -= findItem.SortIndex.Value;
+                                        }
+                                        else
+                                        {
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        break;
+                                    }
+                                }
+                            }
+                            //头衔或专属头衔
+                            if (article.HeadNameShowType == 1)
+                            {
+                                if (!string.IsNullOrEmpty(article.LevelName))
+                                {
+                                    string levelNameUrls = article.LevelNameUrls;
+                                    string[] imgs = string.IsNullOrEmpty(levelNameUrls) ? null : levelNameUrls.Split(new string[] { "#BXT#" }, StringSplitOptions.None);
+                                    if (imgs != null)
+                                    {
+                                        foreach (string imgSrc in imgs)
+                                        {
+                                            <span data-toggle="tooltip" title="头衔：@article.LevelName">
+                                                <img width="20" height="20" src="@imgSrc" />
+                                            </span>
+                                        }
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (!string.IsNullOrEmpty(article.OnlyLevelName))
+                                {
+                                    <span data-toggle="tooltip" title="专属头衔：@article.OnlyLevelName">
+                                        <img width="20" height="20" src="/Content/img/LevelLogo/onlylevelname_@(article.OnlyLevelName).png" />
+                                    </span>
+                                }
+                            }
+                        }
+                        <span class="itemdata">
+                            @(article.PriseCount)赞 •
+                            @(article.LikeCount)关注 •
+                            @(article.CommentCount)评论 •
+                            <span class="pageviews-pv">@(article.PVCount)浏览</span> •
+                            <span data-toggle="tooltip" title="发布时间">@Html.Partial("_TimeLine", article.CreateTime)</span>
+                            @if (article.UpdateTime != article.CreateTime)
+                            {
+                                <span data-toggle="tooltip" title="更新时间"> • @Html.Partial("_TimeLine", article.UpdateTime)</span>
+                            }
+                            @if (article.LastCommentTime.HasValue)
+                            {
+                                <span data-toggle="tooltip" title="最后回复时间">
+                                    • @Html.Partial("_TimeLine", article.LastCommentTime)
+                                </span>
+                            }
+                        </span>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="Llh50 Ltac">
+        暂无该类型的文章！
+    </div>
+}
+<div id="homecommentpage">
+    @Html.Partial("_Page", Model.ARticlePage)
+</div>

@@ -1,0 +1,258 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model UserManageViewModel
+@{
+    ViewBag.Title = "成员帐号管理";
+    int ps = ViewBag.PS;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <div class="col-md-10">
+        <div style="line-height:34px;height:34px;">
+            <span>本站当前一共有@(Model.Page.RecordCount)个用户</span>
+            <span class="btn-search-leo btn btn-primary Lfr">
+                搜索用户
+            </span>
+            <span style="display:inline-block;float:right;width:30%">
+                <input class="searchValue form-control" placeholder="搜索用户" />
+            </span>
+        </div>
+        <form class="form-horizontal Lmgt10 account-manage-searchForm Lmgb10" id="search-form-accountmanage">
+            <div class="col-md-12 clearfix Lpdl0i">
+                <div class="col-md-11 Lpdl0i">
+                    <label for="search_jobTrade" class="col-md-2 control-label Lpdl0i">登录筛选</label>
+                    <div class="col-md-10 Lpdl0i">
+                        <div class="col-md-4 col-xs-12 input-group Lpdl0i Lpdr0i">
+                            <select id="search_login_condition" name="search_login_condition" class="form-control">
+                                <option value="">-登录条件-</option>
+                                <option value="1">本月登录</option>
+                                <option value="2">最近3个月登录</option>
+                                <option value="3">最近半年登录</option>
+                                <option value="4">100天内未登录</option>
+                                <option value="5">1年内未登录</option>
+                                <option value="6">2年内未登录</option>
+                                <option value="7">3年内未登录</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-xs-12 input-group Lpdl0i Lpdr0i">
+                            <select id="search_login_count" name="search_login_count" class="form-control" disabled="disabled">
+                                <option value="">-登录次数-</option>
+                                <option value="1">1次</option>
+                                <option value="2">2次</option>
+                                <option value="3">3次</option>
+                                <option value="4">4次</option>
+                                <option value="5">5次</option>
+                                <option value="6">6次</option>
+                                <option value="7">7次</option>
+                                <option value="8">8次</option>
+                                <option value="9">9次</option>
+                                <option value="10">10次</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3 Lpdl0i Lmgl10">
+                            <a class="btn-search-form btn btn-primary">搜索</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+        <div>
+            <div class="Lpdl0i">
+                <a class="btn btn-primary btn-select-current-page-send-msg">全选本页发消息</a>
+                <a class="btn btn-primary Lmgl10 btn-send-msg-to-all-user">发消息给网站全部用户</a>
+                <div class="input-group Lfr">
+                    <select id="account_page_size" class="form-control">
+                        @*<option value="1" @(ps == 1 ? "selected" : "")>每页1条</option>*@
+                        @*<option value="2" @(ps == 2 ? "selected" : "")>每页2条</option>*@
+                        <option value="20" @(ps == 20 ? "selected" : "")>每页20条</option>
+                        <option value="50" @(ps == 50 ? "selected" : "")>每页50条</option>
+                        <option value="100" @(ps == 100 ? "selected" : "")>每页100条</option>
+                        <option value="150" @(ps == 150 ? "selected" : "")>每页150条</option>
+                        <option value="200" @(ps == 200 ? "selected" : "")>每页200条</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="manageUserListWrap">
+            @Html.Partial("_UserInfoList", Model)
+        </div>
+    </div>
+</div>
+<script>
+    var pageSize = @(ps);
+    var currentSearchType = 1;//1 默认进此页面的，查全部账号 2根据用户名查 3根据登录条件查
+    var searchFunction = {
+        searchUserByKey: function () {
+            currentSearchType = 2;
+            if (CHECKNOTEMPTY($(".searchValue"), "关键字")) {
+                var layerIndex = LOAD("正在查找用户中");
+                $.get("/Console/GetUserByKey/{0}".Format($(".searchValue").val()), { ps: pageSize }, function (data) {
+                    if (data.Ok === false) {
+                        MSG(data.Msg || "查无此人");
+                    } else {
+                        $(".manageUserListWrap").children().remove();
+                        $(".manageUserListWrap").append(data);
+                        Leo.Page.PageRowNumber(".L_page_wrap", ".manageUserListWrap", "/Console/GetUserByKey?ps={0}&{1}".Format(pageSize,$(".searchValue").val()),".container", function () { return  LOAD("正在查找用户中");});
+                    }
+                    CLOSE(layerIndex);
+                });
+            }
+        },
+        searchByCondition: function () {
+            currentSearchType = 3;
+            var search_login_condition = "#search_login_condition", search_login_count = "#search_login_count";
+            if (!Leo.tools.isEmptyObject(search_login_condition.val())) {
+                var ok = true;
+                var search_login_condition_val = search_login_condition.val();
+                if (search_login_condition_val == "1" || search_login_condition_val == "2" || search_login_condition_val == "3") {
+                    if (Leo.tools.isEmptyObject(search_login_count.val())) {
+                        ok = false;
+                        Leo.msg("请选择登录次数");
+                    }
+                }
+                if (ok) {
+                    LOAD("搜索中")
+                    $.get("/console/searchUser?{0}".Format($("#search-form-accountmanage").serialize()), { ps: pageSize }, (data) => {
+                        layer.closeAll();
+                        if (data.Ok === false) {
+                            Leo.msgfail(data.Msg || "搜索失败");
+                        } else {
+                            $(".manageUserListWrap").children().remove();
+                            $(".manageUserListWrap").append(data);
+                            Leo.Page.PageRowNumber(".L_page_wrap", ".manageUserListWrap", "/console/searchUser?ps={0}&{1}".Format(pageSize,$("#search-form-accountmanage").serialize()),".container", function () { return  LOAD("搜索中");});
+                        }
+                    });
+                }
+            } else {
+                Leo.msg("登录条件不能为空");
+            }
+        },
+    }
+    Leo.onfocusKeyup(".searchValue", Leo.keyup.onKeyUpType.Enter, searchFunction.searchUserByKey);
+
+    $(".btn-search-form").click(function () {
+        searchFunction.searchByCondition();
+    });
+    $("#search_login_condition").change(function () {
+        var v = $(this).val();
+        if (v == "1" || v == "2" || v == "3") {
+            $("#search_login_count").attr("disabled", false);
+        } else {
+            $("#search_login_count").attr("disabled", true).val("");
+        }
+    })
+
+    //搜索用户
+    $(".btn-search-leo").unbind("click").bind("click", function () {
+        searchFunction.searchUserByKey();
+    });
+
+    //本页用户发送消息
+    $(".btn-select-current-page-send-msg").click(function () {
+        var checkbox_tds = $(".checkbox_td")
+        if (checkbox_tds.length > 0) {
+            var checkbox_th = $(".checkbox_th");
+            var checkboxs = checkbox_tds.children();
+            checkbox_th.removeClass("Ldn");
+            checkbox_tds.removeClass("Ldn");
+            checkboxs.attr("checked", !0);
+            var names = [],
+                ids = []
+            $.each(checkboxs, function (i, c) {
+                var that = $(this)
+                if (that.is(":checked") === true) {
+                    var $ele = that.parent().parent().find(".username_td").children();
+                    names.push($ele.data("name"));
+                    ids.push($ele.data("id"));
+                }
+            });
+
+            function hide() {
+                checkbox_th.addClass("Ldn");
+                checkbox_tds.addClass("Ldn");
+            }
+
+            if (ids.length > 0) {
+                var msg = names.join(" , ");
+                msg = msg.length > 200 ? msg.substring(0, 200) : msg;
+                Leo.ChatInit(ids, msg + " 等(共{0}人)".Format(names.length), hide, hide, hide);
+            }
+        } else {
+            Leo.msgfail('没有可发送对象')
+        }
+    });
+
+    //发送给全体用户
+    $(".btn-send-msg-to-all-user").click(function () {
+        var message, sendingIndex, errorMsgIndex, inboxIndex, flag = false;
+        var chatDom = $("<div>").attr("id", "chatbox").addClass("chatbox Ldn"), ta, senfFun;
+        $("<div>").addClass("col-md-12")
+            .append("<h3>发送私信</h3>")
+            .append("<h4>To：{0}</h4>".Format("网站全部用户"))
+            .append(ta = $("<textarea>").attr("placeholder", "请输入私信内容"))
+            .append($("<a>").addClass("btn btn-primary btn_send").text("发送").click(senfFun = function (e) {
+                var _me = $(e);
+                //_me.unbind("click");
+                message = ta.val();
+                if (!flag) {
+                    if (Leo.tools.isEmptyObject(message.trim())) {
+                        errorMsgIndex = layer.msg("私信内容不能为空");
+                        ta.focus();
+                        _me.bind("click", function () { senfFun(this); })
+                        return !1;
+                    } else {
+                        flag = !0;
+                        sendingIndex = layer.load("发送消息中");
+                        send();
+                    }
+                }
+            }, function () {
+                senfFun(this);
+            })).appendTo(chatDom);
+        chatDom.appendTo($("body"));
+        setTimeout(function () { ta.focus(); }, 50);
+        function send() {
+            $.post("/c/all", { message: encodeURI(message) }, function (data) {
+                if (data.Ok) {
+                    Leo.msgsuccess(data.Msg || "发送成功");
+                    layer.close(sendingIndex);
+                    layer.close(inboxIndex);
+                    $("#chatbox").remove();
+                } else {
+                    Leo.msgfail(data.Msg || "发送失败");
+                }
+                flag = !1;
+            });
+        }
+
+        inboxIndex = layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            area: ["300px", "auto"],
+            shadeClose: !0,//单击遮罩层关闭窗口
+            content: $("#chatbox"),
+            end: function () {
+                layer.close(errorMsgIndex);
+                $("#chatbox").remove();
+            },
+        });
+    });
+
+    $("#account_page_size").change(function () {
+        pageSize = $(this).val();
+        console.log(pageSize)
+        if (currentSearchType == 1) {
+            location.href = "/console/accountmanage?pi=1&ps={0}".Format(pageSize);
+        } else if (currentSearchType == 2) {
+            searchFunction.searchUserByKey();
+        } else if (currentSearchType == 3) {
+            searchFunction.searchByCondition();
+        }
+    });
+</script>

@@ -1,0 +1,332 @@
+﻿@using AmazonBBS.Model
+@model List<SiteNotice>
+@{
+    ViewBag.Title = "滚屏公告设置";
+    List<SiteNotice> list = Model;
+}
+
+<div class="row">
+    <div class="col-md-2">
+        @Html.Partial("_ConsoleMenu")
+    </div>
+    <form class="form-horizontal" role="form">
+        <div class="col-md-10">
+            <div class="well clearfix">
+                <div class="col-md-12">
+                    <div>
+                        <div>滚屏公告图片切换时间间隔(毫秒：1秒等于1000毫秒)</div>
+                        <input placeholder="@(ViewBag.scrollNoticeChangeTime)" class="form-control" onEmpty="滚屏公告图片切换时间间隔(毫秒)" />
+                        <a onclick="SetConfig('scrollNoticeChangeTime', this)" class="btn btn-primary">确定设置</a>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <h3>滚屏公告设置</h3>
+                    <div class="well">
+                        <div class="form-group-sm clearfix">
+                            <div class="col-sm-12 layer-photos-wrap clearfix">
+                                <label for="search_companyName" class="col-md-2 control-label Lpdl0i">示例</label>
+                                <div class="col-sm-10">
+                                    <img style="width:400px;" src="http://www.baixiaotangtop.com/content/img/scrollnotice.png" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_short_title" class="col-md-2 control-label Lpdl0i">短标题</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="notice_short_title" placeholder="短标题" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_short_title_bgcolor" class="col-md-2 control-label Lpdl0i">短标题背景色</label>
+                                <div class="col-sm-10">
+                                    <input type="color" class="form-control" value="#eeeeee" id="notice_short_title_bgcolor" placeholder="短标题背景色" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_short_title_fontcolor" class="col-md-2 control-label Lpdl0i">短标题字体色</label>
+                                <div class="col-sm-10">
+                                    <input type="color" class="form-control" value="#666666" id="notice_short_title_fontcolor" placeholder="短标题字体色" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_long_title" class="col-md-2 control-label Lpdl0i">长标题</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="notice_long_title" placeholder="长标题" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_long_title_bgcolor" class="col-md-2 control-label Lpdl0i">长标题背景色</label>
+                                <div class="col-sm-10">
+                                    <input type="color" class="form-control" value="#dddddd" id="notice_long_title_bgcolor" placeholder="长标题背景色" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_long_title_fontcolor" class="col-md-2 control-label Lpdl0i">长标题字体色</label>
+                                <div class="col-sm-10">
+                                    <input type="color" class="form-control" value="#777777" id="notice_long_title_fontcolor" placeholder="长标题字体色" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt5 clearfix">
+                                <label for="notice_url" class="col-md-2 control-label Lpdl0i">跳转地址</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="notice_url" placeholder="跳转地址(可为空)" />
+                                </div>
+                            </div>
+                            <div class="col-sm-12 Lmgt10 clearfix Ltac">
+                                <a onclick="addNew()" id="btn_add_notice" class="btn btn-primary">确认新增</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (list != null && list.Count > 0)
+            {
+                <div class="col-md-12">
+                    <table class="table table-bordered table-hover table-concole-scrollnotice">
+                        <caption>滚屏公告管理</caption>
+                        <thead>
+                            <tr>
+                                <th width="15%">短标题</th>
+                                <th width="30%">长标题</th>
+                                <th width="20%">跳转地址</th>
+                                <th width="20%">创建时间</th>
+                                <th width="15%">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (SiteNotice item in list)
+                                {
+                                    long sid = item.Id;
+                                    string stitle = item.ShortTitle;
+                                    string stbgcolor = item.ShortTitleBGColor;
+                                    string stfcolor = item.ShortTitleFontColor;
+                                    string ltitle = item.Title;
+                                    string ltbgcolor = item.TitleBGColor;
+                                    string ltfcolor = item.TitleFontColor;
+                                    string url = item.Url;
+                                    <tr>
+                                        <td style="color:@stfcolor;background-color:@stbgcolor;">@stitle</td>
+                                        @if (!string.IsNullOrEmpty(url))
+                                        {
+                                            <td style="background-color:@ltbgcolor;"><a style="color:@ltfcolor !important;" href="@url" target="_blank">@ltitle</a></td>
+                                            <td><a style="color:@ltfcolor !important;" href="@url" target="_blank">@url</a></td>
+                                        }
+                                        else
+                                        {
+                                            <td style="color:@ltfcolor;background-color:@ltbgcolor;">@ltitle</td>
+                                            <td>-</td>
+                                        }
+                                        <td>@item.CreateTime.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                                        <td>
+                                            <a onclick="Edit(this,@sid,'@stitle','@stbgcolor','@stfcolor','@ltitle','@ltbgcolor','@ltfcolor','@url')" class="btn-sm btn-primary">编辑</a>
+                                            <a onclick="Delete(this,@sid,1)" class="btn-sm btn-danger">删除</a>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </form>
+</div>
+<div class="EditScrollNotice Ldn" style="background-color:#fff;">
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_short_title" class="col-md-2 control-label Lpdl0i">短标题</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="edit_notice_short_title" placeholder="短标题" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_short_title_bgcolor" class="col-md-2 control-label Lpdl0i">短标题背景色</label>
+        <div class="col-sm-10">
+            <input type="color" class="form-control" value="#eeeeee" id="edit_notice_short_title_bgcolor" placeholder="短标题背景色" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_short_title_fontcolor" class="col-md-2 control-label Lpdl0i">短标题字体色</label>
+        <div class="col-sm-10">
+            <input type="color" class="form-control" value="#666666" id="edit_notice_short_title_fontcolor" placeholder="短标题字体色" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_long_title" class="col-md-2 control-label Lpdl0i">长标题</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="edit_notice_long_title" placeholder="长标题" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_long_title_bgcolor" class="col-md-2 control-label Lpdl0i">长标题背景色</label>
+        <div class="col-sm-10">
+            <input type="color" class="form-control" value="#dddddd" id="edit_notice_long_title_bgcolor" placeholder="长标题背景色" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_long_title_fontcolor" class="col-md-2 control-label Lpdl0i">长标题字体色</label>
+        <div class="col-sm-10">
+            <input type="color" class="form-control" value="#777777" id="edit_notice_long_title_fontcolor" placeholder="长标题字体色" />
+        </div>
+    </div>
+    <div class="col-sm-12 Lmgt5 clearfix">
+        <label for="edit_notice_url" class="col-md-2 control-label Lpdl0i">跳转地址</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="edit_notice_url" placeholder="跳转地址(可为空)" />
+        </div>
+    </div>
+    @*<div class="form-group">
+            <div class="col-md-12 Ltac">
+                <button type="button" class="btn-edit btn btn-primary btn-sm">确定修改</button>
+            </div>
+        </div>*@
+</div>
+<script>
+    Leo.ShowMaxImg();
+    function addNew() {
+        var notice_short_title = $("#notice_short_title"),
+            notice_short_title_bgcolor = $("#notice_short_title_bgcolor"),
+            notice_short_title_fontcolor = $("#notice_short_title_fontcolor"),
+            notice_long_title = $("#notice_long_title"),
+            notice_long_title_bgcolor = $("#notice_long_title_bgcolor"),
+            notice_long_title_fontcolor = $("#notice_long_title_fontcolor"),
+            notice_url = $("#notice_url");
+        if (CHECKNOTEMPTY(notice_short_title, "短标题")) {
+            if (Leo.tools.CheckLength(notice_short_title.val(), 1, 10, "短标题")) {
+                if (CHECKNOTEMPTY(notice_long_title, "长标题")) {
+                    if (Leo.tools.CheckLength(notice_long_title.val(), 1, 100, "长标题")) {
+                        var obj = {}
+                        obj["notice_short_title"] = notice_short_title.val();
+                        obj["notice_short_title_bgcolor"] = notice_short_title_bgcolor.val();
+                        obj["notice_short_title_fontcolor"] = notice_short_title_fontcolor.val();
+                        obj["notice_long_title"] = notice_long_title.val();
+                        obj["notice_long_title_bgcolor"] = notice_long_title_bgcolor.val();
+                        obj["notice_long_title_fontcolor"] = notice_long_title_fontcolor.val();
+                        obj["notice_url"] = notice_url.val();
+                        $.post("/console/addScrollNotice", obj, function (data) {
+                            if (data.Ok) {
+                                MSG("新增成功", function () { location.reload(); });
+                                notice_short_title.val("");
+                                notice_short_title_bgcolor.val("");
+                                notice_short_title_fontcolor.val("");
+                                notice_long_title.val("");
+                                notice_long_title_bgcolor.val("");
+                                notice_long_title_fontcolor.val("");
+                                notice_url.val("");
+                            } else {
+                                Leo.msgfail(data.Msg || "失败");
+                            }
+                        });
+                    }
+                }
+            }
+        }
+    }
+
+    //删除
+    function Delete(target, id, type) {
+        var desc = type == 0 ? "恢复" : "删除";
+        var me = $(target);
+        AlertConfirm("确定要{0}此滚屏公告吗？".Format(desc), "确认{0}".Format(desc), '我点错了', function () {
+            var lindex = LOAD(desc + "中...");
+            $.post("/console/updateScrollNotice/{0}".Format(id),
+                //{ desc: desc, updateType: type },
+                function (data) {
+                    layer.close(lindex);
+                    if (data.Ok) {
+                        Leo.msgsuccess("{0}成功".Format(desc));
+                        $(target).parent().parent().remove();
+                        //if (type == 0) {
+                        //    me.text("删除").removeClass("btn-success").addClass("btn-primary");
+                        //} else {
+                        //    me.text("恢复").removeClass("btn-primary").addClass("btn-success");
+                        //}
+                        //me.removeAttr("onClick").unbind("click").bind("click", function () {
+                        //    Delete(me, id, type == 0 ? 1 : 0);
+                        //});
+                    } else {
+                        Leo.msgfail(data.Msg);
+                    }
+                });
+        });
+    }
+
+    //编辑
+    function Edit(me, id, st, stbg, stf, lt, ltbg, ltf, url) {
+        var layerindex;
+        var edit_notice_short_title = $("#edit_notice_short_title"),
+            edit_notice_short_title_bgcolor = $("#edit_notice_short_title_bgcolor"),
+            edit_notice_short_title_fontcolor = $("#edit_notice_short_title_fontcolor"),
+            edit_notice_long_title = $("#edit_notice_long_title"),
+            edit_notice_long_title_bgcolor = $("#edit_notice_long_title_bgcolor"),
+            edit_notice_long_title_fontcolor = $("#edit_notice_long_title_fontcolor"),
+            edit_notice_url = $("#edit_notice_url");
+        edit_notice_short_title.val(st);
+        edit_notice_short_title_bgcolor.val(stbg);
+        edit_notice_short_title_fontcolor.val(stf);
+        edit_notice_long_title.val(lt);
+        edit_notice_long_title_bgcolor.val(ltbg);
+        edit_notice_long_title_fontcolor.val(ltf);
+        edit_notice_url.val(url);
+        function empty() {
+            $("#edit_notice_short_title").val("");
+            $("#edit_notice_short_title_bgcolor").val("");
+            $("#edit_notice_short_title_fontcolor").val("");
+            $("#edit_notice_long_title").val("");
+            $("#edit_notice_long_title_bgcolor").val("");
+            $("#edit_notice_long_title_fontcolor").val("");
+            $("#edit_notice_url").val("");
+        }
+        layerindex = AlertActionAreaWithConfirmWithSize($(".EditScrollNotice"), "编辑滚屏公告", "400px", null, '确定编辑', null, function () {
+            if (CHECKNOTEMPTY(edit_notice_short_title, "短标题")) {
+                if (Leo.tools.CheckLength(edit_notice_short_title.val(), 1, 10, "短标题")) {
+                    if (CHECKNOTEMPTY(edit_notice_long_title, "长标题")) {
+                        if (Leo.tools.CheckLength(edit_notice_long_title.val(), 1, 100, "长标题")) {
+                            var obj = {}
+                            obj["notice_short_title"] = edit_notice_short_title.val();
+                            obj["notice_short_title_bgcolor"] = edit_notice_short_title_bgcolor.val();
+                            obj["notice_short_title_fontcolor"] = edit_notice_short_title_fontcolor.val();
+                            obj["notice_long_title"] = edit_notice_long_title.val();
+                            obj["notice_long_title_bgcolor"] = edit_notice_long_title_bgcolor.val();
+                            obj["notice_long_title_fontcolor"] = edit_notice_long_title_fontcolor.val();
+                            obj["notice_url"] = edit_notice_url.val();
+                            var layerindex2 = LOAD("提交中");
+                            $.post("/console/editScrollNotice/{0}".Format(id), obj, function (data) {
+                                if (data.Ok) {
+                                    layer.close(layerindex);
+                                    layer.close(layerindex2);
+                                    empty();
+                                    MSG("编辑成功", function () {
+                                        location.reload(!0);
+                                    });
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }, function () {
+            empty();
+        });
+    }
+
+    function SetConfig(key, target) {
+        var input = $(target).parent().find(".form-control");
+        if (input.val() != "") {
+            if (Leo.Regpx.isNumber(input.val())) {
+                $.post("/Console/SetConfig/{0}".Format(key), { value: input.val() }, function (data) {
+                    if (data.Ok) {
+                        layer.msg("设置成功");
+                        input.attr("placeholder", input.val());
+                        input.val("");
+                    }
+                });
+            } else {
+                input.focus();
+                MSG("请输入正整数");
+            }
+        } else {
+            input.focus();
+            MSG(input.attr("onEmpty") || "设置不能为空");
+        }
+    }
+</script>

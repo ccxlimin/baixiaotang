@@ -1,0 +1,21 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model BBSListViewModel
+@{
+    UserBase user = UserBaseBLL.Instance.UserInfo;
+    ViewBag.Title = "我发布的问题 - 个人中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string headurl = user.HeadUrl ?? "/Content/img/head_default.gif";
+}
+
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @Html.Partial("_LoadMyQuestionList", Model)
+        </div>
+    </div>
+</div>
+<script>
+    Leo.init("user", "myquestion", 1);
+</script>

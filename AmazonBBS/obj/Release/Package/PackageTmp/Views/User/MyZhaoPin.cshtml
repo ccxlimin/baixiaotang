@@ -1,0 +1,14 @@
+﻿@using AmazonBBS.Model
+@model BaseListViewModel<ZhaoPin>
+@{
+    ViewBag.Title = "我发布的招聘 - 个人中心";
+}
+
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            @Html.Partial("_LoadMyZhaoPinList", Model)
+        </div>
+    </div>
+</div>

@@ -1,0 +1,712 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@using AmazonBBS.Common
+@model BBSListViewModel
+@{
+    ViewBag.Title = "首页";
+
+    bool isVipUser = ViewBag.IsVIPUser;
+
+    string defaultHeadurl = "/Content/img/head_default.gif";
+    bool isSigned = (bool)ViewBag.Signed;
+    bool isLogin = (bool)ViewBag.IsLogin;
+    bool isroot = UserBaseBLL.Instance.IsRoot;
+    long uid = ViewBag.Uid;
+    bool canWriteArticle = UserBaseBLL.Instance.CanPublishArticle();
+
+    List<MasterViewModel> masters = MasterBLL.Instance.GetAllMaster();
+
+    List<UserViewModel> hotusers = UserExtBLL.Instance.GetHotUsers();
+    List<UserViewModel> newusers = UserExtBLL.Instance.GetNewUsers();
+    List<UserViewModel> oldusers = UserExtBLL.Instance.GetOldUsers();
+    //今日签到榜
+    List<SignUserViewModel> signUsersToday = UserBaseBLL.Instance.GetSignUsersByToday();
+    //本月签到榜
+    List<SignUserViewModel> signUsersMonth = UserBaseBLL.Instance.GetSignUsersByMonth();
+    //拉取推荐网站
+    List<SuggestSite> suggestList = SuggestSiteBLL.Instance.SearchAll();
+    List<SiteNotice> scrollNoticeList = ViewBag.ScrollNotice;
+
+    List<Slide> slides = SlideBLL.Instance.GetALLSlider().Where(a => { return a.IsDelete == 0; }).ToList();
+    int slideChangeTime = ConfigHelper.AppSettings("slideChangeTime").ToInt32();
+    int scrollNoticeChangeTime = ConfigHelper.AppSettings("scrollNoticeChangeTime").ToInt32();
+
+    //动态新闻
+    List<News> news = NewsBLL.Instance.FindList(CacheBLL.Instance.Get_NewShowCount());
+
+    //随机获取20个标签(前8个是新创建标签，后16个是随机)
+    List<List<HomeTagsViewModel>> tags = TagBLL.Instance.GetRandomTag();
+
+    //数据分析协会学习榜
+    List<SignUserStudyInfo> studies = ViewBag.VipStudy;
+
+    //热门帖子
+    List<Question> hotQuestionList = ViewBag.HotBBS;
+    //热门文章
+    List<Article> hotArticleList = ViewBag.HotArticle;
+    DateTime now = DateTime.Now;
+}
+<div class="row Lmgt10">
+    <main class="col-md-8">
+        @*  左边尺寸：530 * 306
+            右边尺寸: 205 * 148 *@
+        @*轮播 S*@
+        @if (slides.Count > 0)
+        {
+            List<Slide> leftSlides = slides.Where(a => a.SlideType == 11).ToList();
+            List<Slide> rightTopSlides = slides.Where(a => a.SlideType == 21).ToList();
+            List<Slide> rightBottomSlides = slides.Where(a => a.SlideType == 22).ToList();
+            int leftCount = leftSlides.Count;
+            int rightTopCount = rightTopSlides.Count;
+            int rightBottomCount = rightBottomSlides.Count;
+            if (rightTopCount == 0)
+            {
+                rightTopCount = leftCount;
+                rightTopSlides = leftSlides;
+            }
+            if (rightBottomCount == 0)
+            {
+                rightBottomCount = leftCount;
+                rightBottomSlides = leftSlides;
+            }
+            <div id="home_Carousel" class="Lmgb30 clearfix">
+                @*左侧*@
+                <div id="home_Carousel_left" class="carousel slide" data-ride="carousel" data-interval="@slideChangeTime">
+                    @if (leftCount > 1)
+                    {
+                        <ol class="carousel-indicators">
+                            <li data-target="#home_Carousel_left" data-slide-to="0" class="active"></li>
+                            @for (int i = 1; i < leftCount; i++)
+                            {
+                                <li data-target="#home_Carousel_left" data-slide-to="@i"></li>
+                            }
+                        </ol>
+                    }
+                    <div class="carousel-inner">
+                        @for (int i = 0; i < leftCount; i++)
+                        {
+                            var item = leftSlides[i];
+                            <div class="item@(i==0?" active":string.Empty)">
+                                <a @(string.IsNullOrEmpty(item.Url) ? string.Empty : " target='_blank' href=" + item.Url.ToLower())>
+                                    <img src="@item.Img">
+                                </a>
+                                <div class="carousel-caption" style="color:@item.FontColor;">@item.Title</div>
+                            </div>
+                        }
+                    </div>
+                    @if (leftCount > 1)
+                    {
+                        <a class="left carousel-control" href="#home_Carousel_left" role="button" data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#home_Carousel_left" role="button" data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </a>
+                    }
+                </div>
+                @*右侧*@
+                <div id="home_Carousel_right">
+                    @*右上*@
+                    <div id="home_Carousel_right_top" class="carousel slide" data-ride="carousel" data-interval="@(slideChangeTime-100)">
+                        @if (rightTopCount > 1)
+                        {
+                            <ol class="carousel-indicators">
+                                <li data-target="#home_Carousel_right_top" data-slide-to="0" class="active"></li>
+                                @for (int i = 1; i < rightTopCount; i++)
+                                {
+                                    <li data-target="#home_Carousel_right_top" data-slide-to="@i"></li>
+                                }
+                            </ol>
+                        }
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < rightTopCount; i++)
+                            {
+                                var item = rightTopSlides[i];
+                                <div class="item@(i==0?" active":string.Empty)">
+                                    <a @(string.IsNullOrEmpty(item.Url) ? string.Empty : " target='_blank' href=" + item.Url.ToLower())>
+                                        <img src="@item.Img">
+                                    </a>
+                                    <div class="carousel-caption" style="color:@item.FontColor;">@item.Title</div>
+                                </div>
+                            }
+                        </div>
+                        @if (rightTopCount > 1)
+                        {
+                            <a class="small-left left carousel-control" href="#home_Carousel_right_top" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="small-right right carousel-control" href="#home_Carousel_right_top" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        }
+                    </div>
+                    @*右下*@
+                    <div id="home_Carousel_right_bottom" class="carousel slide" data-ride="carousel" data-interval="@(slideChangeTime+100)">
+                        @if (rightBottomCount > 1)
+                        {
+                            <ol class="carousel-indicators">
+                                <li data-target="#home_Carousel_right_bottom" data-slide-to="0" class="active"></li>
+                                @for (int i = 1; i < rightBottomCount; i++)
+                                {
+                                    <li data-target="#home_Carousel_right_bottom" data-slide-to="@i"></li>
+                                }
+                            </ol>
+                        }
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < rightBottomCount; i++)
+                            {
+                                var item = rightBottomSlides[i];
+                                <div class="item@(i==0?" active":string.Empty)">
+                                    <a @(string.IsNullOrEmpty(item.Url) ? string.Empty : " target='_blank' href=" + item.Url.ToLower())>
+                                        <img src="@item.Img">
+                                    </a>
+                                    <div class="carousel-caption" style="color:@item.FontColor;">@item.Title</div>
+                                </div>
+                            }
+                        </div>
+                        @if (rightBottomCount > 1)
+                        {
+                            <a class="small-left left carousel-control" href="#home_Carousel_right_bottom" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="small-right right carousel-control" href="#home_Carousel_right_bottom" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @*轮播 E*@
+        @*滚屏公告 S*@
+        @if (scrollNoticeList.Count > 0)
+        {
+            //int scrollIndex = 0;
+            <div class="postHome">
+                <div class="scrollNoticeWrapper" data-time="@scrollNoticeChangeTime">
+                    @foreach (SiteNotice notice in scrollNoticeList)
+                    {
+                        <div class="scrollNoticeItem clearfix" style="background-color:@notice.TitleBGColor;">
+                            <div class="shortTitle" title="@notice.ShortTitle" style="color:@notice.ShortTitleFontColor;background-color:@notice.ShortTitleBGColor;">@notice.ShortTitle</div>
+                            @if (string.IsNullOrWhiteSpace(notice.Url))
+                            {
+                                <div class="longTitle" title="@notice.Title" style="color:@notice.TitleFontColor;background-color:@notice.TitleBGColor;">@notice.Title</div>
+                            }
+                            else
+                            {
+                                <a class="longTitle" href="@notice.Url" target="_blank" style="color:@notice.TitleFontColor;background-color:@notice.TitleBGColor;" title="@notice.Title">@notice.Title</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @*滚屏公告 E *@
+        @*标签 S*@
+        @if (tags.Count > 0)
+        {
+            <div class="postHome">
+                @foreach (List<HomeTagsViewModel> tagList in tags)
+                {
+                    foreach (HomeTagsViewModel tag in tagList)
+                    {
+                        <a class="btn btn-default Lmgb10" href="/tag/category/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+                        @*if (tag.TagBelongId == 1038)
+                            {
+                                <a class="btn btn-default Lmgb10" href="/Tag/A/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-default Lmgb10" href="/Tag/B/@tag.TagId">@(tag.TagName)@(tag.ItemCount > 0 ? "(" + tag.ItemCount + ")" : string.Empty)</a>
+                            }*@
+                    }
+                }
+                <a class="btn btn-sm Lfr" href="/tag">更多话题</a>
+            </div>
+        }
+        @*标签 E*@
+
+        @*数据分析协会学习榜 S*@
+        <div class="postHome widget clearfix">
+            <h4 class="title">数据分析协会学习榜</h4>
+            <div class="tab-pane fade in active" id="sign-vip-today-link">
+                <div class="loadwrap2">
+                    @if (studies != null && studies.Count > 0)
+                    {
+                        <div class="clearfix">
+                            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">会员</div>
+                            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">本月签到次</div>
+                            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">总签到次</div>
+                            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">学习内容</div>
+                            <div class="col-md-2 col-xs-2 sign-vip-today-link-column">学习进度</div>
+                        </div>
+                        ViewBag.More = false;
+                        @Html.Partial("_UserStudy", studies)
+                    }
+                    else
+                    {
+                        <div class="well Lmgt5">
+                            会员榜今日暂无签到
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @*数据分析协会学习榜 E*@
+
+        @*问题列表 S*@
+        <div class="postHome">
+            @*标签部分 S*@
+            <div>
+                <ul class="userTabs nav nav-tabs nav-tabs-a-borderColor-top-green">
+                    <li>
+                        <a href="#Sort_AllBBS" data-toggle="tab" data-reactid="Sort_AllBBS" onclick="document.getElementById('sort_art_icon').style.display = 'none'; document.getElementById('sort_bbs_icon').style.display = 'inline-block';">
+                            帖子(@ViewBag.BBSCount)
+                            <img id="sort_bbs_icon" data-sort="1" title="按时间升序" class="Ldn Lcp" src="~/Content/img/sort.png" width="16" />
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#Sort_AllArticle" data-toggle="tab" data-reactid="Sort_AllArticle" onclick="document.getElementById('sort_art_icon').style.display = 'inline-block'; document.getElementById('sort_bbs_icon').style.display = 'none';">
+                            文章(@ViewBag.ArticleCount)
+                            <img id="sort_art_icon" data-sort="1" title="按时间升序" class="Ldn Lcp" src="~/Content/img/sort.png" width="16" />
+                        </a>
+                    </li>
+                    <li class="active"><a href="#Sort_Default" data-toggle="tab" data-reactid="Sort_Default">综合</a></li>
+                    <li><a href="#Sort_Hot" data-toggle="tab" data-reactid="Sort_Hot">热门</a></li>
+                    <li><a href="#Sort_JinHua" data-toggle="tab" data-reactid="Sort_JinHua">精华</a></li>
+                    <li><a href="#Sort_Top" data-toggle="tab" data-reactid="Sort_Top">置顶</a></li>
+                    <li><a href="#Sort_NoComment" data-toggle="tab" data-reactid="Sort_NoComment">待回复</a></li>
+                    <li><a href="#Sort_New" data-toggle="tab" data-reactid="Sort_New">新贴</a></li>
+                </ul>
+                <div class="userTabContent tab-content" oncontextmenu="return !1;" onselect="return !1;">
+                    <div class="tab-pane fade" id="Sort_AllBBS"></div>
+                    <div class="tab-pane fade" id="Sort_AllArticle"></div>
+                    <div class="tab-pane fade" id="Sort_Default"></div>
+                    <div class="tab-pane fade" id="Sort_Hot"></div>
+                    <div class="tab-pane fade" id="Sort_JinHua"></div>
+                    <div class="tab-pane fade" id="Sort_Top"></div>
+                    <div class="tab-pane fade" id="Sort_NoComment"></div>
+                    <div class="tab-pane fade" id="Sort_New"></div>
+                </div>
+            </div>
+            @*标签部分 E*@
+            <div class="homeqlist aw-common-list">
+                @Html.Partial("/Views/bbs/_LoadForHome.cshtml", Model)
+            </div>
+        </div>
+        @*问题列表 E*@
+    </main>
+    <section class="col-md-4 sidebar">
+        <div class="widget clearfix">
+            <h4 class="title">操作</h4>
+            <div class="Ltac">
+                @if (isSigned)
+                {
+                    if (isVipUser)
+                    {
+                        <a class="btn btn-warning Lmgt5 btn-block" href="/study">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日已签到，快来学习吧</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="disabled btn btn-info Lmgt5 btn-block">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日已签到</span>
+                        </a>
+                    }
+                }
+                else
+                {
+                    if (isLogin)
+                    {
+                        <a id="btn_sign" class="btn btn-success Lmgt5 btn-block">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日签到</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a href="/account/login" class="btn btn-success Lmgt5 btn-block">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日签到</span>
+                        </a>
+                    }
+                    if (isVipUser)
+                    {
+                        <a class="btn-signed btn btn-warning Lmgt5 btn-block Ldn" href="/study">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日已签到，快来学习吧</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn-signed disabled btn btn-info Lmgt5 btn-block Ldn">
+                            <img src="~/Content/img/sign.png" class="btnimg" />
+                            <span>今日已签到</span>
+                        </a>
+                    }
+                }
+
+                @if (isLogin)
+                {
+                    <a href="/bbs/add?from=home" class="btn btn-primary btn-block">
+                        <img src="~/Content/img/question.png" class="btnimg" />
+                        <span>发布新贴</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn_login btn btn-primary btn-block" url="/bbs/add?from=home">
+                        <img src="~/Content/img/question.png" class="btnimg" />
+                        <span>发布新贴</span>
+                    </a>
+                }
+
+                @if (isLogin)
+                {
+                    if (canWriteArticle)
+                    {
+                        <a href="/article/publish?from=home" class="btn btn-primary btn-block">
+                            <img src="~/Content/img/article.png" class="btnimg" />
+                            <span>发表文章</span>
+                        </a>
+                    }
+                    else
+                    {
+                        <a onclick="layer.msg('你现在的积分等级不能够发表新文章！')" class="btn btn-primary btn-block">
+                            <img src="~/Content/img/article.png" class="btnimg" />
+                            <span>发表文章</span>
+                        </a>
+                    }
+                    <a href="/party/create?from=home" class="btn btn-primary btn-block">
+                        <img src="~/Content/img/party.png" class="btnimg" />
+                        <span>发布活动</span>
+                    </a>
+                }
+                else
+                {
+                    <a href="/account/login?returnurl=@Request.Url.Authority/article/publish" class="btn btn-primary btn-block">
+                        <img src="~/Content/img/article.png" class="btnimg" />
+                        <span>发表文章</span>
+                    </a>
+                    <a href="/account/login?returnurl=@Request.Url.Authority/party/create?from=home" class="btn btn-primary btn-block">
+                        <img src="~/Content/img/party.png" class="btnimg" />
+                        <span>发布活动</span>
+                    </a>
+                }
+                @if (isLogin)
+                {
+                    <a href="/user/myshare" class="btn btn-primary Lmgt5 btn-block">
+                        <img src="~/Content/img/scorecoin.png" class="btnimg" />
+                        <span>领取分享奖励</span>
+                    </a>
+                }
+                else
+                {
+                    <a class="btn_login btn btn-primary Lmgt5 btn-block">
+                        <img src="~/Content/img/scorecoin.png" class="btnimg" />
+                        <span>领取分享奖励</span>
+                    </a>
+                }
+                <div class="Lmgt5 searchWrapper">
+                    <div class="Lfl searchWrapper-1">
+                        <select class="form-control form-control-afterWithInput">
+                            <option value="questionandarticle">全部</option>
+                            <option value="question">帖子</option>
+                            <option value="article">文章</option>
+                            <option value="user">用户</option>
+                        </select>
+                    </div>
+                    <div class="Lfl searchWrapper-2">
+                        <input placeholder="关键字(Enter)" type="text" class="form-control form-control-beforeWithInput form-control-afterWithInput" />
+                    </div>
+                    <div class="Lfl searchWrapper-3">
+                        <button type="button" class="btn-fullSearch btn btn-default form-control-beforeWithInput">搜索</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        @if (news.Count > 0)
+        {
+            <div class="widget clearfix">
+                <h4 class="title">公告</h4>
+                <div class="content">
+                    <div class="list-group">
+                        @foreach (News item in news)
+                        {
+                            string _title = item.NTitle;
+                            var len = _title.Length;
+                            string tooltop = string.Empty;
+                            if (len > 15)
+                            {
+                                tooltop = "data-toggle=tooltip";
+                                //_title = _title.Substring(0, 15) + "...";
+                            }
+                            <a href="/news/detail/@item.NewsID" target="_blank" class="list-group-item textOverflowHidden" @tooltop title="@_title">
+                                @if (now.Subtract(item.CreateTime.Value).Days <= 30)
+                                {
+                                    <span class="badge badge-new">新</span>
+                                }
+                                @_title
+                            </a>
+                        }
+                    </div>
+                    <div class="Ltar">
+                        <a href="/news/list?from=home">+更多公告</a>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (masters != null && masters.Count > 0)
+        {
+            <div class="widget clearfix">
+                <h4 class="title">管理员</h4>
+                <div class="content clearfix">
+                    @for (int i = 0; i < masters.Count; i++)
+                    {
+                        var item = masters[i];
+                        <div class="col-md-4 col-sm-2 col-xs-4 UserHeadInfo @(i<9?string.Empty:"Ldn")">
+                            <a href="/user/detail/@item.UserName" target="_blank" data-toggle="popover" data-placement="bottom" class="thumbnail col-md-12">
+                                <img src="@(item.HeadUrl ?? defaultHeadurl)" onerror="this.src='@defaultHeadurl';" style="width:80px;height:auto;" />
+                                <div class="caption captionName Ltac">
+                                    <h6>@item.UserName</h6>
+                                    <span class="captionUserv">
+                                        @Html.Partial("_UserV", item.UserV)
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+                @if (masters.Count > 9)
+                {
+                    <div class="Ltac">
+                        <a href="javascript:void(0);" class="showHeadImg">显示全部</a>
+                    </div>
+                }
+            </div>
+        }
+        @if (hotQuestionList.Count > 0)
+        {
+            <div class="widget clearfix">
+                <h4 class="title">热门帖子</h4>
+                <div class="content">
+                    <div class="list-group">
+                        @foreach (Question item in hotQuestionList)
+                        {
+                            string _title = item.Title;
+                            var len = _title.Length;
+                            string tooltop = string.Empty;
+                            if (len > 15)
+                            {
+                                tooltop = "data-toggle=tooltip";
+                                //_title = _title.Substring(0, 15) + "...";
+                            }
+                            <a href="/bbs/detail/@item.QuestionId" target="_blank" class="list-group-item textOverflowHidden" @tooltop title="@_title">
+                                @if (now.Subtract(item.CreateTime.Value).Days <= 30)
+                                {
+                                    <span class="badge badge-new">新</span>
+                                }
+                                @_title
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        @if (hotArticleList.Count > 0)
+        {
+            <div class="widget clearfix">
+                <h4 class="title">热门文章</h4>
+                <div class="content">
+                    <div class="list-group">
+                        @foreach (Article item in hotArticleList)
+                        {
+                            string _title = item.Title;
+                            var len = _title.Length;
+                            string tooltop = string.Empty;
+                            if (len > 15)
+                            {
+                                tooltop = "data-toggle=tooltip";
+                                //_title = _title.Substring(0, 15) + "...";
+                            }
+                            @*<a href="/article/detail/@item.ArticleId" target="_blank" class="list-group-item" title="@_title" @(tooltop)>*@
+                            <a href="/article/detail/@item.ArticleId" target="_blank" class="list-group-item textOverflowHidden" @tooltop title="@_title">
+                                @if (now.Subtract(item.CreateTime.Value).Days <= 30)
+                                {
+                                    <span class="badge badge-new">新</span>
+                                }
+                                @_title
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="widget clearfix">
+            <ul class="nav nav-tabs Lbb0 homeUserWall">
+                <li class="active title Lpdb0">
+                    <a class="Lbd0i Lpd0i Lmgr10i" href="#hotuser-link" data-toggle="tab">
+                        <h4 class="Lmgb0">红人榜</h4>
+                    </a>
+                </li>
+                <li class="title Lpdb0">
+                    <a class="Lbd0i Lpd0i Lmgr10i" href="#newuser-link" data-toggle="tab">
+                        <h4 class="Lmgb0">新人榜</h4>
+                    </a>
+                </li>
+                <li class="title Lpdb0">
+                    <a class="Lbd0i Lpd0i Lmgr10i" href="#olduser-link" data-toggle="tab">
+                        <h4 class="Lmgb0">元老榜</h4>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content homeUserWallContent">
+                <div class="tab-pane fade in active" id="hotuser-link">
+                    <div class="loadwrap2">
+                        @Html.Partial("_UserWall", hotusers)
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="newuser-link">
+                    <div class="loadwrap2">
+                        @Html.Partial("_UserWall", newusers)
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="olduser-link">
+                    <div class="loadwrap2">
+                        @Html.Partial("_UserWall", oldusers)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="widget clearfix">
+            <ul class="nav nav-tabs Lbb0 homeUserWall">
+                <li class="active title Lpdb0">
+                    <a class="Lbd0i Lpd0i Lmgr10i" href="#sign-today-link" data-toggle="tab">
+                        <h4 class="Lmgb0">今日签到榜</h4>
+                    </a>
+                </li>
+                <li class="title Lpdb0">
+                    <a class="Lbd0i Lpd0i Lmgr10i" href="#sign-month-link" data-toggle="tab">
+                        <h4 class="Lmgb0">本月签到榜</h4>
+                    </a>
+                </li>
+            </ul>
+            <div class="tab-content homeUserWallContent clearfix">
+                <div class="tab-pane fade in active" id="sign-today-link">
+                    <div class="loadwrap2">
+                        @if (signUsersToday.Count > 0)
+                        {
+                            <table class="Ltac Lwidth100">
+                                <tr>
+                                    <th width="50%" class="Ltac">用户名</th>
+                                    <th width="50%" class="Ltac">今日签到时间</th>
+                                </tr>
+                                @foreach (SignUserViewModel item in signUsersToday)
+                                {
+                                    <tr>
+                                        <td><a href="/user/detail/@item.UserName">@item.UserName</a></td>
+                                        <td>@item.SignTime.ToString("HH : mm")</td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="well">
+                                今日无人签到
+                            </div>
+                        }
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="sign-month-link">
+                    <div class="loadwrap2">
+                        @if (signUsersMonth.Count > 0)
+                        {
+                            <table class="Ltac Lwidth100">
+                                <tr>
+                                    <th width="30%" class="Ltac">用户名</th>
+                                    <th width="20%" class="Ltac">本月次数</th>
+                                    <th width="20%" class="Ltac">本月连续次数</th>
+                                    <th width="20%" class="Ltac">总次数</th>
+                                    @*<th colspan="3">本月次数/本月连续次数/总次数</th>*@
+                                </tr>
+                                @foreach (SignUserViewModel item in signUsersMonth)
+                                {
+                                    <tr>
+                                        <td><a href="/user/detail/@item.UserName">@item.UserName</a></td>
+                                        <td>@item.SignCount</td>
+                                        <td>@item.MonthContinueSignCount</td>
+                                        <td>@item.SignTotalCount</td>
+                                    </tr>
+                                }
+                            </table>
+                        }
+                        else
+                        {
+                            <div class="well">
+                                本月无人签到
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+@if (isroot)
+{
+    <script>
+        //编辑
+        $(".editContent").click(function () {
+            location.href = "/bbs/edit/" + $(this).parent().data("qid");
+        });
+
+        //删除问题
+        $(".deleteQuestion").click(function () {
+            var me = $(this);
+            var _index = AlertConfirm("确认删除此帖子吗？", "确定", "我再想想", function () {
+                CLOSE(_index);
+                var loadIndex = LOAD();
+                setTimeout(function () {
+                    $.post("/bbs/DeleteQ/{0}".Format(me.parent().data("qid")), function (data) {
+                        if (data.Ok) {
+                            MSG("删除成功");
+                            me.parent().parent().parent().parent().remove();
+                        } else {
+                            MSG(data.Msg || "删除失败");
+                        }
+                        CLOSE(_index);
+                    })
+                }, 1000);
+            }, function () { });
+        });
+    </script>
+}
+@if (suggestList != null && suggestList.Count > 0)
+{
+    <div class="row SuggestSite">
+        <div class="col-md-12 col-sm-12">
+            <h6>百晓堂推荐网站</h6>
+            <ul>
+                @foreach (SuggestSite suggest in suggestList)
+                {
+                    <li><a href="@suggest.SiteAddress" target="_blank">@suggest.SiteName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+<script>
+    Leo.init("home");
+    Leo.user.sign=@(isSigned ? 1 : 0)
+</script>

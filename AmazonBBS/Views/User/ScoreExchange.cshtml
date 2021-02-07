@@ -1,0 +1,133 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    ViewBag.Title = "积分兑换 - 个人中心";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+    UserBaseBLL bll = UserBaseBLL.Instance;
+    UserExtBLL extbll = UserExtBLL.Instance;
+
+    UserBase user = bll.UserInfo;
+    UserExt userext = extbll.GetExtInfo(user.UserID);
+    bool isVip = bll.IsVIP(user.UserID);
+
+    //积分兑换比例
+    int score2VipScore = Convert.ToInt32(ViewBag.ScoreExchange);
+    //一个月会员所需VIP分
+    int buyVipFeeCount = Convert.ToInt32(ViewBag.BuyVIPFeeCount);
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <div class="col-md-12">
+                <h4>
+                    当前社区设置的比例规则为：
+                    1VIP分=@(score2VipScore)积分
+                </h4>
+                <div class="col-md-12">
+                    <span>您当前拥有@(userext.TotalScore)个积分，@(userext.TotalCoin)个VIP分</span>
+                </div>
+            </div>
+            <div class="well">
+                <div class="clearfix Lmgt5">
+                    <div class="col-md-6">
+                        <h4>VIP分兑换积分</h4>
+                        <div class="form-group-sm Lmgt5">
+                            @{ bool enoughCoin = userext.TotalCoin > 0;}
+                            @if (enoughCoin)
+                            {
+                                <input type="number" min="1" max="@userext.TotalCoin" class="form-control" id="ScoreChange" placeholder="请输入VIP分个数" />
+                            }
+                            else
+                            {
+                                <input class="form-control" disabled="disabled" placeholder="VIP分不足，无法兑换" />
+                            }
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            <span class="Ldn ScorechangeResult">可兑换为<span>0</span>个积分</span>
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            @if (enoughCoin)
+                            {
+                                <a id="btn_ScoreChange" class="btn btn-primary">确认将VIP分兑换为积分</a>
+                            }
+                            else
+                            {
+                                <a class="btn disabled btn-primary">VIP分不足，无法兑换</a>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>积分兑换VIP分</h4>
+                        <div class="form-group-sm Lmgt5">
+                            @{ bool enoughScore = userext.TotalScore > 0;}
+                            @if (enoughScore)
+                            {
+                                <input type="number" min="@score2VipScore" step="10" max="@(Math.Floor(Convert.ToDecimal(userext.TotalScore)/score2VipScore)*score2VipScore)" class="form-control" id="VipScoreChange" placeholder="请输入积分个数" />
+                            }
+                            else
+                            {
+                                <input class="form-control" disabled="disabled" placeholder="积分不足，无法兑换" />
+                            }
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            <span class="Ldn VipchangeResult">可兑换为<span>0</span>个VIP分</span>
+                        </div>
+                        <div class="form-group-sm Lmgt5">
+                            @if (enoughScore)
+                            {
+                                <a id="btn_VipScoreChange" class="btn btn-primary">确认将积分兑换为VIP分</a>
+                            }
+                            else
+                            {
+                                <a class="btn disabled btn-primary">积分不足，无法兑换</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <h4>
+                    当前会员价格为@(buyVipFeeCount)VIP分可购买一个月(30天)会员专属
+                </h4>
+            </div>
+            <div class="well" id="scoreexchange">
+                <div class="col-md-12">
+                    <span>VIP分购买会员专属</span>
+                </div>
+                <div class="clearfix Lmgt5">
+                    <div class="col-md-12">
+                        @for (int i = 1; i < 13; i++)
+                        {
+                            <span data-month="@i" class="btn-buyVIP btn btn-primary Lmgt5">购买@(i)个月会员</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (!isVip)
+{
+    <script>
+        Leo.NoVipTips = function () {
+            var lindex = AlertConfirm("您还不是百晓堂VIP用户，无法查看此模块哦！使用积分购买VIP即可成为VIP用户，是否购买VIP？", "购买VIP", "暂不考虑", function () {
+                CLOSE(lindex);
+                if (location.pathname.toLowerCase() != "/user/scoreexchange") {
+                    location.href = Leo.baseUrl + "/user/scoreexchange#scoreexchange";
+                }
+            });
+        }
+        $('.novip').click(function () {
+            Leo.NoVipTips();
+        });
+    </script>
+}
+<script>
+    Leo.init("user", "SE", [@score2VipScore,@buyVipFeeCount]);
+        if (location.search.indexOf("showtip") > -1) {
+            Leo.NoVipTips();
+        }
+</script>

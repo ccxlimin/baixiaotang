@@ -1,0 +1,22 @@
+﻿@{
+    int userv = Model;
+    List<int> vgroup = new List<int>();
+    switch (userv)
+    {
+        case 1: vgroup.Add(1); break;
+        case 2: vgroup.Add(2); break;
+        case 4: vgroup.Add(4); break;
+        case 3: vgroup.Add(1); vgroup.Add(2); break;
+        case 5: vgroup.Add(1); vgroup.Add(4); break;
+        case 6: vgroup.Add(2); vgroup.Add(4); break;
+        case 7: vgroup.Add(1); vgroup.Add(2); vgroup.Add(4); break;
+    }
+}
+
+@if (vgroup.Count > 0)
+{
+    foreach (int index in vgroup)
+    {
+        <img style="width:16px;height:16px;vertical-align:middle !important;" src="/Content/U/UserV/@(index).png" />
+    }
+}

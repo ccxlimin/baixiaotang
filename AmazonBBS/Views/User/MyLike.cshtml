@@ -1,0 +1,16 @@
+﻿@using AmazonBBS.Model
+@model MyLikeViewModel
+@{
+    ViewBag.Title = "我关注的" + ViewBag.TempTitle + "- 个人中心";
+}
+<div class="row Lmgt20">
+    <div class="container">
+        @Html.Partial("_UserMenu")
+        <div class="col-md-9 mycenterRight">
+            <h4>你一共关注了@(Model.MyLikePage.RecordCount)个@(ViewBag.TempTitle)</h4>
+            <div class="mylikeWrap">
+                @Html.Partial("_LoadMyLikeList", Model)
+            </div>
+        </div>
+    </div>
+</div>

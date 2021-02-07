@@ -1,0 +1,24 @@
+﻿@using AmazonBBS.Model
+@{
+    ViewBag.Title = "搜索结果";
+}
+@model SearchResultViewModel
+@{
+    int count = Model.SList.Count;
+    if (count > 0)
+    {
+        <h4>@ViewBag.Title ：找到与「@Model.SearchKey」相关信息 @count 条</h4>
+        <div class="searchResultList">
+            @Html.Partial("_LoadSearchData", Model)
+        </div>
+        <script>
+            Leo.init("S");
+        </script>
+    }
+    else
+    {
+        <h4>
+            抱歉，未找到任何与“@Model.SearchKey” 相关的内容！
+        </h4>
+    }
+}

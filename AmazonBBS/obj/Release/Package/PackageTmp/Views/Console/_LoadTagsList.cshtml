@@ -1,0 +1,56 @@
+﻿@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@model TagViewModel
+@{
+    List<_Tag> list = Model.Tags;
+    Paging page = Model.TagPage;
+}
+@if (page.RecordCount > 0)
+{
+    <div class="col-md-12">
+        <table class="table table-bordered table-hover">
+            <caption>标签管理</caption>
+            <thead>
+                <tr>
+                    <th width="25%">序号</th>
+                    <th width="25%">标签</th>
+                    <th width="25%">创建人</th>
+                    <th width="25%">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < list.Count; i++)
+                {
+                    _Tag item = list[i];
+                    long tid = item.TagId;
+                    <tr>
+                        <td>@(i + 1)</td>
+                        <td>@item.TagName</td>
+                        <td>@item.UserName</td>
+                        <td>
+                            <a onclick="Edit(this,@tid,'@item.TagName')" class="btn-sm btn-primary">编辑</a>
+                            <a onclick="Delete(this,@tid,1)" class="btn-sm btn-danger">删除</a>
+                            @*@if (item.IsDelete == 1)
+                                {
+                                    <a onclick="Delete(this,@tid,0)" class="btn-sm btn-success">恢复</a>
+                                }
+                                else
+                                {
+                                    <a onclick="Delete(this,@tid,1)" class="btn-sm btn-danger">删除</a>
+                                }*@
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="tag_Page">
+            @Html.Partial("_Page", page)
+        </div>
+    </div>
+}
+else
+{
+    <div class="post">
+        暂无标签
+    </div>
+}

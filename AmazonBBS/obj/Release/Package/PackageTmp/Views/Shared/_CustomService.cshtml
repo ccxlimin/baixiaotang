@@ -1,0 +1,258 @@
+﻿@using AmazonBBS.Common
+@using AmazonBBS.Model
+@using AmazonBBS.BLL
+@{
+    int pageType = Model;//页面类型 1:数据分析 2:主页 3:课程页面
+    CustomerVM customers = UserBaseBLL.Instance.GetCustomers();
+
+    if (customers != null)
+    {
+        var qqs = customers.QQs;
+        var wxs = customers.WXs;
+        var gzhs = customers.GZHs;
+        @*左侧栏客服图标*@
+        <div class="kefu_icon">
+            <div class="kefu_close" onclick="$(this).parent().hide()">
+                X
+            </div>
+            <div class="taobao_link">
+                <a href="https://item.taobao.com/item.htm?spm=0.7095261.0.0.14631debmvTPWt&id=581839415728" target="_blank">
+                    @*<img border="0" src="~/Content/img/taobao.png" />*@
+                    淘宝店铺
+                </a>
+            </div>
+            @{
+                //string[] qqs = ConfigHelper.AppSettings("KeFu_QQ").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                //int qqtalk = 1, wechat = 1, gzhindex = 1;
+                if (qqs != null)
+                {
+                    foreach (Customer qq in qqs)
+                    {
+                        <div>
+                            <a href="tencent://message/?uin=@(qq.QQ)" title="在线QQ客服">
+                                <img border="0" src="~/Content/img/qqtalk.png" alt="@qq.Name" title="点击联系@(qq.Name)" />
+                            </a>
+                            <div>@qq.Name</div>
+                        </div>
+                    }
+                }
+                //string[] kefu_wechats = ConfigHelper.AppSettings("KeFu_QRCode").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (wxs != null)
+                {
+                    foreach (Customer wx in wxs)
+                    {
+                        <div class="wechat-icon">
+                            <img class="qricon" border="0" src="@wx.Img" />
+                            @*<img class="qricon" border="0" src="~/Content/img/qrcode.png" />*@
+                            <div>@wx.Name</div>
+                            <img class="qrcode" src="@wx.Img" width="100" height="100" />
+                        </div>
+                    }
+                }
+
+                //string[] gzhs = ConfigHelper.AppSettings("WeChat_GZH").Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                if (gzhs != null)
+                {
+                    foreach (Customer gzh in gzhs)
+                    {
+                        <div class="wechat-icon">
+                            <img class="qricon" border="0" src="@gzh.Img" />
+                            @*<img class="qricon" border="0" src="~/Content/img/qrcode.png" />*@
+                            <div>@gzh.Name</div>
+                            <img class="qrcode" src="@gzh.Img" width="100" height="100" />
+                        </div>
+                    }
+                }
+            }
+        </div>
+        if (pageType == 3)
+        {
+            //课程页面 在中间显示对话提示框
+            bool MustWriteLog = Convert.ToInt32(ConfigHelper.AppSettings("MustWriteLog")) == 1;
+            if (MustWriteLog)
+            {
+                string diy1 = @ConfigHelper.AppSettings("DIY1");
+                string diy2 = @ConfigHelper.AppSettings("DIY2");
+                string diy3 = @ConfigHelper.AppSettings("DIY3");
+                <div class="leavewordContent Ldn">
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <p>
+                                请保持电话或QQ畅通，稍后有百晓堂工作人员和您交流
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="Telephone" name="Telephone" placeholder="联系电话" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="Name" name="Name" placeholder="称呼" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="Age" name="Age" placeholder="年龄" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="diy1" name="diy1" placeholder="@diy1" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="diy2" name="diy2" placeholder="@diy2" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <input class="form-control" id="diy3" name="diy3" placeholder="@diy3" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12 Ltac">
+                            <button type="button" class="btn-kefu-ask btn btn-primary btn-sm">提交并咨询</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="kefu_flow Ldn">
+                <style>
+                    .leavewordContent {
+                        z-index: 999;
+                        padding-top: 15px;
+                        width: 280px !important;
+                        height: auto !important;
+                        margin: -177px 0 70px -140px !important;
+                    }
+
+                        .leavewordContent .form-group {
+                            margin-bottom: 5px !important;
+                        }
+
+                    .kefu_flow, .leavewordContent {
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        margin: -90px 0 0 -175px;
+                        background-color: #fefefe;
+                        width: 350px;
+                        height: 180px;
+                        border-radius: 5px;
+                        border: 1px solid #24b654;
+                    }
+
+                        .kefu_flow .girl {
+                            position: absolute;
+                            top: 5px;
+                            left: 5px;
+                            width: 98px;
+                            height: 128px;
+                            background: url(/Content/img/kechengguid/invitehead.jpg);
+                            background-size: 100%;
+                            background-repeat: no-repeat;
+                        }
+
+                        .kefu_flow .kefu_title {
+                            position: absolute;
+                            top: 50%;
+                            margin-top: -40px;
+                            padding-right: 18px;
+                            left: 115px;
+                            font-size: 12px;
+                        }
+
+                        .kefu_flow .kefu_contact {
+                            position: absolute;
+                            bottom: 5px;
+                            right: 5px;
+                        }
+                </style>
+                <i class="girl"></i>
+                <div class="kefu_title">
+                    百晓堂提醒您：
+                    <br />
+                    点击咨询进行课程相关信息检索！
+                </div>
+                <div class="kefu_contact">
+                    <button class="btn-kefu-later btn btn-default btn-sm">稍后提醒</button>
+                    @if (MustWriteLog)
+                    {
+                        <button class="btn-kefu-writelog btn btn-success btn-sm">点击咨询</button>
+                        <script>
+                            $(".btn-kefu-writelog").click(function () {
+                                if (Leo.user.login) {
+                                    $(".kefu_flow").hide(300);
+                                    $(".leavewordContent").removeClass("Ldn");
+                                    $(".btn-kefu-ask").click(function () {
+                                        if (Leo.user.login) {
+                                            if (CHECKNOTEMPTY($("#Telephone"), "联系电话不能为空")) {
+                                                if (CHECKNOTEMPTY($("#Name"), "称呼不能为空")) {
+                                                    if (CHECKNOTEMPTY($("#Age"), "年龄不能为空")) {
+                                                        if (CHECKNOTEMPTY($("#diy1"), $("#diy1").attr("placeholder") + "不能为空")) {
+                                                            if (CHECKNOTEMPTY($("#diy2"), $("#diy2").attr("placeholder") + "不能为空")) {
+                                                                if (CHECKNOTEMPTY($("#diy3"), $("#diy3").attr("placeholder") + "不能为空")) {
+                                                                    $.post("/gift/leave", {
+                                                                        Telephone: $("#Telephone").val(), Name: $("#Name").val(), Age: $("#Age").val(), diy1: $("#diy1").val(), diy2: $("#diy2").val(), diy3: $("#diy3").val(),
+                                                                    }, function (data) {
+                                                                        if (data.Ok) {
+                                                                            //留言成功
+                                                                            $(".kefu-wechat ul").css("display", "block");
+                                                                            $(".leavewordContent").hide(100);
+                                                                            layer.msg("留言成功，工作人员将联系你~敬请等候")
+                                                                        } else {
+                                                                            if (data.ID = -9999) {
+                                                                                Leo.gologin();
+                                                                            } else {
+                                                                                layer.msg("留言失败");
+                                                                            }
+                                                                        }
+                                                                    })
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            Leo.gologin();
+                                        }
+                                    });
+                                } else {
+                                    Leo.gologin();
+                                }
+                            });
+                        </script>
+                    }
+                    else
+                    {
+                        <button class="btn-kefu-now btn btn-success btn-sm">点击咨询</button>
+                        <script>
+                            $(".btn-kefu-now").click(function () {
+                                if (Leo.user.login) {
+                                    $(".kefu_flow").hide(400);
+                                    $(".kefu-wechat ul").css("display", "block");
+                                } else {
+                                    Leo.gologin();
+                                }
+                            });
+                        </script>
+                    }
+                </div>
+                <script>
+                    $(".btn-kefu-later").click(function () {
+                        $(".kefu_flow").hide(400);
+                    });
+                </script>
+            </div>
+            <script>
+                setTimeout(function () {
+                    $(".kefu_flow").show(400)
+                }, 1000);
+            </script>
+        }
+    }
+}
